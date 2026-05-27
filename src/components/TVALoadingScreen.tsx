@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock } from 'lucide-react';
 
+// @ts-ignore - Ignore type error for mp4 import if it exists
+import tempadVideo from './tempad_video/tempad video.mp4';
+
 interface Props {
   onComplete: () => void;
 }
@@ -120,128 +123,38 @@ export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
                 {/* ANIMATION CONTENT */}
                 <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                    
-                   {/* Branching SVG (Matching Reference Image) */}
-                   <svg viewBox="0 0 800 400" style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}>
-                      <defs>
-                        <style>
-                          {`
-                            .grow-branch {
-                              stroke-dasharray: 600;
-                              stroke-dashoffset: 600;
-                              animation: growAnim 2.5s ease-out forwards;
-                            }
-                            @keyframes growAnim {
-                              0% { stroke-dashoffset: 600; }
-                              100% { stroke-dashoffset: 0; }
-                            }
-                            .red-line-anim {
-                              stroke-dasharray: 600;
-                              stroke-dashoffset: 600;
-                              animation: growRedAnim 3.5s ease-out forwards;
-                            }
-                            @keyframes growRedAnim {
-                              0% { stroke-dashoffset: 600; }
-                              60% { stroke-dashoffset: 600; } /* Wait for yellow branches to grow */
-                              100% { stroke-dashoffset: 0; }
-                            }
-                            .nexus-text {
-                              opacity: 0;
-                              animation: revealAndBlink 1s step-end infinite 2.5s;
-                            }
-                            @keyframes revealAndBlink {
-                              0% { opacity: 1; }
-                              50% { opacity: 0; }
-                              100% { opacity: 1; }
-                            }
-                          `}
-                        </style>
-                        <filter id="glow-heavy">
-                          <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-                          <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
-                          </feMerge>
-                        </filter>
-                        <filter id="glow-light">
-                          <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                          <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
-                          </feMerge>
-                        </filter>
-                      </defs>
-
-                      {/* Subtle Grid / Scanlines in SVG */}
-                      <line x1="0" y1="200" x2="800" y2="200" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-                      <line x1="0" y1="100" x2="800" y2="100" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-                      <line x1="0" y1="300" x2="800" y2="300" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-
-                      {/* Red Threshold Lines (Slightly curved to match CRT look) */}
-                      <path d="M 0 130 Q 400 120 800 130" fill="none" stroke="#ff4444" strokeWidth="5" opacity="0.75" filter="url(#glow-light)" />
-                      <path d="M 0 270 Q 400 280 800 270" fill="none" stroke="#ff4444" strokeWidth="5" opacity="0.75" filter="url(#glow-light)" />
-
-                      {/* Central Sacred Timeline (Intertwined & Thick) */}
-                      <path d="M 0 200 Q 150 190 300 200 T 600 200 T 800 200" fill="none" stroke="#d4f0ff" strokeWidth="7" filter="url(#glow-heavy)" />
-                      <path d="M 0 200 Q 150 210 300 200 T 600 200 T 800 200" fill="none" stroke="#ffffff" strokeWidth="4" filter="url(#glow-heavy)" />
-
-                      {/* Dense Yellow/Orange Branches */}
-                      <g className="grow-branch" fill="none" stroke="#ffbc42" strokeWidth="4" filter="url(#glow-light)" strokeLinecap="round" opacity="0.9">
-                        
-                        {/* Top branches */}
-                        <path d="M 40 200 Q 120 150 180 50" />
-                        <path d="M 90 200 Q 180 160 260 60" />
-                        <path d="M 150 200 Q 240 170 330 60" />
-                        <path d="M 210 200 Q 300 150 410 40" />
-                        <path d="M 260 200 Q 350 160 470 50" />
-                        <path d="M 320 200 Q 410 140 540 40" />
-                        <path d="M 380 200 Q 470 160 610 50" />
-                        <path d="M 430 200 Q 520 150 670 60" />
-                        <path d="M 490 200 Q 580 140 740 40" />
-                        <path d="M 550 200 Q 640 160 780 70" />
-                        <path d="M 610 200 Q 700 150 820 80" />
-
-                        {/* Top sub-branches */}
-                        <path d="M 130 140 Q 190 100 240 70" strokeWidth="2.5" />
-                        <path d="M 260 140 Q 320 100 370 70" strokeWidth="2.5" />
-                        <path d="M 420 130 Q 480 80 560 50" strokeWidth="2.5" />
-                        <path d="M 580 120 Q 640 80 720 50" strokeWidth="2.5" />
-                        
-                        {/* Bottom branches */}
-                        <path d="M 60 200 Q 140 250 210 350" />
-                        <path d="M 120 200 Q 200 240 290 340" />
-                        <path d="M 180 200 Q 270 230 360 360" />
-                        <path d="M 230 200 Q 320 260 440 350" />
-                        <path d="M 290 200 Q 380 250 490 370" />
-                        <path d="M 350 200 Q 440 270 570 340" />
-                        <path d="M 410 200 Q 500 260 640 360" />
-                        <path d="M 470 200 Q 560 240 690 330" />
-                        <path d="M 530 200 Q 620 250 740 370" />
-                        <path d="M 590 200 Q 680 260 810 320" />
-
-                        {/* Bottom sub-branches */}
-                        <path d="M 160 270 Q 220 310 270 340" strokeWidth="2.5" />
-                        <path d="M 310 270 Q 370 320 440 350" strokeWidth="2.5" />
-                        <path d="M 490 280 Q 560 330 630 360" strokeWidth="2.5" />
-                        <path d="M 650 290 Q 720 340 790 370" strokeWidth="2.5" />
-                      </g>
-
-                      {/* Animated Red-Lining (Branches turning red) */}
-                      <g className="red-line-anim" fill="none" stroke="#ff2a2a" strokeWidth="5" filter="url(#glow-heavy)" strokeLinecap="round">
-                         <path d="M 210 200 Q 300 150 410 40" />
-                         <path d="M 470 200 Q 560 240 690 330" />
-                         <path d="M 90 200 Q 180 160 260 60" />
-                      </g>
-
-                      {/* Numbers on the right side */}
-                      <text x="760" y="125" fill="#777" fontSize="14" fontFamily="monospace">.30</text>
-                      <text x="760" y="195" fill="#777" fontSize="14" fontFamily="monospace">.00</text>
-                      <text x="760" y="265" fill="#777" fontSize="14" fontFamily="monospace">.30</text>
-                      
-                      {/* TVA Logo Bottom Right */}
-                      <text x="740" y="380" fill="#ffbc42" fontSize="24" fontWeight="bold" fontFamily="sans-serif" filter="url(#glow-light)">TVA</text>
-                   </svg>
+                   {/* Video Player */}
+                   <video 
+                     src={tempadVideo} 
+                     autoPlay 
+                     loop 
+                     muted 
+                     playsInline
+                     style={{ 
+                       position: 'absolute', 
+                       top: 0, 
+                       left: 0, 
+                       width: '100%', 
+                       height: '100%', 
+                       objectFit: 'cover',
+                       filter: 'contrast(1.2) brightness(1.1)' // Give it a slight retro punch
+                     }} 
+                   />
 
                    {/* Overlay Text */}
+                   <style>
+                     {`
+                       .nexus-text {
+                         opacity: 0;
+                         animation: revealAndBlink 1s step-end infinite 2.5s;
+                       }
+                       @keyframes revealAndBlink {
+                         0% { opacity: 1; }
+                         50% { opacity: 0; }
+                         100% { opacity: 1; }
+                       }
+                     `}
+                   </style>
                    <div className="nexus-text" style={{ position: 'absolute', top: '20px', left: '20px', color: '#ff3333', fontSize: '1.5rem', fontWeight: 'bold', textShadow: '0 0 10px #ff0000' }}>
                      NEXUS EVENT DETECTED!!!!
                    </div>
