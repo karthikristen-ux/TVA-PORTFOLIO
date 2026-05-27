@@ -123,6 +123,38 @@ export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
                    {/* Branching SVG (Matching Reference Image) */}
                    <svg viewBox="0 0 800 400" style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}>
                       <defs>
+                        <style>
+                          {`
+                            .grow-branch {
+                              stroke-dasharray: 600;
+                              stroke-dashoffset: 600;
+                              animation: growAnim 2.5s ease-out forwards;
+                            }
+                            @keyframes growAnim {
+                              0% { stroke-dashoffset: 600; }
+                              100% { stroke-dashoffset: 0; }
+                            }
+                            .red-line-anim {
+                              stroke-dasharray: 600;
+                              stroke-dashoffset: 600;
+                              animation: growRedAnim 3.5s ease-out forwards;
+                            }
+                            @keyframes growRedAnim {
+                              0% { stroke-dashoffset: 600; }
+                              60% { stroke-dashoffset: 600; } /* Wait for yellow branches to grow */
+                              100% { stroke-dashoffset: 0; }
+                            }
+                            .nexus-text {
+                              opacity: 0;
+                              animation: revealAndBlink 1s step-end infinite 2.5s;
+                            }
+                            @keyframes revealAndBlink {
+                              0% { opacity: 1; }
+                              50% { opacity: 0; }
+                              100% { opacity: 1; }
+                            }
+                          `}
+                        </style>
                         <filter id="glow-heavy">
                           <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
                           <feMerge>
@@ -153,7 +185,7 @@ export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
                       <path d="M 0 200 Q 150 210 300 200 T 600 200 T 800 200" fill="none" stroke="#ffffff" strokeWidth="4" filter="url(#glow-heavy)" />
 
                       {/* Dense Yellow/Orange Branches */}
-                      <g fill="none" stroke="#ffbc42" strokeWidth="4" filter="url(#glow-light)" strokeLinecap="round" opacity="0.9">
+                      <g className="grow-branch" fill="none" stroke="#ffbc42" strokeWidth="4" filter="url(#glow-light)" strokeLinecap="round" opacity="0.9">
                         
                         {/* Top branches */}
                         <path d="M 40 200 Q 120 150 180 50" />
@@ -194,16 +226,10 @@ export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
                       </g>
 
                       {/* Animated Red-Lining (Branches turning red) */}
-                      <g fill="none" stroke="#ff2a2a" strokeWidth="5" filter="url(#glow-heavy)" strokeLinecap="round">
-                         <path d="M 210 200 Q 300 150 410 40" strokeDasharray="600" strokeDashoffset="600">
-                           <animate attributeName="stroke-dashoffset" values="600;600;0;0" keyTimes="0;0.5;0.8;1" dur="4s" repeatCount="indefinite" />
-                         </path>
-                         <path d="M 470 200 Q 560 240 690 330" strokeDasharray="600" strokeDashoffset="600">
-                           <animate attributeName="stroke-dashoffset" values="600;600;0;0" keyTimes="0;0.6;0.9;1" dur="4s" repeatCount="indefinite" />
-                         </path>
-                         <path d="M 90 200 Q 180 160 260 60" strokeDasharray="600" strokeDashoffset="600">
-                           <animate attributeName="stroke-dashoffset" values="600;600;0;0" keyTimes="0;0.4;0.7;1" dur="4s" repeatCount="indefinite" />
-                         </path>
+                      <g className="red-line-anim" fill="none" stroke="#ff2a2a" strokeWidth="5" filter="url(#glow-heavy)" strokeLinecap="round">
+                         <path d="M 210 200 Q 300 150 410 40" />
+                         <path d="M 470 200 Q 560 240 690 330" />
+                         <path d="M 90 200 Q 180 160 260 60" />
                       </g>
 
                       {/* Numbers on the right side */}
@@ -216,8 +242,8 @@ export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
                    </svg>
 
                    {/* Overlay Text */}
-                   <div style={{ position: 'absolute', top: '20px', left: '20px', color: '#ff3333', fontSize: '1.5rem', fontWeight: 'bold', textShadow: '0 0 10px #ff0000' }} className="blink">
-                     WARNING: NEXUS EVENT
+                   <div className="nexus-text" style={{ position: 'absolute', top: '20px', left: '20px', color: '#ff3333', fontSize: '1.5rem', fontWeight: 'bold', textShadow: '0 0 10px #ff0000' }}>
+                     NEXUS EVENT DETECTED!!!!
                    </div>
                    
                    <div style={{ position: 'absolute', bottom: '30px', width: '100%', textAlign: 'center', color: '#fff', fontSize: '1.2rem', padding: '10px', textShadow: '0 0 10px #fff' }}>
