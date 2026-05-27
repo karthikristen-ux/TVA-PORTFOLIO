@@ -88,16 +88,106 @@ export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
         {!started && (
           <motion.div 
             className="start-prompt"
-            exit={{ opacity: 0, scale: 1.1 }}
-            transition={{ duration: 0.5 }}
+            exit={{ opacity: 0, scale: 1.5, filter: 'blur(10px)' }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            style={{ zIndex: 200, width: '100%', display: 'flex', justifyContent: 'center', padding: '2rem' }}
           >
-            <button onClick={handleStart} className="tva-button-large">
-              <Clock size={24} style={{ marginRight: '10px' }} />
-              CLICK TO ACCESS TIMELINE
-            </button>
-            <p className="retro-text blink" style={{ marginTop: '20px', fontSize: '0.8rem' }}>
-              [ AUDIO REQUIRED ]
-            </p>
+            <div
+              className="retro-tv-shell"
+              style={{
+                position: 'relative', width: '100%', maxWidth: '650px', backgroundColor: '#1a1a1a',
+                borderRadius: '40px', border: '4px solid #333',
+                boxShadow: '20px 20px 60px rgba(0,0,0,0.8), -10px -10px 30px rgba(255,255,255,0.05), 0 0 30px rgba(255,0,0,0.2)',
+                padding: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center', cursor: 'pointer',
+                transition: 'transform 0.2s',
+              }}
+              onClick={handleStart}
+              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              {/* INNER CRT SCREEN */}
+              <div style={{
+                flex: 1, position: 'relative', backgroundColor: '#050300', borderRadius: '25px',
+                border: '8px solid #0a0a0a', boxShadow: 'inset 0 0 40px #000',
+                overflow: 'hidden', aspectRatio: '4/3', display: 'flex', flexDirection: 'column',
+                fontFamily: 'var(--font-mono)', color: 'var(--tva-orange)'
+              }}>
+                {/* Glare, Scanlines, Shadow */}
+                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 40%)', pointerEvents: 'none', zIndex: 5 }} />
+                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%)', backgroundSize: '100% 4px', pointerEvents: 'none', zIndex: 4 }} />
+                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', boxShadow: 'inset 0 0 30px #000', pointerEvents: 'none', zIndex: 6 }} />
+
+                {/* ANIMATION CONTENT */}
+                <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                   
+                   {/* Branching SVG */}
+                   <svg viewBox="0 0 400 300" style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}>
+                      <defs>
+                        <filter id="glow">
+                          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                          <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                          </feMerge>
+                        </filter>
+                      </defs>
+
+                      {/* Main Sacred Timeline */}
+                      <path d="M 0 150 L 400 150" stroke="#fff" strokeWidth="4" filter="url(#glow)">
+                        <animate attributeName="stroke" values="#a3d9ff;#fff;#fff;#ff3333;#ff0000;#ff0000" dur="4s" repeatCount="indefinite" />
+                      </path>
+
+                      {/* Branch 1 (Up) */}
+                      <path d="M 100 150 Q 150 50 250 30 T 400 20" fill="none" stroke="#ff3333" strokeWidth="3" filter="url(#glow)" strokeDasharray="500" strokeDashoffset="500">
+                        <animate attributeName="stroke-dashoffset" values="500;500;0;0;500" keyTimes="0;0.5;0.65;0.9;1" dur="4s" repeatCount="indefinite" />
+                      </path>
+                      
+                      {/* Branch 2 (Down) */}
+                      <path d="M 150 150 Q 200 250 300 260 T 400 280" fill="none" stroke="#ff0000" strokeWidth="3" filter="url(#glow)" strokeDasharray="500" strokeDashoffset="500">
+                        <animate attributeName="stroke-dashoffset" values="500;500;0;0;500" keyTimes="0;0.5;0.7;0.9;1" dur="4s" repeatCount="indefinite" />
+                      </path>
+                      
+                      {/* Branch 3 (Up Secondary) */}
+                      <path d="M 200 150 Q 250 100 350 80 T 400 90" fill="none" stroke="#ff5555" strokeWidth="2" filter="url(#glow)" strokeDasharray="500" strokeDashoffset="500">
+                         <animate attributeName="stroke-dashoffset" values="500;500;0;0;500" keyTimes="0;0.5;0.75;0.9;1" dur="4s" repeatCount="indefinite" />
+                      </path>
+                      
+                      {/* Branch 4 (Down Secondary) */}
+                      <path d="M 250 150 Q 280 200 320 200 T 400 180" fill="none" stroke="#ff0000" strokeWidth="2" filter="url(#glow)" strokeDasharray="500" strokeDashoffset="500">
+                        <animate attributeName="stroke-dashoffset" values="500;500;0;0;500" keyTimes="0;0.5;0.8;0.9;1" dur="4s" repeatCount="indefinite" />
+                      </path>
+                      
+                      {/* Sub-branch on Branch 1 */}
+                      <path d="M 180 80 Q 220 10 300 10" fill="none" stroke="#ff2222" strokeWidth="2" filter="url(#glow)" strokeDasharray="300" strokeDashoffset="300">
+                        <animate attributeName="stroke-dashoffset" values="300;300;0;0;300" keyTimes="0;0.6;0.75;0.9;1" dur="4s" repeatCount="indefinite" />
+                      </path>
+                   </svg>
+
+                   {/* Overlay Text */}
+                   <div style={{ position: 'absolute', top: '20px', left: '20px', color: '#ff3333', fontSize: '1.5rem', fontWeight: 'bold', textShadow: '0 0 10px #ff0000' }} className="blink">
+                     WARNING: NEXUS EVENT
+                   </div>
+                   
+                   <div style={{ position: 'absolute', bottom: '30px', width: '100%', textAlign: 'center', color: '#fff', fontSize: '1.2rem', padding: '10px', textShadow: '0 0 10px #fff' }}>
+                     [ CLICK TO INTERVENE ]
+                   </div>
+
+                </div>
+              </div>
+
+              {/* TV Controls */}
+              <div className="retro-tv-controls" style={{ width: '60px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#222', boxShadow: 'inset 0 5px 10px rgba(255,255,255,0.1), 0 5px 10px rgba(0,0,0,0.8)', border: '2px solid #111', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <div style={{ width: '4px', height: '15px', backgroundColor: '#ff3333', borderRadius: '2px', transform: 'translateY(-8px)', boxShadow: '0 0 5px #ff0000' }} />
+                </div>
+                <div style={{ width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#222', boxShadow: 'inset 0 5px 10px rgba(255,255,255,0.1), 0 5px 10px rgba(0,0,0,0.8)', border: '2px solid #111', display: 'flex', justifyContent: 'center', alignItems: 'center', transform: 'rotate(45deg)' }}>
+                  <div style={{ width: '3px', height: '10px', backgroundColor: '#555', borderRadius: '2px', transform: 'translateY(-5px)' }} />
+                </div>
+                <div className="retro-tv-speaker" style={{ display: 'flex', gap: '4px', marginTop: '1rem' }}>
+                  {[...Array(5)].map((_, i) => <div key={i} style={{ width: '20px', height: '3px', backgroundColor: '#0a0a0a', borderRadius: '2px' }} />)}
+                </div>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
