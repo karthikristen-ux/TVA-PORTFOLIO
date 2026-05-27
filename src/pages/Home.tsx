@@ -14,7 +14,7 @@ export const Home: React.FC = () => {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4rem' }}>
           
           {/* LEFT COLUMN: INTRO & BUTTONS */}
-          <div style={{ flex: '1 1 500px' }}>
+          <div style={{ flex: '1 1 300px' }}>
             <h1 className="crt-text">T. KARTHIKEYAN</h1>
             <h2>Electronics & Communication Engineering</h2>
             <p style={{ fontSize: '1.2rem', marginBottom: '2rem', maxWidth: '800px', lineHeight: '1.6' }}>
@@ -45,7 +45,7 @@ export const Home: React.FC = () => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
             className="tva-card" 
-            style={{ flex: '1 1 300px', maxWidth: '400px', padding: '1.5rem', textAlign: 'center' }}
+            style={{ flex: '1 1 300px', maxWidth: '400px', margin: '0 auto', padding: '1.5rem', textAlign: 'center' }}
           >
             <div style={{ fontSize: '0.9rem', marginBottom: '1rem', opacity: 0.8, letterSpacing: '2px', borderBottom: '1px solid var(--tva-orange)', paddingBottom: '0.5rem' }}>
               SUBJECT_VARIANT_LOG :: T.K
@@ -97,7 +97,7 @@ export const Home: React.FC = () => {
 
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
           
           <div className="tva-card">
             <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><Cpu size={24}/> Core Skills</h3>

@@ -57,7 +57,7 @@ export const Projects: React.FC = () => {
               </div>
               
               <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
-                <div style={{ flex: '1', minWidth: '300px' }}>
+                <div style={{ flex: '1', minWidth: '250px' }}>
                   <img 
                     src={proj.image} 
                     alt={`${proj.title} schematic`} 
@@ -70,7 +70,7 @@ export const Projects: React.FC = () => {
                     }} 
                   />
                 </div>
-                <div style={{ flex: '2', minWidth: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div style={{ flex: '2', minWidth: '250px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <p style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>{proj.description}</p>
                   
                   <div style={{ display: 'flex', gap: '1rem' }}>

@@ -163,3 +163,53 @@ nav {
   gap: 0.5rem;
   text-shadow: 0 0 10px var(--tva-orange);
 }
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+========================================= */
+@media (max-width: 768px) {
+  /* Scale down global font sizes */
+  body {
+    font-size: 1.1rem;
+  }
+  
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 1.8rem; border-bottom: none; }
+  h3 { font-size: 1.5rem; }
+  
+  /* Navbar adjustments */
+  nav {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .logo {
+    font-size: 2rem;
+  }
+  
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .nav-links a {
+    font-size: 1.2rem;
+  }
+  
+  /* Buttons and containers */
+  .tva-btn {
+    font-size: 1.1rem !important;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .tva-container {
+    padding: 1rem;
+  }
+  
+  .tva-card {
+    padding: 1rem;
+  }
+}

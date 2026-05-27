@@ -25,7 +25,7 @@ export const Certificates: React.FC = () => {
           Official credentials and recognitions on file.
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
           {certificates.map((cert, index) => (
             <motion.div 
               key={index}
