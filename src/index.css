@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+  --tva-orange: #FF8C00;
+  --tva-orange-glow: rgba(255, 140, 0, 0.6);
+  --tva-orange-dim: rgba(255, 140, 0, 0.2);
+  --tva-bg: #050505; 
+  --tva-bg-darker: #000000;
+  
+  --font-mono: 'VT323', monospace;
+  --font-heading: 'VT323', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--tva-bg);
+  color: var(--tva-orange);
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  line-height: 1.4;
+  overflow-x: hidden;
+  text-transform: uppercase;
+  /* CRT glow on all text */
+  text-shadow: 0 0 4px var(--tva-orange-glow);
+  
+  /* TemPad Grid Background */
+  background-image: 
+    linear-gradient(var(--tva-orange-dim) 1px, transparent 1px),
+    linear-gradient(90deg, var(--tva-orange-dim) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center center;
+}
+
+/* Subtle CRT scanline overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 9998;
+}
+
+/* Vignette effect */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  background: radial-gradient(circle, transparent 65%, rgba(0,0,0,0.4) 100%);
+  z-index: 9997;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: normal;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  color: var(--tva-orange);
+}
+
+h1 { font-size: 4rem; }
+h2 { font-size: 2.5rem; border-bottom: 2px dashed var(--tva-orange); display: inline-block; padding-right: 1rem; }
+h3 { font-size: 2rem; }
+
+a {
+  color: var(--tva-orange);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  text-shadow: 0 0 10px var(--tva-orange);
+}
+
+.tva-btn {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  padding: 0.5rem 1.5rem;
+  background-color: transparent;
+  color: var(--tva-orange);
+  border: 2px solid var(--tva-orange);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 5px var(--tva-orange-glow);
+}
+
+.tva-btn:hover {
+  background-color: var(--tva-orange);
+  color: var(--tva-bg);
+  box-shadow: 0 0 15px var(--tva-orange);
+}
+
+.tva-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.tva-card {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid var(--tva-orange);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0 10px var(--tva-orange-glow);
+  backdrop-filter: blur(2px);
+}
+
+.crt-text {
+  color: var(--tva-orange);
+  text-shadow: 0 0 8px var(--tva-orange), 0 0 15px var(--tva-orange);
+}
+
+/* Navigation */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 2px solid var(--tva-orange);
+  background-color: rgba(0, 0, 0, 0.8);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 10px rgba(255, 140, 0, 0.2);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 1.8rem;
+  color: var(--tva-orange);
+}
+
+.nav-links a:hover, .nav-links a.active {
+  text-shadow: 0 0 10px var(--tva-orange);
+  border-bottom: 2px solid var(--tva-orange);
+}
+
+.logo {
+  font-family: var(--font-mono);
+  font-size: 2.5rem;
+  color: var(--tva-orange);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-shadow: 0 0 10px var(--tva-orange);
+}
