@@ -55,7 +55,8 @@ const MissMinutesBody: React.FC<{
   pupilPos: { x: number; y: number };
   isTalking: boolean;
   mood: string;
-}> = ({ pupilPos, isTalking, mood }) => {
+  isSleeping: boolean;
+}> = ({ pupilPos, isTalking, mood, isSleeping }) => {
   const orange = '#FF8C00';
   const orangeLight = '#FFB347';
   const orangeDark = '#CC6600';
@@ -138,12 +139,46 @@ const MissMinutesBody: React.FC<{
       <circle cx="100" cy="95" r="3.5" fill="#3a1800" />
 
       {/* EYES */}
-      <ellipse cx="78" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
-      <circle cx={78 + pupilPos.x} cy={85 + pupilPos.y} r="6.5" fill="#1a1a1a" />
-      <circle cx={75 + pupilPos.x} cy={82 + pupilPos.y} r="2.2" fill="white" />
-      <ellipse cx="122" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
-      <circle cx={122 + pupilPos.x} cy={85 + pupilPos.y} r="6.5" fill="#1a1a1a" />
-      <circle cx={119 + pupilPos.x} cy={82 + pupilPos.y} r="2.2" fill="white" />
+      {isSleeping ? (
+        <g>
+          {/* Sleeping Eyes */}
+          <ellipse cx="78" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
+          <path d="M 68 85 Q 78 95 88 85" fill="none" stroke="#3a1800" strokeWidth="2.5" strokeLinecap="round" />
+          <ellipse cx="122" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
+          <path d="M 112 85 Q 122 95 132 85" fill="none" stroke="#3a1800" strokeWidth="2.5" strokeLinecap="round" />
+          
+          {/* Zzzzz animation */}
+          <g>
+            <text x="135" y="40" fontSize="18" fill={orangeLight} fontFamily="var(--font-mono)" opacity="0" fontWeight="bold">
+              <animate attributeName="y" values="40;20" dur="2s" repeatCount="indefinite" />
+              <animate attributeName="x" values="135;145" dur="2s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" />
+              Z
+            </text>
+            <text x="145" y="25" fontSize="22" fill={orangeLight} fontFamily="var(--font-mono)" opacity="0" fontWeight="bold">
+              <animate attributeName="y" values="25;0" dur="2s" repeatCount="indefinite" delay="0.6s" />
+              <animate attributeName="x" values="145;155" dur="2s" repeatCount="indefinite" delay="0.6s" />
+              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" delay="0.6s" />
+              Z
+            </text>
+            <text x="155" y="5" fontSize="28" fill={orangeLight} fontFamily="var(--font-mono)" opacity="0" fontWeight="bold">
+              <animate attributeName="y" values="5;-25" dur="2s" repeatCount="indefinite" delay="1.2s" />
+              <animate attributeName="x" values="155;165" dur="2s" repeatCount="indefinite" delay="1.2s" />
+              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" delay="1.2s" />
+              Z
+            </text>
+          </g>
+        </g>
+      ) : (
+        <g>
+          <ellipse cx="78" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
+          <circle cx={78 + pupilPos.x} cy={85 + pupilPos.y} r="6.5" fill="#1a1a1a" />
+          <circle cx={75 + pupilPos.x} cy={82 + pupilPos.y} r="2.2" fill="white" />
+          <ellipse cx="122" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
+          <circle cx={122 + pupilPos.x} cy={85 + pupilPos.y} r="6.5" fill="#1a1a1a" />
+          <circle cx={119 + pupilPos.x} cy={82 + pupilPos.y} r="2.2" fill="white" />
+        </g>
+      )}
 
       {/* EYEBROWS */}
       <line x1="65" y1="64" x2="88" y2="66" stroke={orangeDark} strokeWidth="2.5" strokeLinecap="round" />
@@ -191,14 +226,25 @@ export const MissMinutes: React.FC = () => {
   const characterRef = useRef<HTMLDivElement>(null);
 
   const [showSpeech, setShowSpeech] = useState(false);
+  const [isSleeping, setIsSleeping] = useState(true);
   const [currentFact, setCurrentFact] = useState('');
+  const [factIndex, setFactIndex] = useState(0);
   const [pupilPos, setPupilPos] = useState({ x: 0, y: 0 });
+  const sleepTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const config = pageConfig[location.pathname] || pageConfig['/'];
 
   useEffect(() => {
+    return () => {
+      if (sleepTimeoutRef.current) clearTimeout(sleepTimeoutRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
     setShowSpeech(false);
-    setCurrentFact(config.facts[Math.floor(Math.random() * config.facts.length)]);
+    setIsSleeping(true);
+    setFactIndex(0);
+    setCurrentFact(config.facts[0]);
   }, [location.pathname]);
 
   // Listen for custom speak events from other components (like TemPadTimeline)
@@ -208,6 +254,8 @@ export const MissMinutes: React.FC = () => {
       if (customEvent.detail) {
         setCurrentFact(customEvent.detail);
         setShowSpeech(true);
+        setIsSleeping(false);
+        resetSleepTimer(15000);
       }
     };
 
@@ -215,10 +263,28 @@ export const MissMinutes: React.FC = () => {
     return () => window.removeEventListener('miss-minutes-speak', handleSpeakEvent);
   }, []);
 
+  const resetSleepTimer = (delay = 5000) => {
+    if (sleepTimeoutRef.current) clearTimeout(sleepTimeoutRef.current);
+    sleepTimeoutRef.current = setTimeout(() => {
+      setShowSpeech(false);
+      setIsSleeping(true);
+    }, delay);
+  };
+
+  const handleMouseEnter = () => {
+    if (sleepTimeoutRef.current) clearTimeout(sleepTimeoutRef.current);
+  };
+
+  const handleMouseLeave = () => {
+    if (!isSleeping) {
+      resetSleepTimer(5000); // go to sleep 5s after mouse leaves
+    }
+  };
+
   // Eye tracking
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!characterRef.current) return;
+      if (isSleeping || !characterRef.current) return;
       const rect = characterRef.current.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
@@ -230,13 +296,18 @@ export const MissMinutes: React.FC = () => {
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [isSleeping]);
 
   const handleClick = () => {
-    if (showSpeech) {
-      setShowSpeech(false);
+    if (isSleeping) {
+      setIsSleeping(false);
+      setShowSpeech(true);
+      setFactIndex(0);
+      setCurrentFact(config.facts[0]);
     } else {
-      setCurrentFact(config.facts[Math.floor(Math.random() * config.facts.length)]);
+      const nextIndex = (factIndex + 1) % config.facts.length;
+      setFactIndex(nextIndex);
+      setCurrentFact(config.facts[nextIndex]);
       setShowSpeech(true);
     }
   };
@@ -260,6 +331,8 @@ export const MissMinutes: React.FC = () => {
         flexDirection: 'column',
         alignItems: 'flex-end',
       }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <AnimatePresence mode="wait">
         {showSpeech && (
@@ -302,7 +375,7 @@ export const MissMinutes: React.FC = () => {
           filter: 'drop-shadow(0 0 12px var(--tva-orange-glow))',
         }}
       >
-        <MissMinutesBody pupilPos={pupilPos} isTalking={showSpeech} mood={config.mood} />
+        <MissMinutesBody pupilPos={pupilPos} isTalking={showSpeech} mood={config.mood} isSleeping={isSleeping} />
       </motion.div>
     </div>
   );
