@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock } from 'lucide-react';
 
 // @ts-ignore - Ignore type error for mp4 import if it exists
 import tempadVideo from './tempad_video/tempad video.mp4';

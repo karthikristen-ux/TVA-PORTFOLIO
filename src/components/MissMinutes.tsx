@@ -156,15 +156,15 @@ const MissMinutesBody: React.FC<{
               Z
             </text>
             <text x="145" y="25" fontSize="22" fill={orangeLight} fontFamily="var(--font-mono)" opacity="0" fontWeight="bold">
-              <animate attributeName="y" values="25;0" dur="2s" repeatCount="indefinite" delay="0.6s" />
-              <animate attributeName="x" values="145;155" dur="2s" repeatCount="indefinite" delay="0.6s" />
-              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" delay="0.6s" />
+              <animate attributeName="y" values="25;0" dur="2s" repeatCount="indefinite" begin="0.6s" />
+              <animate attributeName="x" values="145;155" dur="2s" repeatCount="indefinite" begin="0.6s" />
+              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.6s" />
               Z
             </text>
             <text x="155" y="5" fontSize="28" fill={orangeLight} fontFamily="var(--font-mono)" opacity="0" fontWeight="bold">
-              <animate attributeName="y" values="5;-25" dur="2s" repeatCount="indefinite" delay="1.2s" />
-              <animate attributeName="x" values="155;165" dur="2s" repeatCount="indefinite" delay="1.2s" />
-              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" delay="1.2s" />
+              <animate attributeName="y" values="5;-25" dur="2s" repeatCount="indefinite" begin="1.2s" />
+              <animate attributeName="x" values="155;165" dur="2s" repeatCount="indefinite" begin="1.2s" />
+              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1.2s" />
               Z
             </text>
           </g>
@@ -230,7 +230,7 @@ export const MissMinutes: React.FC = () => {
   const [currentFact, setCurrentFact] = useState('');
   const [factIndex, setFactIndex] = useState(0);
   const [pupilPos, setPupilPos] = useState({ x: 0, y: 0 });
-  const sleepTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const sleepTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const config = pageConfig[location.pathname] || pageConfig['/'];
 
