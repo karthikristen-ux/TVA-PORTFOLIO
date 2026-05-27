@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
-import { Camera, ExternalLink, Image as ImageIcon } from 'lucide-react';
+import { Camera } from 'lucide-react';
 
 // Setup frames for the background
 const TOTAL_FRAMES = 40;

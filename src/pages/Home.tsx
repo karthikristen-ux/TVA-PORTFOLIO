@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Terminal, Cpu, Database, Mail, Link, FileText } from 'lucide-react';
+import { Terminal, Cpu, Mail, Link, FileText } from 'lucide-react';
 import { TemPadTimeline } from '../components/TemPadTimeline';
 
 export const Home: React.FC = () => {
