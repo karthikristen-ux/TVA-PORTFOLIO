@@ -58,10 +58,10 @@ export const Hobbies: React.FC = () => {
         <img
           src={frameUrls[currentFrame]}
           alt=""
+          className="hobbies-bg-img"
           style={{
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
             filter: 'saturate(1.2) contrast(1.1)', 
           }}
         />
@@ -111,6 +111,7 @@ export const Hobbies: React.FC = () => {
               whileInView={{ x: 0, opacity: 1 }}
               viewport={{ once: false, margin: "-20%" }}
               transition={{ type: 'spring', bounce: 0.4 }}
+              className="retro-tv-shell"
               style={{
                 // MINIMALIST RETRO TV SHELL
                 position: 'relative',
@@ -196,11 +197,10 @@ export const Hobbies: React.FC = () => {
               </div>
 
               {/* RETRO TV CONTROL PANEL (Right side knobs) */}
-              <div style={{ 
+              <div className="retro-tv-controls" style={{ 
                 width: '60px', 
                 height: '100%', 
                 display: 'flex', 
-                flexDirection: 'column', 
                 alignItems: 'center', 
                 justifyContent: 'center',
                 gap: '2rem' 
@@ -224,7 +224,7 @@ export const Hobbies: React.FC = () => {
                 </div>
                 
                 {/* Speaker Grill */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '1rem' }}>
+                <div className="retro-tv-speaker" style={{ display: 'flex', gap: '4px', marginTop: '1rem' }}>
                   <div style={{ width: '20px', height: '3px', backgroundColor: '#0a0a0a', borderRadius: '2px' }} />
                   <div style={{ width: '20px', height: '3px', backgroundColor: '#0a0a0a', borderRadius: '2px' }} />
                   <div style={{ width: '20px', height: '3px', backgroundColor: '#0a0a0a', borderRadius: '2px' }} />
