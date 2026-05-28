@@ -27,13 +27,13 @@ export const Home: React.FC = () => {
               <a href="mailto:karthikeyant1885@gmail.com" className="tva-btn" style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                  <Mail size={20} /> COMMUNICATE
               </a>
-              <a href="https://www.linkedin.com/in/karthikristen" target="_blank" rel="noreferrer" className="tva-btn" style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <a href="https://www.linkedin.com/in/karthikristen/" target="_blank" rel="noopener" className="tva-btn" style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                  <Link size={20} /> LINKEDIN NODE
               </a>
               <a href="https://github.com/karthikristen-ux" target="_blank" rel="noreferrer" className="tva-btn" style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                  <Terminal size={20} /> GITHUB REPO
               </a>
-              <a href="#" className="tva-btn" style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <a href="https://drive.google.com/file/d/1Y6PHHpYaOuttlEbAWEBzi9brH7QaRlze/view?usp=drive_link" target="_blank" rel="noreferrer" className="tva-btn" style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                  <FileText size={20} /> EXTRACT DOSSIER (CV)
               </a>
             </div>
