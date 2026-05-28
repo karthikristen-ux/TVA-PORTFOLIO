@@ -73,62 +73,64 @@ export const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
 
   return (
-    <div className="tva-container">
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="crt-text">PROJECT ARCHIVE</h1>
-        <p style={{ fontSize: '1.2rem', marginBottom: '3rem' }}>
-          Database entries for significant engineering deployments.
-        </p>
+    <>
+      <div className="tva-container">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="crt-text">PROJECT ARCHIVE</h1>
+          <p style={{ fontSize: '1.2rem', marginBottom: '3rem' }}>
+            Database entries for significant engineering deployments.
+          </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          {projects.map((proj, index) => (
-            <motion.div 
-              key={index}
-              className="tva-card"
-              initial={{ x: -50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: index * 0.2 }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <h2>{proj.title}</h2>
-                <span style={{ color: 'var(--tva-orange)', fontFamily: 'var(--font-mono)' }}>[{proj.date}]</span>
-              </div>
-              
-              <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
-                <div style={{ flex: '1', minWidth: '250px' }}>
-                  <img 
-                    src={proj.image} 
-                    alt={`${proj.title} schematic`} 
-                    style={{ 
-                      width: '100%', 
-                      height: 'auto', 
-                      border: '2px solid var(--tva-orange)', 
-                      boxShadow: '0 0 10px var(--tva-orange-glow)',
-                      filter: 'grayscale(100%) sepia(100%) hue-rotate(350deg) saturate(500%) brightness(1.2)' // Forces orange tint
-                    }} 
-                  />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            {projects.map((proj, index) => (
+              <motion.div 
+                key={index}
+                className="tva-card"
+                initial={{ x: -50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: index * 0.2 }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <h2>{proj.title}</h2>
+                  <span style={{ color: 'var(--tva-orange)', fontFamily: 'var(--font-mono)' }}>[{proj.date}]</span>
                 </div>
-                <div style={{ flex: '2', minWidth: '250px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <p style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>{proj.description}</p>
-                  
-                  <div style={{ display: 'flex', gap: '1rem' }}>
-                    <a href={proj.github} target="_blank" rel="noreferrer" className="tva-btn" style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <Code size={20} /> Code
-                    </a>
-                    <button onClick={() => setSelectedProject(proj)} className="tva-btn" style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', background: 'transparent', border: '1px solid var(--tva-orange)' }}>
-                      <ExternalLink size={20} /> Details
-                    </button>
+                
+                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
+                  <div style={{ flex: '1', minWidth: '250px' }}>
+                    <img 
+                      src={proj.image} 
+                      alt={`${proj.title} schematic`} 
+                      style={{ 
+                        width: '100%', 
+                        height: 'auto', 
+                        border: '2px solid var(--tva-orange)', 
+                        boxShadow: '0 0 10px var(--tva-orange-glow)',
+                        filter: 'grayscale(100%) sepia(100%) hue-rotate(350deg) saturate(500%) brightness(1.2)' // Forces orange tint
+                      }} 
+                    />
+                  </div>
+                  <div style={{ flex: '2', minWidth: '250px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <p style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>{proj.description}</p>
+                    
+                    <div style={{ display: 'flex', gap: '1rem' }}>
+                      <a href={proj.github} target="_blank" rel="noreferrer" className="tva-btn" style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Code size={20} /> Code
+                      </a>
+                      <button onClick={() => setSelectedProject(proj)} className="tva-btn" style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', background: 'transparent', border: '1px solid var(--tva-orange)' }}>
+                        <ExternalLink size={20} /> Details
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
 
       <AnimatePresence>
         {selectedProject && (
@@ -146,7 +148,7 @@ export const Projects: React.FC = () => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              zIndex: 1000,
+              zIndex: 9999,
               padding: '1rem',
               backdropFilter: 'blur(5px)'
             }}
@@ -216,15 +218,18 @@ export const Projects: React.FC = () => {
                 ))}
               </ul>
               
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <a href={selectedProject.github} target="_blank" rel="noreferrer" className="tva-btn" style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', textAlign: 'center', justifyContent: 'center', flex: 1 }}>
+              <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+                <a href={selectedProject.github} target="_blank" rel="noreferrer" className="tva-btn" style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', textAlign: 'center', justifyContent: 'center' }}>
                   <Code size={20} /> Access Source Code
                 </a>
+                <button onClick={() => setSelectedProject(null)} className="tva-btn" style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', cursor: 'pointer', background: 'transparent', border: '1px solid var(--tva-orange)' }}>
+                  <X size={20} /> Close Details
+                </button>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 };
