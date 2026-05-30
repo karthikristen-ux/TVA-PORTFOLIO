@@ -229,13 +229,10 @@ export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
 
       <div className="tva-border-text bottom-left">
         TIME VARIANCE AUTHORITY PRESENTATION COMMISSION // DSTORY.CO
-            </div>
-            <div className="tva-border-logo bottom-right">
-              TVA
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
+      <div className="tva-border-logo bottom-right">
+        TVA
+      </div>
     </div>
   );
 };
