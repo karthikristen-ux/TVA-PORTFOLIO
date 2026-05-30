@@ -82,19 +82,26 @@ export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
     <div className="tva-intro-container" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: '#050505', margin: 0, padding: 0 }}>
       <div className="crt-overlay" style={{ zIndex: 10 }}></div>
 
-      {/* Dimmed Background Video */}
-      <video
-        src={tempadBgVideo}
-        autoPlay loop muted playsInline
-        style={{
-          position: 'absolute', top: 0, left: 0,
-          width: '100%', height: '100%',
-          objectFit: 'cover',
-          filter: phase === 'loading' ? 'brightness(0.1)' : 'contrast(1.2) brightness(0.2)',
-          zIndex: 1,
-          transition: 'filter 1s ease',
-        }}
-      />
+      {/* Background Video ONLY on loading screen */}
+      <AnimatePresence>
+        {phase === 'loading' && (
+          <motion.video
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            src={tempadBgVideo}
+            autoPlay loop muted playsInline
+            style={{
+              position: 'absolute', top: 0, left: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover',
+              filter: 'brightness(0.1)',
+              zIndex: 1,
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {phase === 'intro' && (
