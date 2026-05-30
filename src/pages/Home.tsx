@@ -108,7 +108,7 @@ export const Home: React.FC = () => {
                     maxHeight: '100%',
                     objectFit: 'contain',
                     mixBlendMode: 'screen',
-                    filter: 'contrast(1.2) sepia(1) hue-rotate(350deg) saturate(3)',
+                    opacity: 0.9,
                   }}
                 />
               </motion.div>
