@@ -1,5 +1,8 @@
 import React from 'react';
 
+// @ts-ignore
+import hologramVideo from './tempad_video/animation tempad.mp4';
+
 interface HologramPortraitProps {
   size?: number;
 }
@@ -23,14 +26,17 @@ export const HologramPortrait: React.FC<HologramPortraitProps> = ({
         ))}
       </div>
 
-      {/* Floating Portrait */}
+      {/* Floating Portrait Animation */}
       <div className="hologram-portrait-frame">
-        <img
-          src="/images/ascii_variant.png"
-          alt="Variant Hologram"
+        <video
+          src={hologramVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
           className="hologram-portrait-img"
         />
-        {/* Scanline overlay on image */}
+        {/* Scanline overlay on video */}
         <div className="hologram-img-scanlines" />
         {/* Edge glow */}
         <div className="hologram-img-edge-glow" />
