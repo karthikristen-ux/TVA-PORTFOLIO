@@ -37,6 +37,15 @@ export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
         }}
       />
 
+      {/* 3D LAYER 1: Massive Background Text */}
+      <div className="massive-bg-text">KARTHIKEYAN</div>
+
+      {/* 3D LAYER 2: Floating Holographic Blobs */}
+      <div className="fluid-blob blob-1" />
+      <div className="fluid-blob blob-2" />
+      <div className="fluid-blob blob-3" />
+
+      {/* 3D LAYER 3: Main Animation Container */}
       <motion.div
         key="intro"
         exit={{ opacity: 0, scale: 0.9 }}
@@ -45,62 +54,30 @@ export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
           position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
           zIndex: 20,
           display: 'flex',
-          flexDirection: 'row', // Side by side
+          flexDirection: 'column',
           alignItems: 'center', 
           justifyContent: 'center',
-          gap: '4rem',
-          padding: '2rem',
-          boxSizing: 'border-box',
           width: '100vw',
           height: '100vh',
           overflow: 'hidden'
         }}
       >
-        {/* BREACH ALERT (LEFT SIDE) */}
-        <AnimatePresence>
-          <motion.div
-            className="breach-alert-text"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{
-              opacity: [1, 0.7, 1],
-              x: 0,
-            }}
-            transition={{
-              opacity: { duration: 1.5, repeat: Infinity, repeatType: 'reverse' },
-              x: { duration: 0.8, ease: 'easeOut' }
-            }}
-            style={{ 
-              zIndex: 30,
-              fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
-              maxWidth: '300px',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1rem',
-              alignItems: 'center'
-            }}
-          >
-            <span style={{ fontSize: '4rem' }}>⚠</span>
-            <span>TIMELINE BREACH ALERT</span>
-            <span style={{ fontSize: '4rem' }}>⚠</span>
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Custom Chroma-Keyed Animation (CENTER/RIGHT) */}
+        {/* Custom Chroma-Keyed Animation (CENTERED FRONT) */}
         <AnimatePresence>
           {showVideo && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.8, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
               style={{
-                flex: '1 1 auto',
-                maxWidth: '800px',
+                width: '100%',
+                maxWidth: '900px',
                 height: '80vh',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 zIndex: 25,
+                position: 'relative'
               }}
             >
               <ChromaKeyVideo 
