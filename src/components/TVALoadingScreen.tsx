@@ -122,20 +122,33 @@ export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
             }}
           >
             {/* 3D LAYER 1: Massive Background Text */}
-            <div className="massive-bg-text">KARTHIKEYAN</div>
+            <motion.div 
+              className="massive-bg-text"
+              initial={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
+              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              transition={{ duration: 2.5, ease: "easeOut" }}
+            >
+              KARTHIKEYAN
+            </motion.div>
 
             {/* 3D LAYER 2: Floating Holographic Blobs */}
-            <div className="fluid-blob blob-1" />
-            <div className="fluid-blob blob-2" />
-            <div className="fluid-blob blob-3" />
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 3, delay: 0.5 }}
+            >
+              <div className="fluid-blob blob-1" />
+              <div className="fluid-blob blob-2" />
+              <div className="fluid-blob blob-3" />
+            </motion.div>
 
             {/* 3D LAYER 3: Main Animation Container */}
             <AnimatePresence>
               {showVideo && (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: 30 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 1.2, ease: "easeOut" }}
+                  initial={{ opacity: 0, scale: 0.95, filter: 'blur(20px)' }}
+                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                  transition={{ duration: 2, ease: "easeOut" }}
                   style={{
                     width: '100%',
                     maxWidth: '900px',
