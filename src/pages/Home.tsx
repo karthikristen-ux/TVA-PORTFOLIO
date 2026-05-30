@@ -4,9 +4,6 @@ import type { Variants } from 'framer-motion';
 import { Terminal, Cpu, Mail, Link, FileText } from 'lucide-react';
 import { TemPadTimeline } from '../components/TemPadTimeline';
 
-// @ts-ignore
-import tempadBgVideo from '../components/tempad_video/tempad video.mp4';
-
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -64,7 +61,7 @@ export const Home: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* RIGHT COLUMN: TVA TV TEMPAD DISPLAY */}
+          {/* RIGHT COLUMN: HOLOGRAM VARIANT DISPLAY */}
           <motion.div 
             variants={itemVariants}
             style={{ 
@@ -72,101 +69,154 @@ export const Home: React.FC = () => {
               flexDirection: 'column', 
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '1rem'
+              position: 'relative'
             }}
           >
-            {/* TV Shell */}
+            {/* Hologram Container */}
             <div style={{
+              position: 'relative',
               width: '100%',
-              maxWidth: '500px',
-              backgroundColor: '#1a1a1a',
-              borderRadius: '24px',
-              border: '4px solid #333',
-              boxShadow: '0 10px 40px rgba(0,0,0,0.8), 0 0 30px rgba(255,140,0,0.2), inset 0 0 10px rgba(255,140,0,0.1)',
-              padding: '1.5rem',
+              maxWidth: '450px',
+              aspectRatio: '3/4',
               display: 'flex',
-              flexDirection: 'column',
-              gap: '1rem',
-              position: 'relative'
+              alignItems: 'center',
+              justifyContent: 'center',
+              perspective: '1000px'
             }}>
               
-              {/* TV Screen Container */}
-              <div style={{
-                position: 'relative',
-                width: '100%',
-                aspectRatio: '4/3',
-                backgroundColor: '#050300',
-                borderRadius: '16px',
-                border: '6px solid #000',
-                boxShadow: 'inset 0 0 30px rgba(0,0,0,0.9), 0 0 15px rgba(255,140,0,0.3)',
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column'
-              }}>
-                {/* Glare and Scanlines */}
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%)',
-                  pointerEvents: 'none', zIndex: 5,
-                }} />
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                  background: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(255, 140, 0, 0.05) 50%)',
-                  backgroundSize: '100% 4px',
-                  pointerEvents: 'none', zIndex: 4,
-                }} />
-                
-                {/* Video playing inside the TV */}
-                <video 
-                  src={tempadBgVideo} 
-                  autoPlay loop muted playsInline
+              {/* The Holographic Figure */}
+              <motion.div
+                initial={{ y: 10, opacity: 0.8 }}
+                animate={{ y: -10, opacity: 1 }}
+                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  position: 'relative',
+                  zIndex: 2,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  filter: 'drop-shadow(0 0 15px rgba(0, 150, 255, 0.5))'
+                }}
+              >
+                <img 
+                  src="/images/blue_hologram.png" 
+                  alt="Variant Hologram" 
                   style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    filter: 'contrast(1.2) sepia(1) hue-rotate(350deg) saturate(3) brightness(1.1)',
-                    position: 'relative',
-                    zIndex: 1
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    objectFit: 'contain',
+                    mixBlendMode: 'screen',
                   }}
                 />
-              </div>
+              </motion.div>
 
-              {/* TV Control Panel & Alert */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '0 0.5rem'
-              }}>
-                {/* Alert Message */}
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 1, 0.5, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  style={{
-                    color: '#ff4d00',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.85rem',
-                    letterSpacing: '2px',
-                    textShadow: '0 0 10px rgba(255, 77, 0, 0.5)',
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }}
-                >
-                  <strong style={{ fontSize: '1rem' }}>[ TIMELINE BREACHED ]</strong>
-                  <span style={{ fontSize: '0.75rem', opacity: 0.8, marginTop: '2px', cursor: 'pointer' }}>&gt; CLICK TO VIEW VARIANT</span>
-                </motion.div>
-
-                {/* Knobs */}
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <div style={{ width: '25px', height: '25px', borderRadius: '50%', backgroundColor: '#222', border: '1px solid #111', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                     <div style={{ width: '2px', height: '10px', backgroundColor: 'var(--tva-orange)', borderRadius: '2px', transform: 'translateY(-5px)' }} />
-                  </div>
-                  <div style={{ width: '25px', height: '25px', borderRadius: '50%', backgroundColor: '#222', border: '1px solid #111', display: 'flex', justifyContent: 'center', alignItems: 'center', transform: 'rotate(45deg)' }}>
-                     <div style={{ width: '2px', height: '10px', backgroundColor: '#555', borderRadius: '2px', transform: 'translateY(-5px)' }} />
-                  </div>
+              {/* HUD Elements */}
+              {/* HUD Line 1: Name */}
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1, duration: 0.5 }}
+                style={{
+                  position: 'absolute',
+                  top: '25%',
+                  right: '-10%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  zIndex: 10
+                }}
+              >
+                <div style={{ width: '40px', height: '1px', backgroundColor: '#00d4ff', boxShadow: '0 0 8px #00d4ff' }}></div>
+                <div style={{ 
+                  backgroundColor: 'rgba(0, 20, 40, 0.8)', 
+                  border: '1px solid #00d4ff', 
+                  padding: '4px 10px', 
+                  marginLeft: '5px',
+                  fontFamily: 'system-ui, sans-serif',
+                  fontSize: '0.75rem',
+                  color: '#00d4ff',
+                  letterSpacing: '1px',
+                  boxShadow: '0 0 10px rgba(0, 212, 255, 0.3)'
+                }}>
+                  VARIANT: T. KARTHIKEYAN
                 </div>
-              </div>
+              </motion.div>
+
+              {/* HUD Line 2: Case ID */}
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.2, duration: 0.5 }}
+                style={{
+                  position: 'absolute',
+                  top: '55%',
+                  left: '-15%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'row-reverse',
+                  zIndex: 10
+                }}
+              >
+                <div style={{ width: '60px', height: '1px', backgroundColor: '#00d4ff', boxShadow: '0 0 8px #00d4ff' }}></div>
+                <div style={{ 
+                  backgroundColor: 'rgba(0, 20, 40, 0.8)', 
+                  border: '1px solid #00d4ff', 
+                  padding: '4px 10px', 
+                  marginRight: '5px',
+                  fontFamily: 'system-ui, sans-serif',
+                  fontSize: '0.75rem',
+                  color: '#00d4ff',
+                  letterSpacing: '1px',
+                  boxShadow: '0 0 10px rgba(0, 212, 255, 0.3)'
+                }}>
+                  CASE ID: 0232-467-9751
+                </div>
+              </motion.div>
+
+              {/* HUD Line 3: Status */}
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.4, duration: 0.5 }}
+                style={{
+                  position: 'absolute',
+                  bottom: '25%',
+                  right: '-5%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  zIndex: 10
+                }}
+              >
+                <div style={{ width: '30px', height: '1px', backgroundColor: '#ff4d00', boxShadow: '0 0 8px #ff4d00' }}></div>
+                <div style={{ 
+                  backgroundColor: 'rgba(40, 10, 0, 0.8)', 
+                  border: '1px solid #ff4d00', 
+                  padding: '4px 10px', 
+                  marginLeft: '5px',
+                  fontFamily: 'system-ui, sans-serif',
+                  fontSize: '0.75rem',
+                  color: '#ff4d00',
+                  letterSpacing: '1px',
+                  boxShadow: '0 0 10px rgba(255, 77, 0, 0.3)'
+                }}>
+                  STATUS: ESCAPED TIMELINE
+                </div>
+              </motion.div>
+
+              {/* Glowing Base Platform */}
+              <div style={{
+                position: 'absolute',
+                bottom: '5%',
+                width: '60%',
+                height: '20px',
+                background: 'radial-gradient(ellipse at center, rgba(0, 212, 255, 0.4) 0%, rgba(0,0,0,0) 70%)',
+                borderRadius: '50%',
+                transform: 'rotateX(75deg)',
+                boxShadow: '0 0 30px rgba(0, 212, 255, 0.2)',
+                zIndex: 1
+              }} />
+
             </div>
           </motion.div>
 
