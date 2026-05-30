@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { Terminal, Cpu, Mail, Link, FileText } from 'lucide-react';
 import { TemPadTimeline } from '../components/TemPadTimeline';
-import { HologramPortrait } from '../components/HologramPortrait';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -101,9 +100,16 @@ export const Home: React.FC = () => {
                   filter: 'drop-shadow(0 0 15px rgba(255, 140, 0, 0.5))'
                 }}
               >
-                <div style={{ transform: 'scale(0.8)', filter: 'contrast(1.2)' }}>
-                  <HologramPortrait />
-                </div>
+                <img 
+                  src="/images/ascii_variant.png" 
+                  alt="ASCII Variant Portrait" 
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    objectFit: 'contain',
+                    filter: 'contrast(1.2) sepia(1) hue-rotate(350deg) saturate(3)',
+                  }}
+                />
               </motion.div>
 
               {/* HUD Elements */}
