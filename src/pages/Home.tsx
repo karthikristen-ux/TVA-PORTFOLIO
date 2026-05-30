@@ -4,6 +4,9 @@ import type { Variants } from 'framer-motion';
 import { Terminal, Cpu, Mail, Link, FileText } from 'lucide-react';
 import { TemPadTimeline } from '../components/TemPadTimeline';
 
+// @ts-ignore
+import tempadBgVideo from '../components/tempad_video/tempad video.mp4';
+
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -61,57 +64,108 @@ export const Home: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* RIGHT COLUMN: ASCII ART VARIANT LOG */}
+          {/* RIGHT COLUMN: TVA TV TEMPAD DISPLAY */}
           <motion.div 
             variants={itemVariants}
-            className="tva-card" 
-            style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+            style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '1rem'
+            }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,140,0,0.3)', paddingBottom: '1rem' }}>
-              <span style={{ fontSize: '0.85rem', letterSpacing: '3px', color: '#ff8c00' }}>SYSTEM LOG // T.K</span>
-              <span className="crt-text" style={{ fontSize: '0.85rem' }}>[ ACTIVE ]</span>
-            </div>
-            
-            <div style={{ 
-              width: '100%', 
-              borderRadius: '8px', 
-              overflow: 'hidden',
-              backgroundColor: '#000',
-              border: '1px solid rgba(255, 140, 0, 0.1)'
-            }}>
-              <img 
-                src="/images/ascii_variant.png" 
-                alt="ASCII Variant Portrait" 
-                style={{ 
-                  width: '100%', 
-                  height: 'auto', 
-                  display: 'block',
-                  filter: 'contrast(1.2) sepia(1) hue-rotate(350deg) saturate(3)',
-                  opacity: 0.9
-                }} 
-              />
-            </div>
-
-            {/* VARIANT DETAILS */}
-            <div style={{ 
-              fontFamily: "var(--font-mono)", 
-              fontSize: '0.9rem', 
-              color: '#ccc',
+            {/* TV Shell */}
+            <div style={{
+              width: '100%',
+              maxWidth: '500px',
+              backgroundColor: '#1a1a1a',
+              borderRadius: '24px',
+              border: '4px solid #333',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.8), 0 0 30px rgba(255,140,0,0.2), inset 0 0 10px rgba(255,140,0,0.1)',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '0.8rem'
+              gap: '1rem',
+              position: 'relative'
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ opacity: 0.5 }}>ID_CODE:</span>
-                <strong style={{ color: '#fff' }}>VARIANT-18</strong>
+              
+              {/* TV Screen Container */}
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                aspectRatio: '4/3',
+                backgroundColor: '#050300',
+                borderRadius: '16px',
+                border: '6px solid #000',
+                boxShadow: 'inset 0 0 30px rgba(0,0,0,0.9), 0 0 15px rgba(255,140,0,0.3)',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
+                {/* Glare and Scanlines */}
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%)',
+                  pointerEvents: 'none', zIndex: 5,
+                }} />
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                  background: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(255, 140, 0, 0.05) 50%)',
+                  backgroundSize: '100% 4px',
+                  pointerEvents: 'none', zIndex: 4,
+                }} />
+                
+                {/* Video playing inside the TV */}
+                <video 
+                  src={tempadBgVideo} 
+                  autoPlay loop muted playsInline
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    filter: 'contrast(1.2) sepia(1) hue-rotate(350deg) saturate(3) brightness(1.1)',
+                    position: 'relative',
+                    zIndex: 1
+                  }}
+                />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ opacity: 0.5 }}>STATUS:</span>
-                <span style={{ color: '#ff4d00', textShadow: '0 0 8px rgba(255, 77, 0, 0.5)' }}>ESCAPED TIMELINE</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ opacity: 0.5 }}>LOCATION:</span>
-                <strong style={{ color: '#fff' }}>CHENNAI, INDIA</strong>
+
+              {/* TV Control Panel & Alert */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '0 0.5rem'
+              }}>
+                {/* Alert Message */}
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 1, 0.5, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  style={{
+                    color: '#ff4d00',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.85rem',
+                    letterSpacing: '2px',
+                    textShadow: '0 0 10px rgba(255, 77, 0, 0.5)',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <strong style={{ fontSize: '1rem' }}>[ TIMELINE BREACHED ]</strong>
+                  <span style={{ fontSize: '0.75rem', opacity: 0.8, marginTop: '2px', cursor: 'pointer' }}>&gt; CLICK TO VIEW VARIANT</span>
+                </motion.div>
+
+                {/* Knobs */}
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  <div style={{ width: '25px', height: '25px', borderRadius: '50%', backgroundColor: '#222', border: '1px solid #111', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                     <div style={{ width: '2px', height: '10px', backgroundColor: 'var(--tva-orange)', borderRadius: '2px', transform: 'translateY(-5px)' }} />
+                  </div>
+                  <div style={{ width: '25px', height: '25px', borderRadius: '50%', backgroundColor: '#222', border: '1px solid #111', display: 'flex', justifyContent: 'center', alignItems: 'center', transform: 'rotate(45deg)' }}>
+                     <div style={{ width: '2px', height: '10px', backgroundColor: '#555', borderRadius: '2px', transform: 'translateY(-5px)' }} />
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
