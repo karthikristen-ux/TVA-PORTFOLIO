@@ -22,10 +22,11 @@
 body {
   background-color: var(--tva-bg);
   color: #e0e0e0;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-mono); /* Restored */
   font-size: 1.1rem;
   line-height: 1.7;
   overflow-x: hidden;
+  text-transform: uppercase; /* Restored */
   
   /* TemPad Grid Background - Subtler */
   background-image: 
@@ -791,7 +792,7 @@ nav {
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: var(--font-bebas); /* Changed to Bebas Neue */
-  font-size: 22vw; /* Made slightly bigger for more impact */
+  font-size: 18vw; /* Made slightly bigger for more impact */
   font-weight: 400; /* Bebas Neue is bold by default */
   color: #ff8c00; /* Fully visible TVA Orange */
   text-align: center;
