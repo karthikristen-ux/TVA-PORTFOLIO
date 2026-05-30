@@ -77,11 +77,10 @@ export const Home: React.FC = () => {
               position: 'relative',
               width: '100%',
               maxWidth: '450px',
-              aspectRatio: '3/4',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'center',
-              perspective: '1000px'
+              gap: '1.5rem',
             }}>
               
               {/* The Holographic Figure */}
@@ -91,13 +90,13 @@ export const Home: React.FC = () => {
                 transition={{ duration: 3, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
                 style={{
                   width: '100%',
-                  height: '100%',
+                  aspectRatio: '1/1',
                   position: 'relative',
                   zIndex: 2,
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  filter: 'drop-shadow(0 0 15px rgba(255, 140, 0, 0.5))'
+                  filter: 'drop-shadow(0 0 15px rgba(255, 140, 0, 0.4))'
                 }}
               >
                 <img 
@@ -108,116 +107,76 @@ export const Home: React.FC = () => {
                     maxHeight: '100%',
                     objectFit: 'contain',
                     mixBlendMode: 'screen',
-                    opacity: 0.9,
+                    opacity: 0.95,
                   }}
                 />
+                
+                {/* Glowing Base Platform under the image */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: '-5%',
+                  width: '60%',
+                  height: '20px',
+                  background: 'radial-gradient(ellipse at center, rgba(255, 140, 0, 0.4) 0%, rgba(0,0,0,0) 70%)',
+                  borderRadius: '50%',
+                  transform: 'rotateX(75deg)',
+                  boxShadow: '0 0 30px rgba(255, 140, 0, 0.2)',
+                  zIndex: -1
+                }} />
               </motion.div>
 
-              {/* HUD Elements */}
-              {/* HUD Line 1: Name */}
+              {/* ID Card Details Below the Image */}
               <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1, duration: 0.5 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
                 style={{
-                  position: 'absolute',
-                  top: '25%',
-                  right: '-10%',
+                  width: '100%',
+                  backgroundColor: 'rgba(20, 10, 0, 0.6)',
+                  border: '1px solid #ff8c00',
+                  borderRadius: '8px',
+                  padding: '1.2rem',
                   display: 'flex',
-                  alignItems: 'center',
-                  zIndex: 10
+                  flexDirection: 'column',
+                  gap: '0.8rem',
+                  boxShadow: '0 0 20px rgba(255, 140, 0, 0.15), inset 0 0 10px rgba(255, 140, 0, 0.1)',
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
-                <div style={{ width: '40px', height: '1px', backgroundColor: '#ff8c00', boxShadow: '0 0 8px #ff8c00' }}></div>
-                <div style={{ 
-                  backgroundColor: 'rgba(40, 20, 0, 0.8)', 
-                  border: '1px solid #ff8c00', 
-                  padding: '4px 10px', 
-                  marginLeft: '5px',
-                  fontFamily: 'system-ui, sans-serif',
-                  fontSize: '0.75rem',
-                  color: '#ff8c00',
-                  letterSpacing: '1px',
-                  boxShadow: '0 0 10px rgba(255, 140, 0, 0.3)'
-                }}>
-                  VARIANT: T. KARTHIKEYAN
+                {/* Scanline effect on ID card */}
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                  background: 'linear-gradient(rgba(255, 140, 0, 0.03) 50%, rgba(0, 0, 0, 0.2) 50%)',
+                  backgroundSize: '100% 4px',
+                  pointerEvents: 'none',
+                }} />
+                
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px dashed rgba(255,140,0,0.3)', paddingBottom: '0.5rem' }}>
+                  <span style={{ color: '#ff8c00', opacity: 0.7, fontSize: '0.75rem', letterSpacing: '2px' }}>SUBJECT</span>
+                  <strong style={{ color: '#ff8c00', fontSize: '1rem', letterSpacing: '1px' }}>T. KARTHIKEYAN</strong>
+                </div>
+                
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px dashed rgba(255,140,0,0.3)', paddingBottom: '0.5rem' }}>
+                  <span style={{ color: '#ff8c00', opacity: 0.7, fontSize: '0.75rem', letterSpacing: '2px' }}>CASE ID</span>
+                  <span style={{ color: '#ff8c00', fontSize: '0.9rem', fontFamily: 'var(--font-mono)' }}>0232-467-9751</span>
+                </div>
+                
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: '#ff4d00', opacity: 0.7, fontSize: '0.75rem', letterSpacing: '2px' }}>STATUS</span>
+                  <span style={{ 
+                    color: '#ff4d00', 
+                    fontSize: '0.85rem', 
+                    fontWeight: 'bold', 
+                    letterSpacing: '1px',
+                    textShadow: '0 0 8px rgba(255,77,0,0.5)',
+                    animation: 'pulse 2s infinite'
+                  }}>
+                    ESCAPED TIMELINE
+                  </span>
                 </div>
               </motion.div>
-
-              {/* HUD Line 2: Case ID */}
-              <motion.div 
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1.2, duration: 0.5 }}
-                style={{
-                  position: 'absolute',
-                  top: '55%',
-                  left: '-15%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  flexDirection: 'row-reverse',
-                  zIndex: 10
-                }}
-              >
-                <div style={{ width: '60px', height: '1px', backgroundColor: '#ff8c00', boxShadow: '0 0 8px #ff8c00' }}></div>
-                <div style={{ 
-                  backgroundColor: 'rgba(40, 20, 0, 0.8)', 
-                  border: '1px solid #ff8c00', 
-                  padding: '4px 10px', 
-                  marginRight: '5px',
-                  fontFamily: 'system-ui, sans-serif',
-                  fontSize: '0.75rem',
-                  color: '#ff8c00',
-                  letterSpacing: '1px',
-                  boxShadow: '0 0 10px rgba(255, 140, 0, 0.3)'
-                }}>
-                  CASE ID: 0232-467-9751
-                </div>
-              </motion.div>
-
-              {/* HUD Line 3: Status */}
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1.4, duration: 0.5 }}
-                style={{
-                  position: 'absolute',
-                  bottom: '25%',
-                  right: '-5%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  zIndex: 10
-                }}
-              >
-                <div style={{ width: '30px', height: '1px', backgroundColor: '#ff4d00', boxShadow: '0 0 8px #ff4d00' }}></div>
-                <div style={{ 
-                  backgroundColor: 'rgba(40, 10, 0, 0.8)', 
-                  border: '1px solid #ff4d00', 
-                  padding: '4px 10px', 
-                  marginLeft: '5px',
-                  fontFamily: 'system-ui, sans-serif',
-                  fontSize: '0.75rem',
-                  color: '#ff4d00',
-                  letterSpacing: '1px',
-                  boxShadow: '0 0 10px rgba(255, 77, 0, 0.3)'
-                }}>
-                  STATUS: ESCAPED TIMELINE
-                </div>
-              </motion.div>
-
-              {/* Glowing Base Platform */}
-              <div style={{
-                position: 'absolute',
-                bottom: '5%',
-                width: '60%',
-                height: '20px',
-                background: 'radial-gradient(ellipse at center, rgba(255, 140, 0, 0.4) 0%, rgba(0,0,0,0) 70%)',
-                borderRadius: '50%',
-                transform: 'rotateX(75deg)',
-                boxShadow: '0 0 30px rgba(255, 140, 0, 0.2)',
-                zIndex: 1
-              }} />
-
+              
             </div>
           </motion.div>
 
