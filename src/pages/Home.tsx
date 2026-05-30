@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { Terminal, Cpu, Mail, Link, FileText } from 'lucide-react';
 import { TemPadTimeline } from '../components/TemPadTimeline';
+import { HologramPortrait } from '../components/HologramPortrait';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -97,19 +98,12 @@ export const Home: React.FC = () => {
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  filter: 'drop-shadow(0 0 15px rgba(0, 150, 255, 0.5))'
+                  filter: 'drop-shadow(0 0 15px rgba(255, 140, 0, 0.5))'
                 }}
               >
-                <img 
-                  src="/images/blue_hologram.png" 
-                  alt="Variant Hologram" 
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    objectFit: 'contain',
-                    mixBlendMode: 'screen',
-                  }}
-                />
+                <div style={{ transform: 'scale(0.8)', filter: 'contrast(1.2)' }}>
+                  <HologramPortrait />
+                </div>
               </motion.div>
 
               {/* HUD Elements */}
@@ -127,17 +121,17 @@ export const Home: React.FC = () => {
                   zIndex: 10
                 }}
               >
-                <div style={{ width: '40px', height: '1px', backgroundColor: '#00d4ff', boxShadow: '0 0 8px #00d4ff' }}></div>
+                <div style={{ width: '40px', height: '1px', backgroundColor: '#ff8c00', boxShadow: '0 0 8px #ff8c00' }}></div>
                 <div style={{ 
-                  backgroundColor: 'rgba(0, 20, 40, 0.8)', 
-                  border: '1px solid #00d4ff', 
+                  backgroundColor: 'rgba(40, 20, 0, 0.8)', 
+                  border: '1px solid #ff8c00', 
                   padding: '4px 10px', 
                   marginLeft: '5px',
                   fontFamily: 'system-ui, sans-serif',
                   fontSize: '0.75rem',
-                  color: '#00d4ff',
+                  color: '#ff8c00',
                   letterSpacing: '1px',
-                  boxShadow: '0 0 10px rgba(0, 212, 255, 0.3)'
+                  boxShadow: '0 0 10px rgba(255, 140, 0, 0.3)'
                 }}>
                   VARIANT: T. KARTHIKEYAN
                 </div>
@@ -158,17 +152,17 @@ export const Home: React.FC = () => {
                   zIndex: 10
                 }}
               >
-                <div style={{ width: '60px', height: '1px', backgroundColor: '#00d4ff', boxShadow: '0 0 8px #00d4ff' }}></div>
+                <div style={{ width: '60px', height: '1px', backgroundColor: '#ff8c00', boxShadow: '0 0 8px #ff8c00' }}></div>
                 <div style={{ 
-                  backgroundColor: 'rgba(0, 20, 40, 0.8)', 
-                  border: '1px solid #00d4ff', 
+                  backgroundColor: 'rgba(40, 20, 0, 0.8)', 
+                  border: '1px solid #ff8c00', 
                   padding: '4px 10px', 
                   marginRight: '5px',
                   fontFamily: 'system-ui, sans-serif',
                   fontSize: '0.75rem',
-                  color: '#00d4ff',
+                  color: '#ff8c00',
                   letterSpacing: '1px',
-                  boxShadow: '0 0 10px rgba(0, 212, 255, 0.3)'
+                  boxShadow: '0 0 10px rgba(255, 140, 0, 0.3)'
                 }}>
                   CASE ID: 0232-467-9751
                 </div>
@@ -210,10 +204,10 @@ export const Home: React.FC = () => {
                 bottom: '5%',
                 width: '60%',
                 height: '20px',
-                background: 'radial-gradient(ellipse at center, rgba(0, 212, 255, 0.4) 0%, rgba(0,0,0,0) 70%)',
+                background: 'radial-gradient(ellipse at center, rgba(255, 140, 0, 0.4) 0%, rgba(0,0,0,0) 70%)',
                 borderRadius: '50%',
                 transform: 'rotateX(75deg)',
-                boxShadow: '0 0 30px rgba(0, 212, 255, 0.2)',
+                boxShadow: '0 0 30px rgba(255, 140, 0, 0.2)',
                 zIndex: 1
               }} />
 
