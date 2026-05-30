@@ -107,6 +107,7 @@ export const Home: React.FC = () => {
                     maxWidth: '100%',
                     maxHeight: '100%',
                     objectFit: 'contain',
+                    mixBlendMode: 'screen',
                     filter: 'contrast(1.2) sepia(1) hue-rotate(350deg) saturate(3)',
                   }}
                 />
