@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { HologramPortrait } from './HologramPortrait';
 
 // @ts-ignore - Ignore type error for mp4 import if it exists
 import tempadVideo from './tempad_video/tempad video.mp4';
@@ -30,246 +31,230 @@ const playRetroSound = () => {
     
     osc.start();
     osc.stop(audioCtx.currentTime + 1.5);
-
-    // Play "waka waka" sequence
-    let time = audioCtx.currentTime + 0.5;
-    for (let i = 0; i < 15; i++) {
-      const osc2 = audioCtx.createOscillator();
-      const gain2 = audioCtx.createGain();
-      osc2.type = 'triangle';
-      osc2.connect(gain2);
-      gain2.connect(audioCtx.destination);
-      
-      osc2.frequency.setValueAtTime(i % 2 === 0 ? 300 : 450, time);
-      gain2.gain.setValueAtTime(0.05, time);
-      gain2.gain.linearRampToValueAtTime(0.01, time + 0.15);
-      
-      osc2.start(time);
-      osc2.stop(time + 0.15);
-      time += 0.3;
-    }
   } catch (e) {
     console.error("Audio playback failed", e);
   }
 };
 
 export const TVALoadingScreen: React.FC<Props> = ({ onComplete }) => {
-  const [started, setStarted] = useState(false);
-  const [progress, setProgress] = useState(0);
-
-  const handleStart = () => {
-    setStarted(true);
-    playRetroSound();
-  };
+  const [showBreachAlert, setShowBreachAlert] = useState(false);
+  const [showTempad, setShowTempad] = useState(false);
+  const [showHologram, setShowHologram] = useState(false);
 
   useEffect(() => {
-    if (!started) return;
+    // Staggered animation sequence
+    const t1 = setTimeout(() => setShowBreachAlert(true), 1000);
+    const t2 = setTimeout(() => setShowTempad(true), 1800);
+    const t3 = setTimeout(() => setShowHologram(true), 2500);
 
-    const duration = 5000;
-    const interval = 50;
-    let current = 0;
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, []);
 
-    const timer = setInterval(() => {
-      current += interval;
-      setProgress(Math.min((current / duration) * 100, 100));
-      
-      if (current >= duration) {
-        clearInterval(timer);
-        setTimeout(onComplete, 500); // slight delay after 100%
-      }
-    }, interval);
-
-    return () => clearInterval(timer);
-  }, [started, onComplete]);
+  const handleClickToView = () => {
+    playRetroSound();
+    setTimeout(() => {
+      onComplete();
+    }, 500);
+  };
 
   return (
-    <div className="tva-intro-container">
-      <div className="crt-overlay"></div>
+    <div className="tva-intro-container" style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: '#000' }}>
+      <div className="crt-overlay" style={{ zIndex: 10 }}></div>
       
-      <AnimatePresence>
-        {!started && (
-          <motion.div 
-            className="start-prompt"
-            exit={{ opacity: 0, scale: 1.5, filter: 'blur(10px)' }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-            style={{ zIndex: 200, width: '100%', display: 'flex', justifyContent: 'center', padding: '2rem' }}
-          >
-            <div
-              className="retro-tv-shell"
-              style={{
-                position: 'relative', width: '100%', maxWidth: '650px', backgroundColor: '#1a1a1a',
-                borderRadius: '40px', border: '4px solid #333',
-                boxShadow: '20px 20px 60px rgba(0,0,0,0.8), -10px -10px 30px rgba(255,255,255,0.05), 0 0 30px rgba(255,0,0,0.2)',
-                padding: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center', cursor: 'pointer',
-                transition: 'transform 0.2s',
-              }}
-              onClick={handleStart}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-            >
-              {/* INNER CRT SCREEN */}
-              <div style={{
-                flex: 1, position: 'relative', backgroundColor: '#050300', borderRadius: '25px',
-                border: '8px solid #0a0a0a', boxShadow: 'inset 0 0 40px #000',
-                overflow: 'hidden', aspectRatio: '4/3', display: 'flex', flexDirection: 'column',
-                fontFamily: 'var(--font-mono)', color: 'var(--tva-orange)'
-              }}>
-                {/* Glare, Scanlines, Shadow */}
-                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 40%)', pointerEvents: 'none', zIndex: 5 }} />
-                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%)', backgroundSize: '100% 4px', pointerEvents: 'none', zIndex: 4 }} />
-                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', boxShadow: 'inset 0 0 30px #000', pointerEvents: 'none', zIndex: 6 }} />
+      {/* Background Video */}
+      <video 
+        src={tempadVideo} 
+        autoPlay 
+        loop 
+        muted 
+        playsInline
+        style={{ 
+          position: 'absolute', 
+          top: 0, 
+          left: 0, 
+          width: '100%', 
+          height: '100%', 
+          objectFit: 'cover',
+          filter: 'contrast(1.2) brightness(0.4)',
+          zIndex: 1
+        }} 
+      />
 
-                {/* ANIMATION CONTENT */}
-                <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                   
-                   {/* Video Player */}
-                   <video 
-                     src={tempadVideo} 
-                     autoPlay 
-                     loop 
-                     muted 
-                     playsInline
-                     style={{ 
-                       position: 'absolute', 
-                       top: 0, 
-                       left: 0, 
-                       width: '100%', 
-                       height: '100%', 
-                       objectFit: 'cover',
-                       filter: 'contrast(1.2) brightness(1.1)' // Give it a slight retro punch
-                     }} 
-                   />
+      {/* Main Content Layer */}
+      <div style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0, bottom: 0,
+        zIndex: 20,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '1rem',
+      }}>
 
-                   {/* Overlay Text */}
-                   <style>
-                     {`
-                       .nexus-text {
-                         opacity: 0;
-                         animation: revealAndBlink 1s step-end infinite 2.5s;
-                       }
-                       @keyframes revealAndBlink {
-                         0% { opacity: 1; }
-                         50% { opacity: 0; }
-                         100% { opacity: 1; }
-                       }
-                     `}
-                   </style>
-                   <div className="nexus-text" style={{ position: 'absolute', top: '20px', left: '20px', color: '#ff3333', fontSize: '1.5rem', fontWeight: 'bold', textShadow: '0 0 10px #ff0000' }}>
-                     NEXUS EVENT DETECTED!!!!
-                   </div>
-                   
-                   <div style={{ position: 'absolute', bottom: '30px', width: '100%', textAlign: 'center', color: '#fff', fontSize: '1.2rem', padding: '10px', textShadow: '0 0 10px #fff' }}>
-                     [ CLICK TO INTERVENE ]
-                   </div>
-
-                </div>
-              </div>
-
-              {/* TV Controls */}
-              <div className="retro-tv-controls" style={{ width: '60px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#222', boxShadow: 'inset 0 5px 10px rgba(255,255,255,0.1), 0 5px 10px rgba(0,0,0,0.8)', border: '2px solid #111', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <div style={{ width: '4px', height: '15px', backgroundColor: '#ff3333', borderRadius: '2px', transform: 'translateY(-8px)', boxShadow: '0 0 5px #ff0000' }} />
-                </div>
-                <div style={{ width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#222', boxShadow: 'inset 0 5px 10px rgba(255,255,255,0.1), 0 5px 10px rgba(0,0,0,0.8)', border: '2px solid #111', display: 'flex', justifyContent: 'center', alignItems: 'center', transform: 'rotate(45deg)' }}>
-                  <div style={{ width: '3px', height: '10px', backgroundColor: '#555', borderRadius: '2px', transform: 'translateY(-5px)' }} />
-                </div>
-                <div className="retro-tv-speaker" style={{ display: 'flex', gap: '4px', marginTop: '1rem' }}>
-                  {[...Array(5)].map((_, i) => <div key={i} style={{ width: '20px', height: '3px', backgroundColor: '#0a0a0a', borderRadius: '2px' }} />)}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {started && (
-        <motion.div 
-          className="tva-screen-content"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {/* Main Logo */}
-          <div className="tva-logo-large">
-            <span style={{ fontSize: '8rem', fontWeight: 900, letterSpacing: '-5px', position: 'relative', display: 'flex', alignItems: 'center' }}>
-              T<span style={{ position: 'relative' }}>
-                V
-                <span style={{ position: 'absolute', right: '-15%', top: '50%', width: '130%', height: '8px', background: '#E23D28', transform: 'translateY(-50%)' }}></span>
-              </span>A
-            </span>
-          </div>
-
-          <h1 className="retro-text" style={{ fontSize: '2rem', letterSpacing: '8px', marginBottom: '40px' }}>
-            HEY Y'ALL...
-          </h1>
-
-          {/* Loading Area */}
-          <div className="loading-area" style={{ position: 'relative', width: '60%', maxWidth: '800px', height: '100px' }}>
-            
-            {/* Pac-Man Miss Minutes */}
+        {/* BREACH ALERT TEXT */}
+        <AnimatePresence>
+          {showBreachAlert && (
             <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: [0, 1, 0.7, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+              className="breach-alert-text"
+            >
+              ⚠ TIMELINE BREACH ALERT ⚠
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* HOLOGRAM SECTION */}
+        <AnimatePresence>
+          {showHologram && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
               style={{
-                position: 'absolute',
-                bottom: '10px',
-                left: `${progress}%`,
-                transform: 'translateX(-50%)',
-                zIndex: 10
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                position: 'relative',
+                marginBottom: '-20px',
               }}
             >
-              <svg viewBox="0 0 100 120" width="80" height="96" style={{ overflow: 'visible' }}>
-                {/* Legs running */}
-                <g stroke="var(--tva-orange)" strokeWidth="4" strokeLinecap="round">
-                  <line x1="40" y1="92" x2="30" y2="110">
-                    <animate attributeName="x2" values="30;50;30" dur="0.4s" repeatCount="indefinite" />
-                  </line>
-                  <line x1="60" y1="92" x2="70" y2="110">
-                    <animate attributeName="x2" values="70;50;70" dur="0.4s" repeatCount="indefinite" />
-                  </line>
-                </g>
-                {/* Pacman body */}
-                <circle cx="50" cy="50" r="45" fill="var(--tva-orange)" />
-                {/* Eye */}
-                <circle cx="50" cy="30" r="8" fill="#fff" />
-                <circle cx="53" cy="30" r="4" fill="#000" />
-                {/* Animated Mouth (Pac-Man style) */}
-                <path d="M 50 50 L 100 20 A 45 45 0 0 1 100 80 Z" fill="#111">
-                  <animate attributeName="d" 
-                    values="M 50 50 L 100 20 A 45 45 0 0 1 100 80 Z; M 50 50 L 100 48 A 45 45 0 0 1 100 52 Z; M 50 50 L 100 20 A 45 45 0 0 1 100 80 Z" 
-                    dur="0.3s" repeatCount="indefinite" />
-                </path>
-              </svg>
-            </motion.div>
-
-            {/* Progress Bar Container */}
-            <div className="progress-bar-container" style={{ 
-              position: 'absolute', bottom: '0', width: '100%', height: '40px', 
-              border: '4px solid var(--tva-orange)', padding: '4px', boxSizing: 'border-box'
-            }}>
-              {/* Dots for Pacman to eat */}
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                {[...Array(20)].map((_, i) => (
-                  <div key={i} style={{ width: '8px', height: '8px', background: 'rgba(255,140,0,0.5)', borderRadius: '50%' }} />
-                ))}
+              {/* 3D Hologram Portrait */}
+              <div className="hologram-wrapper">
+                <HologramPortrait size={320} rotationSpeed={0.005} />
+                {/* Hologram scanline overlay */}
+                <div className="hologram-scanlines"></div>
               </div>
-              
-              {/* Solid Fill */}
-              <div style={{ 
-                height: '100%', background: 'var(--tva-orange)', 
-                width: `${progress}%`, transition: 'width 0.1s linear' 
-              }}></div>
-            </div>
-          </div>
-          
-          {/* Border Details */}
-          <div className="tva-border-text bottom-left">
-            TIME VARIANCE AUTHORITY PRESENTATION COMMISSION // DSTORY.CO
-          </div>
-          <div className="tva-border-logo bottom-right">
-            TVA
-          </div>
-          
-        </motion.div>
-      )}
+
+              {/* Hologram Beam Cone */}
+              <div className="hologram-beam"></div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* TEMPAD UI PANEL */}
+        <AnimatePresence>
+          {showTempad && (
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, type: 'spring', bounce: 0.2 }}
+              className="tempad-panel"
+            >
+              {/* Scanlines inside panel */}
+              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%)', backgroundSize: '100% 4px', pointerEvents: 'none', zIndex: 1, borderRadius: '12px' }} />
+
+              {/* Header Bar */}
+              <div className="tempad-header">
+                <span>CONFIRM IDENTITY</span>
+                <span style={{ color: '#ff3333' }}>BREACH DETECTED</span>
+              </div>
+
+              {/* Content Row */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', position: 'relative', zIndex: 2 }}>
+                
+                {/* Graph Side */}
+                <div style={{ flex: '1 1 280px', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                  <div className="tempad-graph-area">
+                    {/* SVG Graph */}
+                    <svg width="100%" height="100%" viewBox="0 0 400 160" preserveAspectRatio="none" style={{ position: 'absolute', top: 0, left: 0 }}>
+                      <g stroke="rgba(255, 140, 0, 0.12)" strokeWidth="1">
+                        <line x1="0" y1="32" x2="400" y2="32" />
+                        <line x1="0" y1="64" x2="400" y2="64" />
+                        <line x1="0" y1="96" x2="400" y2="96" />
+                        <line x1="0" y1="128" x2="400" y2="128" />
+                        <line x1="80" y1="0" x2="80" y2="160" />
+                        <line x1="160" y1="0" x2="160" y2="160" />
+                        <line x1="240" y1="0" x2="240" y2="160" />
+                        <line x1="320" y1="0" x2="320" y2="160" />
+                      </g>
+                      
+                      {/* Red danger zone */}
+                      <rect x="0" y="12" width="400" height="12" fill="#ff3333" opacity="0.7" />
+                      
+                      {/* Sacred Timeline */}
+                      <line x1="0" y1="96" x2="400" y2="96" stroke="var(--tva-orange)" strokeWidth="2.5" />
+                      
+                      {/* Branch line */}
+                      <motion.line 
+                        x1="180" y1="96" 
+                        x2="320" y2="20" 
+                        stroke="#ff3333" 
+                        strokeWidth="3"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 2, delay: 1 }}
+                        style={{ filter: 'drop-shadow(0 0 4px #ff0000)' }}
+                      />
+                    </svg>
+
+                    <div style={{ position: 'absolute', bottom: '10px', left: '12px', color: 'var(--tva-orange)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', opacity: 0.9, lineHeight: '1.4' }}>
+                      TIMELINE M44 : 70.62.0734.4641<br/>
+                      SEGMENT : 636.432
+                    </div>
+
+                    <div style={{ position: 'absolute', top: '30px', left: '12px', color: 'var(--tva-orange)', fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 'bold' }}>
+                      3.92<br/>
+                      <span style={{ fontSize: '0.55rem', fontWeight: 'normal' }}>UNITS</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Variant Info Side */}
+                <div style={{ flex: '0 0 180px', display: 'flex', flexDirection: 'column', gap: '0.5rem', position: 'relative', zIndex: 2 }}>
+                  <div className="tempad-variant-info">
+                    <div className="variant-row">
+                      <span>VARIANT#</span>
+                      <strong>T.K-18</strong>
+                    </div>
+                    <div className="variant-row">
+                      <span>STATUS</span>
+                      <span style={{ color: '#ff4d00', fontSize: '0.85rem' }}>ESCAPED</span>
+                    </div>
+                    <div className="variant-row">
+                      <span>ORIGIN</span>
+                      <strong>CHENNAI</strong>
+                    </div>
+                    <div className="variant-row">
+                      <span>THREAT</span>
+                      <span style={{ color: '#ff3333' }}>LEVEL 9</span>
+                    </div>
+                  </div>
+
+                  <div style={{
+                    padding: '0.5rem',
+                    textAlign: 'center',
+                    color: '#000',
+                    fontFamily: 'var(--font-mono)',
+                    backgroundColor: 'var(--tva-orange)',
+                    fontWeight: 'bold',
+                    letterSpacing: '1px',
+                    fontSize: '0.9rem',
+                  }}>
+                    TVA CASE FILE
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <motion.button
+                onClick={handleClickToView}
+                whileHover={{ scale: 1.02, backgroundColor: 'var(--tva-orange)', color: '#000', boxShadow: '0 0 25px rgba(255, 140, 0, 0.7)' }}
+                whileTap={{ scale: 0.97 }}
+                className="tempad-cta-button"
+              >
+                [ CLICK TO VIEW VARIANT ]
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };
