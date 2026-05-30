@@ -5,13 +5,17 @@ interface ChromaKeyVideoProps {
   width?: number | string;
   height?: number | string;
   className?: string;
+  onEnded?: () => void;
+  loop?: boolean;
 }
 
 export const ChromaKeyVideo: React.FC<ChromaKeyVideoProps> = ({
   src,
-  width = 800,
-  height = 600,
+  width = '100%',
+  height = '100%',
   className = '',
+  onEnded,
+  loop = true,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -87,6 +91,10 @@ export const ChromaKeyVideo: React.FC<ChromaKeyVideoProps> = ({
       }
     });
 
+    if (onEnded) {
+      video.addEventListener('ended', onEnded);
+    }
+
     // Start immediately if already playing
     if (!video.paused && !video.ended) {
       requestRef.current = requestAnimationFrame(computeFrame);
@@ -97,8 +105,9 @@ export const ChromaKeyVideo: React.FC<ChromaKeyVideoProps> = ({
 
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      if (onEnded) video.removeEventListener('ended', onEnded);
     };
-  }, []);
+  }, [onEnded]);
 
   return (
     <div style={{ position: 'relative', width, height }} className={className}>
@@ -106,7 +115,7 @@ export const ChromaKeyVideo: React.FC<ChromaKeyVideoProps> = ({
         ref={videoRef}
         src={src}
         autoPlay
-        loop
+        loop={loop}
         muted
         playsInline
         style={{ 
@@ -122,7 +131,7 @@ export const ChromaKeyVideo: React.FC<ChromaKeyVideoProps> = ({
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'contain',
+          objectFit: 'cover',
           display: 'block'
         }}
       />
