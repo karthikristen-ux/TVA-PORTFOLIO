@@ -78,52 +78,68 @@ export const Projects: React.FC = () => {
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6 }}
         >
-          <h1 className="crt-text">PROJECT ARCHIVE</h1>
-          <p style={{ fontSize: '1.2rem', marginBottom: '3rem' }}>
-            Database entries for significant engineering deployments.
+          <h1 className="crt-text" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginBottom: '0.5rem', lineHeight: 1.1 }}>PROJECT ARCHIVE</h1>
+          <p style={{ fontSize: '1.15rem', color: '#ccc', marginBottom: '4rem', maxWidth: '600px', lineHeight: 1.6 }}>
+            A curated log of high-level engineering deployments and automated systems.
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))', gap: '3rem' }}>
             {projects.map((proj, index) => (
               <motion.div 
                 key={index}
                 className="tva-card"
-                initial={{ x: -50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: index * 0.2 }}
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: index * 0.15, duration: 0.6, ease: "easeOut" }}
+                style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <h2>{proj.title}</h2>
-                  <span style={{ color: 'var(--tva-orange)', fontFamily: 'var(--font-mono)' }}>[{proj.date}]</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid rgba(255,140,0,0.2)', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
+                  <h2 style={{ fontSize: '1.5rem', margin: 0, border: 'none', padding: 0 }}>{proj.title}</h2>
+                  <span style={{ color: 'var(--tva-orange)', fontFamily: 'var(--font-mono)', fontSize: '0.9rem', opacity: 0.8 }}>[{proj.date}]</span>
                 </div>
                 
-                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
-                  <div style={{ flex: '1', minWidth: '250px' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ 
+                    width: '100%', 
+                    height: '220px', 
+                    borderRadius: '8px', 
+                    overflow: 'hidden', 
+                    marginBottom: '1.5rem',
+                    border: '1px solid rgba(255,140,0,0.1)',
+                    position: 'relative'
+                  }}>
                     <img 
                       src={proj.image} 
                       alt={`${proj.title} schematic`} 
                       style={{ 
                         width: '100%', 
-                        height: 'auto', 
-                        border: '2px solid var(--tva-orange)', 
-                        boxShadow: '0 0 10px var(--tva-orange-glow)',
-                        filter: 'grayscale(100%) sepia(100%) hue-rotate(350deg) saturate(500%) brightness(1.2)' // Forces orange tint
+                        height: '100%', 
+                        objectFit: 'cover',
+                        filter: 'grayscale(80%) sepia(50%) hue-rotate(350deg) saturate(200%) brightness(0.8)',
+                        transition: 'all 0.5s ease'
                       }} 
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.filter = 'grayscale(0%) sepia(20%) hue-rotate(350deg) saturate(300%) brightness(1.1)';
+                        e.currentTarget.style.transform = 'scale(1.05)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.filter = 'grayscale(80%) sepia(50%) hue-rotate(350deg) saturate(200%) brightness(0.8)';
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
                     />
                   </div>
-                  <div style={{ flex: '2', minWidth: '250px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                    <p style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>{proj.description}</p>
-                    
-                    <div style={{ display: 'flex', gap: '1rem' }}>
-                      <a href={proj.github} target="_blank" rel="noreferrer" className="tva-btn" style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Code size={20} /> Code
-                      </a>
-                      <button onClick={() => setSelectedProject(proj)} className="tva-btn" style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', background: 'transparent', border: '1px solid var(--tva-orange)' }}>
-                        <ExternalLink size={20} /> Details
-                      </button>
-                    </div>
+                  
+                  <p style={{ color: '#ccc', marginBottom: '2rem', fontSize: '1.05rem', lineHeight: '1.6', flex: 1 }}>{proj.description}</p>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <a href={proj.github} target="_blank" rel="noreferrer" className="tva-btn" style={{ fontSize: '0.9rem' }}>
+                      <Code size={18} style={{marginRight: '8px'}}/> SOURCE
+                    </a>
+                    <button onClick={() => setSelectedProject(proj)} className="tva-btn" style={{ fontSize: '0.9rem', background: 'transparent', borderColor: 'rgba(255,140,0,0.5)' }}>
+                      <ExternalLink size={18} style={{marginRight: '8px'}}/> DECRYPT
+                    </button>
                   </div>
                 </div>
               </motion.div>
@@ -144,30 +160,31 @@ export const Projects: React.FC = () => {
               left: 0,
               width: '100%',
               height: '100%',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
               zIndex: 9999,
-              padding: '1rem',
-              backdropFilter: 'blur(5px)'
+              padding: '2rem'
             }}
             onClick={() => setSelectedProject(null)}
           >
             <motion.div
-              initial={{ scale: 0.9, y: 20, opacity: 0 }}
+              initial={{ scale: 0.95, y: 20, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
-              exit={{ scale: 0.9, y: 20, opacity: 0 }}
+              exit={{ scale: 0.95, y: 20, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
               className="tva-card"
               style={{
-                maxWidth: '700px',
+                maxWidth: '800px',
                 width: '100%',
-                maxHeight: '90vh',
+                maxHeight: '85vh',
                 overflowY: 'auto',
                 position: 'relative',
-                background: '#0a0a0a',
-                border: '2px solid var(--tva-orange)',
-                boxShadow: '0 0 20px var(--tva-orange-glow)'
+                padding: '3rem',
+                margin: 0
               }}
               onClick={e => e.stopPropagation()}
             >
@@ -175,56 +192,79 @@ export const Projects: React.FC = () => {
                 onClick={() => setSelectedProject(null)}
                 style={{
                   position: 'absolute',
-                  top: '1rem',
-                  right: '1rem',
-                  background: 'none',
-                  border: 'none',
+                  top: '1.5rem',
+                  right: '1.5rem',
+                  background: 'rgba(255,140,0,0.1)',
+                  border: '1px solid rgba(255,140,0,0.3)',
                   color: 'var(--tva-orange)',
                   cursor: 'pointer',
-                  zIndex: 2
+                  zIndex: 2,
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s ease'
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--tva-orange)'; e.currentTarget.style.color = '#000'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,140,0,0.1)'; e.currentTarget.style.color = 'var(--tva-orange)'; }}
               >
-                <X size={24} />
+                <X size={20} />
               </button>
               
-              <h2 style={{ marginBottom: '1rem', paddingRight: '2rem' }}>{selectedProject.title}</h2>
-              <p style={{ color: 'var(--tva-orange)', fontFamily: 'var(--font-mono)', marginBottom: '1.5rem' }}>[{selectedProject.date}]</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem', borderBottom: '1px solid rgba(255,140,0,0.2)', paddingBottom: '1rem' }}>
+                <h2 style={{ margin: 0, border: 'none', padding: 0 }}>{selectedProject.title}</h2>
+                <span style={{ color: 'var(--tva-orange)', fontFamily: 'var(--font-mono)', opacity: 0.7 }}>[{selectedProject.date}]</span>
+              </div>
               
-              <img 
-                src={selectedProject.image} 
-                alt={`${selectedProject.title} schematic`} 
-                style={{ 
-                  width: '100%', 
-                  height: 'auto', 
-                  marginBottom: '1.5rem',
-                  border: '1px solid var(--tva-orange)',
-                  filter: 'grayscale(100%) sepia(100%) hue-rotate(350deg) saturate(500%) brightness(1.2)'
-                }} 
-              />
+              <div style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: '2rem', border: '1px solid rgba(255,140,0,0.2)' }}>
+                <img 
+                  src={selectedProject.image} 
+                  alt={`${selectedProject.title} schematic`} 
+                  style={{ 
+                    width: '100%', 
+                    height: 'auto', 
+                    display: 'block',
+                    filter: 'grayscale(20%) sepia(30%) hue-rotate(350deg) saturate(150%)'
+                  }} 
+                />
+              </div>
               
-              <h3 style={{ color: 'var(--tva-orange)', marginBottom: '0.5rem', fontFamily: 'var(--font-mono)' }}>// PROBLEM STATEMENT</h3>
-              <p style={{ marginBottom: '1.5rem', lineHeight: '1.6' }}>{selectedProject.problemStatement}</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem', color: '#ddd' }}>
+                <div>
+                  <h3 className="crt-text" style={{ fontSize: '1.2rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ color: 'var(--tva-orange)' }}>//</span> PROBLEM STATEMENT
+                  </h3>
+                  <p style={{ lineHeight: '1.7' }}>{selectedProject.problemStatement}</p>
+                </div>
 
-              <h3 style={{ color: 'var(--tva-orange)', marginBottom: '0.5rem', fontFamily: 'var(--font-mono)' }}>// SOLUTION</h3>
-              <p style={{ marginBottom: '1.5rem', lineHeight: '1.6' }}>{selectedProject.solution}</p>
+                <div>
+                  <h3 className="crt-text" style={{ fontSize: '1.2rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ color: 'var(--tva-orange)' }}>//</span> SOLUTION
+                  </h3>
+                  <p style={{ lineHeight: '1.7' }}>{selectedProject.solution}</p>
+                </div>
+                
+                <div>
+                  <h3 className="crt-text" style={{ fontSize: '1.2rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ color: 'var(--tva-orange)' }}>//</span> KEY ARCHITECTURE
+                  </h3>
+                  <ul style={{ listStyleType: 'none', padding: 0 }}>
+                    {selectedProject.features?.map((feature, idx) => (
+                      <li key={idx} style={{ position: 'relative', paddingLeft: '1.5rem', marginBottom: '0.8rem', lineHeight: '1.6' }}>
+                        <span style={{ position: 'absolute', left: 0, color: 'var(--tva-orange)' }}>▹</span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
               
-              <h3 style={{ color: 'var(--tva-orange)', marginBottom: '0.5rem', fontFamily: 'var(--font-mono)' }}>// KEY FEATURES</h3>
-              <ul style={{ listStyleType: 'none', padding: 0, marginBottom: '2rem' }}>
-                {selectedProject.features?.map((feature, idx) => (
-                  <li key={idx} style={{ position: 'relative', paddingLeft: '1.5rem', marginBottom: '0.5rem', lineHeight: '1.5' }}>
-                    <span style={{ position: 'absolute', left: 0, color: 'var(--tva-orange)' }}>&gt;</span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              
-              <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                <a href={selectedProject.github} target="_blank" rel="noreferrer" className="tva-btn" style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', textAlign: 'center', justifyContent: 'center' }}>
-                  <Code size={20} /> Access Source Code
+              <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'flex-end' }}>
+                <a href={selectedProject.github} target="_blank" rel="noreferrer" className="tva-btn">
+                  <Code size={18} style={{marginRight: '8px'}}/> ACCESS SOURCE CODE
                 </a>
-                <button onClick={() => setSelectedProject(null)} className="tva-btn" style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', cursor: 'pointer', background: 'transparent', border: '1px solid var(--tva-orange)' }}>
-                  <X size={20} /> Close Details
-                </button>
               </div>
             </motion.div>
           </motion.div>

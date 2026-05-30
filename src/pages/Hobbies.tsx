@@ -83,15 +83,16 @@ export const Hobbies: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: "-20%" }}
             transition={{ duration: 0.8 }}
-            style={{ maxWidth: '800px', textAlign: 'center', backgroundColor: 'rgba(10,10,10,0.6)', padding: '3rem', borderRadius: '20px', border: '1px solid var(--tva-orange)', backdropFilter: 'blur(5px)' }}
+            className="tva-card"
+            style={{ maxWidth: '800px', textAlign: 'center', padding: '4rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
           >
-            <h1 className="crt-text" style={{ textShadow: '0 0 10px #000, 0 0 20px var(--tva-orange)', margin: 0 }}>
+            <h1 className="crt-text" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', margin: 0, lineHeight: 1.1 }}>
               RECREATIONAL LOGS
             </h1>
-            <p style={{ fontSize: '1.4rem', marginTop: '1rem', textShadow: '0 0 5px #000' }}>
-              Documenting the sacred timeline outside of work.
+            <p style={{ fontSize: '1.2rem', color: '#ccc', lineHeight: 1.6, margin: 0 }}>
+              Documenting the sacred timeline outside of work. An archival look into personal pursuits and unclassified activities.
             </p>
-            <div style={{ marginTop: '2rem', opacity: 0.8, animation: 'pulse 2s infinite' }}>
+            <div style={{ marginTop: '3rem', opacity: 0.7, animation: 'pulse 2s infinite', letterSpacing: '4px', fontSize: '0.9rem', color: 'var(--tva-orange)' }}>
               ↓ SCROLL TO ADVANCE TIMELINE ↓
             </div>
           </motion.div>
@@ -111,33 +112,32 @@ export const Hobbies: React.FC = () => {
               whileInView={{ x: 0, opacity: 1 }}
               viewport={{ once: false, margin: "-20%" }}
               transition={{ type: 'spring', bounce: 0.4 }}
-              className="retro-tv-shell"
+              className="tva-card retro-tv-shell"
               style={{
                 // MINIMALIST RETRO TV SHELL
                 position: 'relative',
                 width: '100%',
-                maxWidth: '600px', 
-                backgroundColor: '#1a1a1a', // Sleek dark shell
-                borderRadius: '40px', // Heavy rounded corners for retro TV look
-                border: '4px solid #333',
-                boxShadow: '20px 20px 60px rgba(0,0,0,0.8), -10px -10px 30px rgba(255,255,255,0.05), 0 0 20px rgba(255,140,0,0.2)',
-                padding: '1.5rem', 
+                maxWidth: '650px', 
+                backgroundColor: 'rgba(15, 15, 15, 0.75)', 
+                borderRadius: '24px', 
+                padding: '2rem', 
                 display: 'flex',
-                gap: '1rem', // Space between screen and control panel
-                alignItems: 'center'
+                gap: '1.5rem', 
+                alignItems: 'center',
+                margin: 0
               }}
             >
               {/* INNER CRT SCREEN */}
               <div style={{
                 flex: 1,
                 position: 'relative',
-                backgroundColor: '#050300', 
-                borderRadius: '25px', // Curved screen
-                border: '8px solid #0a0a0a', // Inner bezel
-                boxShadow: 'inset 0 0 40px #000',
+                backgroundColor: '#030200', 
+                borderRadius: '16px', 
+                border: '6px solid #000', 
+                boxShadow: 'inset 0 0 50px rgba(0,0,0,0.9), 0 0 15px rgba(255,140,0,0.1)',
                 padding: '2rem',
                 overflow: 'hidden',
-                aspectRatio: '4/3', // Classic TV aspect ratio
+                aspectRatio: '4/3', 
                 display: 'flex',
                 flexDirection: 'column',
                 fontFamily: 'var(--font-mono)',
@@ -147,7 +147,7 @@ export const Hobbies: React.FC = () => {
                 {/* Minimalist Glare */}
                 <div style={{
                   position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 40%)',
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%)',
                   pointerEvents: 'none', zIndex: 5,
                 }} />
                 
@@ -158,20 +158,13 @@ export const Hobbies: React.FC = () => {
                   backgroundSize: '100% 4px',
                   pointerEvents: 'none', zIndex: 4,
                 }} />
-                
-                {/* Tube shadow */}
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                  boxShadow: 'inset 0 0 30px #000',
-                  pointerEvents: 'none', zIndex: 6,
-                }} />
 
                 {/* MINIMALIST CONTENT */}
                 <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%' }}>
                   
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem', opacity: 0.9 }}>
                     <Camera size={24} color="var(--tva-orange)" />
-                    <h3 style={{ margin: 0, fontSize: '1.2rem', letterSpacing: '2px' }}>PHOTOGRAPHY_ARCHIVE</h3>
+                    <h3 style={{ margin: 0, fontSize: '1.2rem', letterSpacing: '2px', border: 'none' }}>PHOTOGRAPHY_ARCHIVE</h3>
                   </div>
                   
                   {/* Clean Placeholder Area */}
@@ -181,55 +174,54 @@ export const Hobbies: React.FC = () => {
                     flexDirection: 'column', 
                     justifyContent: 'center', 
                     alignItems: 'center',
-                    backgroundColor: 'rgba(255, 140, 0, 0.05)',
-                    borderRadius: '10px',
+                    backgroundColor: 'rgba(255, 140, 0, 0.03)',
+                    border: '1px dashed rgba(255, 140, 0, 0.2)',
+                    borderRadius: '8px',
                     position: 'relative'
                   }}>
-                    <Camera size={40} color="var(--tva-orange)" style={{ opacity: 0.5, marginBottom: '1rem' }} />
-                    <div style={{ letterSpacing: '2px', fontSize: '0.8rem', opacity: 0.8 }}>[ CONNECTING TO FEED... ]</div>
+                    <Camera size={40} color="var(--tva-orange)" style={{ opacity: 0.4, marginBottom: '1rem' }} />
+                    <div style={{ letterSpacing: '2px', fontSize: '0.8rem', opacity: 0.6 }}>[ ESTABLISHING FEED... ]</div>
                   </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', fontSize: '0.7rem', opacity: 0.5, marginTop: '1rem', letterSpacing: '1px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', fontSize: '0.75rem', opacity: 0.4, marginTop: '1rem', letterSpacing: '2px' }}>
                     CH: 03 | VOL: 42
                   </div>
 
                 </div>
               </div>
 
-              {/* RETRO TV CONTROL PANEL (Right side knobs) */}
+              {/* RETRO TV CONTROL PANEL */}
               <div className="retro-tv-controls" style={{ 
                 width: '60px', 
                 height: '100%', 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center',
-                gap: '2rem' 
+                gap: '2.5rem' 
               }}>
                 {/* Big tuning knob */}
                 <div style={{ 
-                  width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#222',
-                  boxShadow: 'inset 0 5px 10px rgba(255,255,255,0.1), 0 5px 10px rgba(0,0,0,0.8)',
-                  border: '2px solid #111', display: 'flex', justifyContent: 'center', alignItems: 'center'
+                  width: '45px', height: '45px', borderRadius: '50%', backgroundColor: '#1a1a1a',
+                  boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.05), 0 5px 10px rgba(0,0,0,0.5)',
+                  border: '1px solid #333', display: 'flex', justifyContent: 'center', alignItems: 'center'
                 }}>
-                  <div style={{ width: '4px', height: '15px', backgroundColor: 'var(--tva-orange)', borderRadius: '2px', transform: 'translateY(-8px)' }} />
+                  <div style={{ width: '3px', height: '15px', backgroundColor: 'var(--tva-orange)', borderRadius: '2px', transform: 'translateY(-10px)' }} />
                 </div>
                 {/* Smaller volume knob */}
                 <div style={{ 
-                  width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#222',
-                  boxShadow: 'inset 0 5px 10px rgba(255,255,255,0.1), 0 5px 10px rgba(0,0,0,0.8)',
-                  border: '2px solid #111', display: 'flex', justifyContent: 'center', alignItems: 'center',
+                  width: '35px', height: '35px', borderRadius: '50%', backgroundColor: '#1a1a1a',
+                  boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.05), 0 5px 10px rgba(0,0,0,0.5)',
+                  border: '1px solid #333', display: 'flex', justifyContent: 'center', alignItems: 'center',
                   transform: 'rotate(45deg)'
                 }}>
-                  <div style={{ width: '3px', height: '10px', backgroundColor: '#555', borderRadius: '2px', transform: 'translateY(-5px)' }} />
+                  <div style={{ width: '2px', height: '10px', backgroundColor: '#666', borderRadius: '2px', transform: 'translateY(-8px)' }} />
                 </div>
                 
                 {/* Speaker Grill */}
-                <div className="retro-tv-speaker" style={{ display: 'flex', gap: '4px', marginTop: '1rem' }}>
-                  <div style={{ width: '20px', height: '3px', backgroundColor: '#0a0a0a', borderRadius: '2px' }} />
-                  <div style={{ width: '20px', height: '3px', backgroundColor: '#0a0a0a', borderRadius: '2px' }} />
-                  <div style={{ width: '20px', height: '3px', backgroundColor: '#0a0a0a', borderRadius: '2px' }} />
-                  <div style={{ width: '20px', height: '3px', backgroundColor: '#0a0a0a', borderRadius: '2px' }} />
-                  <div style={{ width: '20px', height: '3px', backgroundColor: '#0a0a0a', borderRadius: '2px' }} />
+                <div className="retro-tv-speaker" style={{ display: 'flex', gap: '5px', marginTop: '1.5rem', opacity: 0.7 }}>
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} style={{ width: '24px', height: '3px', backgroundColor: '#000', borderRadius: '2px' }} />
+                  ))}
                 </div>
               </div>
 
@@ -245,11 +237,12 @@ export const Hobbies: React.FC = () => {
               whileInView={{ x: 0, opacity: 1 }}
               viewport={{ once: false, margin: "-20%" }}
               transition={{ duration: 0.8 }}
-              style={{ maxWidth: '500px', backgroundColor: 'rgba(10,10,10,0.8)', padding: '3rem', borderRadius: '20px', border: '1px solid var(--tva-orange)' }}
+              className="tva-card"
+              style={{ maxWidth: '500px', padding: '4rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}
             >
-              <h2 style={{ color: 'var(--tva-orange)', marginTop: 0 }}>END OF LOG</h2>
-              <p style={{ fontSize: '1.2rem', lineHeight: '1.6' }}>
-                The timeline is constantly expanding. More recreational logs will be added as new branch realities emerge.
+              <h2 className="crt-text" style={{ fontSize: '2.5rem', margin: 0, border: 'none' }}>END OF LOG</h2>
+              <p style={{ fontSize: '1.15rem', color: '#ccc', lineHeight: '1.7', margin: 0 }}>
+                The timeline is constantly expanding. More recreational logs and variant data will be added as new branch realities emerge.
               </p>
             </motion.div>
           </div>

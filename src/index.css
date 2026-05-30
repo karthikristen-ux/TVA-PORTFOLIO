@@ -21,20 +21,17 @@
 
 body {
   background-color: var(--tva-bg);
-  color: var(--tva-orange);
-  font-family: var(--font-mono);
-  font-size: 1.5rem;
-  line-height: 1.4;
+  color: #e0e0e0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.7;
   overflow-x: hidden;
-  text-transform: uppercase;
-  /* CRT glow on all text */
-  text-shadow: 0 0 4px var(--tva-orange-glow);
   
-  /* TemPad Grid Background */
+  /* TemPad Grid Background - Subtler */
   background-image: 
-    linear-gradient(var(--tva-orange-dim) 1px, transparent 1px),
-    linear-gradient(90deg, var(--tva-orange-dim) 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(rgba(255, 140, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 140, 0, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
   background-position: center center;
 }
 
@@ -46,7 +43,7 @@ body::before {
   pointer-events: none;
   background: linear-gradient(
     rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.25) 50%
+    rgba(0, 0, 0, 0.2) 50%
   );
   background-size: 100% 4px;
   z-index: 9998;
@@ -58,7 +55,7 @@ body::after {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none;
-  background: radial-gradient(circle, transparent 65%, rgba(0,0,0,0.4) 100%);
+  background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.6) 100%);
   z-index: 9997;
 }
 
@@ -68,62 +65,98 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 2px;
   margin-bottom: 1rem;
   color: var(--tva-orange);
+  text-transform: uppercase;
 }
 
-h1 { font-size: 4rem; }
-h2 { font-size: 2.5rem; border-bottom: 2px dashed var(--tva-orange); display: inline-block; padding-right: 1rem; }
-h3 { font-size: 2rem; }
+h1 { font-size: 4rem; text-shadow: 0 0 10px var(--tva-orange-glow); }
+h2 { font-size: 2.5rem; border-bottom: 1px solid rgba(255, 140, 0, 0.3); display: inline-block; padding-bottom: 0.5rem; padding-right: 1rem; }
+h3 { font-size: 1.8rem; }
 
 a {
   color: var(--tva-orange);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 a:hover {
-  text-shadow: 0 0 10px var(--tva-orange);
+  text-shadow: 0 0 15px var(--tva-orange);
+  color: #fff;
 }
 
 .tva-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-mono);
-  font-size: 1.5rem;
-  padding: 0.5rem 1.5rem;
-  background-color: transparent;
+  font-size: 1.1rem !important;
+  padding: 0.8rem 1.8rem;
+  background-color: rgba(255, 140, 0, 0.05);
   color: var(--tva-orange);
-  border: 2px solid var(--tva-orange);
+  border: 1px solid rgba(255, 140, 0, 0.3);
+  border-radius: 4px;
   cursor: pointer;
   text-transform: uppercase;
-  transition: all 0.2s ease;
-  box-shadow: 0 0 5px var(--tva-orange-glow);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  letter-spacing: 2px;
 }
 
 .tva-btn:hover {
-  background-color: var(--tva-orange);
-  color: var(--tva-bg);
-  box-shadow: 0 0 15px var(--tva-orange);
+  background-color: rgba(255, 140, 0, 0.15);
+  border-color: var(--tva-orange);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 140, 0, 0.2), inset 0 0 15px rgba(255, 140, 0, 0.1);
 }
 
 .tva-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 4rem 2rem;
   position: relative;
   z-index: 10;
 }
 
 .tva-card {
-  background-color: rgba(0, 0, 0, 0.7);
-  border: 2px solid var(--tva-orange);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 0 10px var(--tva-orange-glow);
-  backdrop-filter: blur(2px);
+  background: rgba(10, 10, 10, 0.55);
+  border: 1px solid rgba(255, 140, 0, 0.1);
+  border-top: 1px solid rgba(255, 140, 0, 0.25);
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.tva-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 140, 0, 0.3);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 140, 0, 0.05);
+}
+
+.tva-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.03), transparent);
+  transform: skewX(-20deg);
+  transition: all 0.7s;
+}
+
+.tva-card:hover::before {
+  left: 150%;
 }
 
 .crt-text {
   color: var(--tva-orange);
-  text-shadow: 0 0 8px var(--tva-orange), 0 0 15px var(--tva-orange);
+  text-shadow: 0 0 8px rgba(255, 140, 0, 0.6), 0 0 15px rgba(255, 140, 0, 0.3);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
 }
 
 /* Navigation */
