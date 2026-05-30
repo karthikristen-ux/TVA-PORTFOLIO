@@ -48,43 +48,52 @@ export const ChromaKeyVideo: React.FC<ChromaKeyVideoProps> = ({
         const w = video.videoWidth;
         const h = video.videoHeight;
 
-        // Draw current video frame to temporary canvas
-        tempCtx.drawImage(video, 0, 0, w, h);
-        
-        // Get pixel data
-        const frame = tempCtx.getImageData(0, 0, w, h);
-        const l = frame.data.length / 4;
+        try {
+          // Draw current video frame to temporary canvas
+          tempCtx.drawImage(video, 0, 0, w, h);
+          
+          // Get pixel data
+          const frame = tempCtx.getImageData(0, 0, w, h);
+          const l = frame.data.length / 4;
 
-        // Chroma key logic (Green Screen Removal)
-        for (let i = 0; i < l; i++) {
-          const r = frame.data[i * 4 + 0];
-          const g = frame.data[i * 4 + 1];
-          const b = frame.data[i * 4 + 2];
+          // Chroma key logic (Green Screen Removal)
+          for (let i = 0; i < l; i++) {
+            const r = frame.data[i * 4 + 0];
+            const g = frame.data[i * 4 + 1];
+            const b = frame.data[i * 4 + 2];
 
-          // Identify green pixels
-          // Typical green screen is high green, low red/blue
-          if (g > 100 && g > r * 1.4 && g > b * 1.4) {
-            // Set alpha to 0 (transparent)
-            frame.data[i * 4 + 3] = 0;
-          } else if (g > 80 && g > r * 1.1 && g > b * 1.1) {
-            // Anti-aliasing / edge spill reduction
-            // Partially transparent for pixels that are somewhat green
-            frame.data[i * 4 + 3] = Math.max(0, frame.data[i * 4 + 3] - (g - r) * 1.5);
-            // Desaturate green slightly on edges
-            frame.data[i * 4 + 1] = (r + b) / 2;
+            // Identify green pixels
+            if (g > 100 && g > r * 1.4 && g > b * 1.4) {
+              frame.data[i * 4 + 3] = 0;
+            } else if (g > 80 && g > r * 1.1 && g > b * 1.1) {
+              frame.data[i * 4 + 3] = Math.max(0, frame.data[i * 4 + 3] - (g - r) * 1.5);
+              frame.data[i * 4 + 1] = (r + b) / 2;
+            }
           }
-        }
 
-        // Put modified pixel data onto the visible canvas
-        ctx.putImageData(frame, 0, 0);
+          // Put modified pixel data onto the visible canvas
+          ctx.putImageData(frame, 0, 0);
+        } catch (e) {
+          console.error("Canvas chroma key error:", e);
+        }
       }
 
       requestRef.current = requestAnimationFrame(computeFrame);
     };
 
     video.addEventListener('play', () => {
-      requestRef.current = requestAnimationFrame(computeFrame);
+      if (!requestRef.current) {
+        requestRef.current = requestAnimationFrame(computeFrame);
+      }
     });
+
+    // Start immediately if already playing
+    if (!video.paused && !video.ended) {
+      requestRef.current = requestAnimationFrame(computeFrame);
+    } else {
+      // Sometimes play event is missed, force a start just in case
+      requestRef.current = requestAnimationFrame(computeFrame);
+    }
 
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
@@ -100,8 +109,13 @@ export const ChromaKeyVideo: React.FC<ChromaKeyVideoProps> = ({
         loop
         muted
         playsInline
-        crossOrigin="anonymous"
-        style={{ display: 'none' }} // Hide actual video
+        style={{ 
+          opacity: 0, 
+          position: 'absolute', 
+          width: '1px', 
+          height: '1px', 
+          pointerEvents: 'none' 
+        }} 
       />
       <canvas
         ref={canvasRef}
