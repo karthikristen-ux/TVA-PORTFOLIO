@@ -68,20 +68,20 @@ const projects = [
     image: '/images/smart_traffic.png'
   },
   {
-    title: 'Behaviour Screening System',
+    title: 'Behaviour Screening System (Smart Glove)',
     date: '2026',
-    description: 'An automated system designed to screen and analyze behavioral patterns using advanced data processing and monitoring techniques.',
-    problemStatement: 'Manual behavioral screening processes are often subjective, time-consuming, and prone to human error, making it difficult to analyze large datasets efficiently.',
-    solution: 'Developed an automated screening platform that leverages data analytics to evaluate behavioral metrics objectively, providing actionable insights and reports.',
+    description: 'A wearable smart glove prototype equipped with flex sensors that connects to a PC via Wi-Fi, allowing users to control and play games using natural hand gestures.',
+    problemStatement: 'Traditional gaming controllers can be unintuitive and limit the immersive experience. There is a need for more natural, motion-based human-computer interfaces to track behavioral gestures.',
+    solution: 'Developed a prototype wearable glove integrating flex sensors and a Wi-Fi enabled microcontroller. It translates hand movements and finger gestures into precise gaming inputs on a PC in real-time.',
     features: [
-      'Automated behavioral data analysis',
-      'Objective evaluation metrics',
-      'Comprehensive reporting dashboard',
-      'Scalable architecture for large datasets'
+      'Wearable flex-sensor glove design',
+      'Wireless Wi-Fi connectivity to PC',
+      'Real-time gesture recognition',
+      'Seamless game integration'
     ],
     github: 'https://github.com/karthikristen-ux/BEHAVIOUR-SCREENING-SYSYTEM.git',
     link: '#',
-    image: '/images/rawp.png'
+    image: '/images/smart_glove.png'
   }
 ];
 

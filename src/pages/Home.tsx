@@ -59,6 +59,35 @@ export const Home: React.FC = () => {
                  <FileText size={18} style={{marginRight: '8px'}} /> DOSSIER
               </a>
             </div>
+
+            {/* Glowing PCB Wiring connecting the tabs */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.85 }}
+              transition={{ delay: 0.8, duration: 1 }}
+              style={{ 
+                marginTop: '1.5rem',
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                position: 'relative'
+              }}
+            >
+              <img 
+                src="/images/pcb_wiring.png" 
+                alt="PCB Wiring Connection"
+                style={{
+                  width: '100%',
+                  maxWidth: '550px',
+                  height: '140px',
+                  objectFit: 'cover',
+                  mixBlendMode: 'screen',
+                  WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                  maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                  pointerEvents: 'none'
+                }}
+              />
+            </motion.div>
           </motion.div>
 
           {/* RIGHT COLUMN: ASCII ART VARIANT LOG */}
