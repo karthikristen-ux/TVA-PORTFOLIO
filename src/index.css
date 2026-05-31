@@ -873,3 +873,174 @@ nav {
   67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
   100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
 }
+
+/* =========================================
+   PCB BOARD — IC CHIP LAYOUT
+========================================= */
+.pcb-board {
+  position: relative;
+  width: 100%;
+  padding: 2.5rem 2.5rem 2.5rem 4rem;
+  background: rgba(5, 5, 5, 0.9);
+  border: 2px solid rgba(255, 140, 0, 0.3);
+  border-radius: 12px;
+  box-shadow:
+    0 0 30px rgba(255, 140, 0, 0.08),
+    inset 0 0 40px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  /* Subtle grid pattern like a real PCB */
+  background-image:
+    linear-gradient(rgba(255, 140, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 140, 0, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Corner PCB marks */
+.pcb-board::before,
+.pcb-board::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 140, 0, 0.15);
+  border: 2px solid rgba(255, 140, 0, 0.3);
+  box-shadow: 0 0 6px rgba(255, 140, 0, 0.2);
+}
+.pcb-board::before { top: 10px; left: 10px; }
+.pcb-board::after { top: 10px; right: 10px; }
+
+.pcb-chip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 2;
+  margin-left: 3rem;
+}
+
+/* IC Chip */
+.pcb-ic-chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem 1rem;
+  background: rgba(10, 5, 0, 0.85);
+  border: 2px solid rgba(255, 140, 0, 0.4);
+  border-radius: 6px;
+  color: var(--tva-orange);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 0 10px rgba(255, 140, 0, 0.05),
+    inset 0 0 8px rgba(255, 140, 0, 0.03);
+  min-height: 70px;
+}
+
+.pcb-ic-chip:hover {
+  border-color: #ff8c00;
+  background: rgba(255, 140, 0, 0.08);
+  box-shadow:
+    0 0 20px rgba(255, 140, 0, 0.15),
+    inset 0 0 15px rgba(255, 140, 0, 0.06);
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 140, 0, 0.6);
+  transform: translateY(-2px);
+}
+
+/* IC Notch */
+.pcb-ic-notch {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 8px;
+  background: rgba(5, 5, 5, 0.9);
+  border: 2px solid rgba(255, 140, 0, 0.4);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+}
+
+/* IC Pin label (like a chip number) */
+.pcb-ic-pin-label {
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+  font-size: 0.6rem;
+  color: rgba(255, 140, 0, 0.35);
+  font-family: var(--font-mono);
+  letter-spacing: 1px;
+}
+
+/* IC Content */
+.pcb-ic-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 2;
+}
+
+/* IC Pins */
+.pcb-ic-pins {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pcb-ic-pins-left {
+  left: -10px;
+}
+
+.pcb-ic-pins-right {
+  right: -10px;
+}
+
+.pcb-pin {
+  width: 10px;
+  height: 3px;
+  background: rgba(255, 140, 0, 0.5);
+  border-radius: 1px;
+  box-shadow: 0 0 4px rgba(255, 140, 0, 0.3);
+}
+
+.pcb-ic-chip:hover .pcb-pin {
+  background: #ff8c00;
+  box-shadow: 0 0 8px rgba(255, 140, 0, 0.6);
+}
+
+/* ---- PCB Mobile Responsive ---- */
+@media (max-width: 768px) {
+  .pcb-board {
+    padding: 1.5rem 1rem 1.5rem 1rem;
+  }
+
+  .pcb-chip-grid {
+    grid-template-columns: 1fr;
+    margin-left: 0;
+    gap: 1rem;
+  }
+
+  .pcb-wires {
+    display: none;
+  }
+
+  .pcb-ic-chip {
+    min-height: 55px;
+    font-size: 0.9rem;
+  }
+
+  .pcb-ic-pins {
+    display: none;
+  }
+}

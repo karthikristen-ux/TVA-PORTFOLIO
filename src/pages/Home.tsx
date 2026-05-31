@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
-import { Terminal, Cpu, Mail, Link, FileText } from 'lucide-react';
+import { Cpu, Terminal } from 'lucide-react';
 import { TemPadTimeline } from '../components/TemPadTimeline';
+import { PCBBoard } from '../components/PCBBoard';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -33,7 +34,7 @@ export const Home: React.FC = () => {
           marginBottom: '6rem' 
         }}>
           
-          {/* LEFT COLUMN: INTRO & BUTTONS */}
+          {/* LEFT COLUMN: INTRO & PCB BOARD */}
           <motion.div variants={itemVariants} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div>
               <h1 className="crt-text" style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', margin: '0 0 0.5rem 0', lineHeight: 1.1 }}>T. KARTHIKEYAN</h1>
@@ -45,47 +46,8 @@ export const Home: React.FC = () => {
               Currently decoding the future at Sathyabama Institute of Science and Technology (2023 - 2027).
             </p>
 
-            {/* PCB 4-BOX GRID FOR TABS */}
-            <div style={{ 
-              position: 'relative', 
-              marginTop: '2rem',
-              width: '100%',
-              aspectRatio: '16/9',
-              backgroundImage: 'url(/images/pcb_tabs.png)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '8px',
-              border: '1px solid rgba(255,140,0,0.3)',
-              boxShadow: '0 0 20px rgba(255,140,0,0.1)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '2rem'
-            }}>
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '1fr 1fr', 
-                gridTemplateRows: '1fr 1fr',
-                gap: '15%', 
-                width: '80%',
-                height: '80%',
-                position: 'relative', 
-                zIndex: 2 
-              }}>
-                <a href="mailto:karthikeyant1885@gmail.com" className="tva-btn" style={{ background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,140,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                   <Mail size={18} style={{marginRight: '8px'}} /> COMMUNICATE
-                </a>
-                <a href="https://www.linkedin.com/in/karthikristen/" target="_blank" rel="noopener" className="tva-btn" style={{ background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,140,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                   <Link size={18} style={{marginRight: '8px'}} /> LINKEDIN
-                </a>
-                <a href="https://github.com/karthikristen-ux" target="_blank" rel="noreferrer" className="tva-btn" style={{ background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,140,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                   <Terminal size={18} style={{marginRight: '8px'}} /> GITHUB
-                </a>
-                <a href="https://drive.google.com/file/d/1Y6PHHpYaOuttlEbAWEBzi9brH7QaRlze/view?usp=drive_link" target="_blank" rel="noreferrer" className="tva-btn" style={{ background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,140,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                   <FileText size={18} style={{marginRight: '8px'}} /> DOSSIER
-                </a>
-              </div>
-            </div>
+            {/* PCB BOARD WITH IC CHIP TABS */}
+            <PCBBoard />
           </motion.div>
 
           {/* RIGHT COLUMN: ASCII ART VARIANT LOG */}
