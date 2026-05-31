@@ -1040,7 +1040,31 @@ nav {
     font-size: 0.9rem;
   }
 
-  .pcb-ic-pins {
+  .pcb-ic-pins,
+  .pcb-ic-pins-bottom {
     display: none;
   }
+}
+
+/* Bottom pins on IC chips */
+.pcb-ic-pins-bottom {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.pcb-pin-h {
+  width: 3px;
+  height: 10px;
+  background: rgba(255, 140, 0, 0.5);
+  border-radius: 1px;
+  box-shadow: 0 0 4px rgba(255, 140, 0, 0.3);
+}
+
+.pcb-ic-chip:hover .pcb-pin-h {
+  background: #ff8c00;
+  box-shadow: 0 0 8px rgba(255, 140, 0, 0.6);
 }
