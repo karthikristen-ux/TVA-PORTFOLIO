@@ -66,6 +66,22 @@ const projects = [
     github: 'https://github.com/karthikristen-ux/smart-traffic-system-1.git',
     link: '#',
     image: '/images/smart_traffic.png'
+  },
+  {
+    title: 'Behaviour Screening System',
+    date: '2026',
+    description: 'An automated system designed to screen and analyze behavioral patterns using advanced data processing and monitoring techniques.',
+    problemStatement: 'Manual behavioral screening processes are often subjective, time-consuming, and prone to human error, making it difficult to analyze large datasets efficiently.',
+    solution: 'Developed an automated screening platform that leverages data analytics to evaluate behavioral metrics objectively, providing actionable insights and reports.',
+    features: [
+      'Automated behavioral data analysis',
+      'Objective evaluation metrics',
+      'Comprehensive reporting dashboard',
+      'Scalable architecture for large datasets'
+    ],
+    github: 'https://github.com/karthikristen-ux/BEHAVIOUR-SCREENING-SYSYTEM.git',
+    link: '#',
+    image: '/images/rawp.png'
   }
 ];
 

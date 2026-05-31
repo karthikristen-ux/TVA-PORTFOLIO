@@ -61,122 +61,64 @@ export const Home: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* RIGHT COLUMN: HOLOGRAM VARIANT DISPLAY */}
+          {/* RIGHT COLUMN: ASCII ART VARIANT LOG */}
           <motion.div 
             variants={itemVariants}
+            className="tva-card" 
             style={{ 
               display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative'
-            }}
-          >
-            {/* Hologram Container */}
-            <div style={{
-              position: 'relative',
+              flexDirection: 'column',
+              padding: '1.5rem', 
+              textAlign: 'center',
               width: '100%',
               maxWidth: '450px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '1.5rem',
+              margin: '0 auto'
+            }}
+          >
+            <div style={{ fontSize: '0.9rem', marginBottom: '1.5rem', opacity: 0.8, letterSpacing: '2px', borderBottom: '1px solid var(--tva-orange)', paddingBottom: '0.8rem' }}>
+              SUBJECT_VARIANT_LOG :: T.K
+            </div>
+            <div style={{ 
+              width: '100%', 
+              borderRadius: '8px', 
+              overflow: 'hidden',
+              boxShadow: '0 0 15px rgba(255, 140, 0, 0.2)',
+              backgroundColor: '#000',
+              marginBottom: '1.5rem'
             }}>
-              
-              {/* The Holographic Figure */}
-              <motion.div
-                initial={{ y: 10, opacity: 0.8 }}
-                animate={{ y: -10, opacity: 1 }}
-                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-                style={{
-                  width: '100%',
-                  aspectRatio: '1/1',
-                  position: 'relative',
-                  zIndex: 2,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  filter: 'drop-shadow(0 0 15px rgba(255, 140, 0, 0.4))'
-                }}
-              >
-                <img 
-                  src="/images/ascii_variant.png" 
-                  alt="ASCII Variant Portrait" 
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    objectFit: 'contain',
-                    mixBlendMode: 'screen',
-                    opacity: 0.95,
-                  }}
-                />
-                
-                {/* Glowing Base Platform under the image */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: '-5%',
-                  width: '60%',
-                  height: '20px',
-                  background: 'radial-gradient(ellipse at center, rgba(255, 140, 0, 0.4) 0%, rgba(0,0,0,0) 70%)',
-                  borderRadius: '50%',
-                  transform: 'rotateX(75deg)',
-                  boxShadow: '0 0 30px rgba(255, 140, 0, 0.2)',
-                  zIndex: -1
-                }} />
-              </motion.div>
+              <img 
+                src="/images/ascii_variant.png" 
+                alt="ASCII Variant Portrait" 
+                style={{ 
+                  width: '100%', 
+                  height: 'auto', 
+                  display: 'block',
+                  filter: 'contrast(1.2) sepia(1) hue-rotate(350deg) saturate(3)' 
+                }} 
+              />
+            </div>
 
-              {/* ID Card Details Below the Image */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                style={{
-                  width: '100%',
-                  backgroundColor: 'rgba(20, 10, 0, 0.6)',
-                  border: '1px solid #ff8c00',
-                  borderRadius: '8px',
-                  padding: '1.2rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.8rem',
-                  boxShadow: '0 0 20px rgba(255, 140, 0, 0.15), inset 0 0 10px rgba(255, 140, 0, 0.1)',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-              >
-                {/* Scanline effect on ID card */}
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                  background: 'linear-gradient(rgba(255, 140, 0, 0.03) 50%, rgba(0, 0, 0, 0.2) 50%)',
-                  backgroundSize: '100% 4px',
-                  pointerEvents: 'none',
-                }} />
-                
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px dashed rgba(255,140,0,0.3)', paddingBottom: '0.5rem' }}>
-                  <span style={{ color: '#ff8c00', opacity: 0.7, fontSize: '0.75rem', letterSpacing: '2px' }}>SUBJECT</span>
-                  <strong style={{ color: '#ff8c00', fontSize: '1rem', letterSpacing: '1px' }}>T. KARTHIKEYAN</strong>
-                </div>
-                
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px dashed rgba(255,140,0,0.3)', paddingBottom: '0.5rem' }}>
-                  <span style={{ color: '#ff8c00', opacity: 0.7, fontSize: '0.75rem', letterSpacing: '2px' }}>CASE ID</span>
-                  <span style={{ color: '#ff8c00', fontSize: '0.9rem', fontFamily: 'var(--font-mono)' }}>0232-467-9751</span>
-                </div>
-                
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: '#ff4d00', opacity: 0.7, fontSize: '0.75rem', letterSpacing: '2px' }}>STATUS</span>
-                  <span style={{ 
-                    color: '#ff4d00', 
-                    fontSize: '0.85rem', 
-                    fontWeight: 'bold', 
-                    letterSpacing: '1px',
-                    textShadow: '0 0 8px rgba(255,77,0,0.5)',
-                    animation: 'pulse 2s infinite'
-                  }}>
-                    ESCAPED TIMELINE
-                  </span>
-                </div>
-              </motion.div>
-              
+            {/* VARIANT DETAILS */}
+            <div style={{ 
+              textAlign: 'left', 
+              fontFamily: "'Courier New', Courier, monospace", 
+              fontSize: '0.95rem', 
+              lineHeight: '1.6',
+              color: 'var(--tva-orange)',
+              textShadow: '0 0 5px var(--tva-orange-glow)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed var(--tva-orange)', paddingBottom: '0.5rem', marginBottom: '0.8rem' }}>
+                <span>[ ID ]</span>
+                <strong>VARIANT-18</strong>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed var(--tva-orange)', paddingBottom: '0.5rem', marginBottom: '0.8rem' }}>
+                <span>[ STATUS ]</span>
+                <span style={{ color: '#ff4d00' }}>ESCAPED FROM 2023 TIMELINE</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem' }}>
+                <span>[ LOCATION ]</span>
+                <strong>CHENNAI, INDIA</strong>
+              </div>
             </div>
           </motion.div>
 
