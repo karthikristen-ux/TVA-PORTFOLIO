@@ -45,49 +45,55 @@ export const Home: React.FC = () => {
               Currently decoding the future at Sathyabama Institute of Science and Technology (2023 - 2027).
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
-              <a href="mailto:karthikeyant1885@gmail.com" className="tva-btn">
-                 <Mail size={18} style={{marginRight: '8px'}} /> COMMUNICATE
-              </a>
-              <a href="https://www.linkedin.com/in/karthikristen/" target="_blank" rel="noopener" className="tva-btn">
-                 <Link size={18} style={{marginRight: '8px'}} /> LINKEDIN
-              </a>
-              <a href="https://github.com/karthikristen-ux" target="_blank" rel="noreferrer" className="tva-btn">
-                 <Terminal size={18} style={{marginRight: '8px'}} /> GITHUB
-              </a>
-              <a href="https://drive.google.com/file/d/1Y6PHHpYaOuttlEbAWEBzi9brH7QaRlze/view?usp=drive_link" target="_blank" rel="noreferrer" className="tva-btn">
-                 <FileText size={18} style={{marginRight: '8px'}} /> DOSSIER
-              </a>
-            </div>
+            <div style={{ position: 'relative', marginTop: '2rem' }}>
+              {/* Buttons acting as components */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', position: 'relative', zIndex: 2 }}>
+                <a href="mailto:karthikeyant1885@gmail.com" className="tva-btn" style={{ backgroundColor: 'rgba(20, 10, 0, 0.8)', borderBottomWidth: '4px' }}>
+                   <Mail size={18} style={{marginRight: '8px'}} /> COMMUNICATE
+                </a>
+                <a href="https://www.linkedin.com/in/karthikristen/" target="_blank" rel="noopener" className="tva-btn" style={{ backgroundColor: 'rgba(20, 10, 0, 0.8)', borderBottomWidth: '4px' }}>
+                   <Link size={18} style={{marginRight: '8px'}} /> LINKEDIN
+                </a>
+                <a href="https://github.com/karthikristen-ux" target="_blank" rel="noreferrer" className="tva-btn" style={{ backgroundColor: 'rgba(20, 10, 0, 0.8)', borderBottomWidth: '4px' }}>
+                   <Terminal size={18} style={{marginRight: '8px'}} /> GITHUB
+                </a>
+                <a href="https://drive.google.com/file/d/1Y6PHHpYaOuttlEbAWEBzi9brH7QaRlze/view?usp=drive_link" target="_blank" rel="noreferrer" className="tva-btn" style={{ backgroundColor: 'rgba(20, 10, 0, 0.8)', borderBottomWidth: '4px' }}>
+                   <FileText size={18} style={{marginRight: '8px'}} /> DOSSIER
+                </a>
+              </div>
 
-            {/* Glowing PCB Wiring connecting the tabs */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.85 }}
-              transition={{ delay: 0.8, duration: 1 }}
-              style={{ 
-                marginTop: '1.5rem',
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                position: 'relative'
-              }}
-            >
-              <img 
-                src="/images/pcb_wiring.png" 
-                alt="PCB Wiring Connection"
-                style={{
+              {/* Glowing PCB Wiring connecting the tabs */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.85 }}
+                transition={{ delay: 0.8, duration: 1 }}
+                style={{ 
+                  marginTop: '-1.5rem', // Overlap the PCB beneath the buttons
                   width: '100%',
-                  maxWidth: '550px',
-                  height: '140px',
-                  objectFit: 'cover',
-                  mixBlendMode: 'screen',
-                  WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
-                  maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
-                  pointerEvents: 'none'
+                  display: 'flex',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  zIndex: 1
                 }}
-              />
-            </motion.div>
+              >
+                <img 
+                  src="/images/pcb_wiring.png" 
+                  alt="PCB Wiring Connection"
+                  style={{
+                    width: '100%',
+                    maxWidth: '550px',
+                    height: '140px',
+                    objectFit: 'cover',
+                    mixBlendMode: 'screen',
+                    WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%), linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                    maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%), linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                    maskComposite: 'intersect',
+                    WebkitMaskComposite: 'source-in',
+                    pointerEvents: 'none'
+                  }}
+                />
+              </motion.div>
+            </div>
           </motion.div>
 
           {/* RIGHT COLUMN: ASCII ART VARIANT LOG */}
