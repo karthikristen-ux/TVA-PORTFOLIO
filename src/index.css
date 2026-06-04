@@ -1068,3 +1068,365 @@ nav {
   background: #ff8c00;
   box-shadow: 0 0 8px rgba(255, 140, 0, 0.6);
 }
+
+/* =========================================
+   RETRO FLOATING MODEL PROJECT SHOWCASE
+========================================= */
+
+/* ---- Float keyframe ---- */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+
+/* ---- Root layout ---- */
+.bp-root {
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  background: #060604;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+}
+
+/* ---- Models stage ---- */
+.bp-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  flex-wrap: wrap;
+  flex: 1;
+  padding: 3rem 2rem;
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bp-stage--collapsed {
+  flex: 0 0 220px;
+  flex-direction: column;
+  gap: 20px;
+  padding: 2rem 1rem;
+  border-right: 1px solid rgba(200, 96, 16, 0.15);
+}
+
+/* ---- Individual model button ---- */
+.bp-model {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px;
+  animation: floatY 3.5s ease-in-out infinite;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  outline: none;
+}
+
+.bp-model svg {
+  transition: filter 0.3s ease;
+  filter: drop-shadow(0 0 6px rgba(200, 96, 16, 0.25));
+}
+
+.bp-model:hover svg {
+  filter: drop-shadow(0 0 16px rgba(200, 96, 16, 0.6));
+}
+
+.bp-model-label {
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  color: #c86010;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  text-align: center;
+  max-width: 140px;
+}
+
+.bp-model:hover .bp-model-label {
+  opacity: 1;
+}
+
+/* collapsed state model styling */
+.bp-stage--collapsed .bp-model {
+  opacity: 0.45;
+  transform: scale(0.85);
+  animation-play-state: paused;
+}
+
+.bp-stage--collapsed .bp-model--active {
+  opacity: 1;
+  transform: scale(1);
+  animation-play-state: running;
+}
+
+.bp-stage--collapsed .bp-model-label {
+  font-size: 0.6rem;
+  max-width: 120px;
+}
+
+/* ---- Detail panel ---- */
+.bp-panel {
+  width: 0;
+  overflow: hidden;
+  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #060604;
+  border-left: 1px solid transparent;
+  position: relative;
+}
+
+.bp-panel--open {
+  width: 480px;
+  border-left: 1px solid rgba(200, 96, 16, 0.15);
+  overflow-y: auto;
+}
+
+/* ---- Panel inner content ---- */
+.bp-panel-inner {
+  padding: 2.5rem 2rem;
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+  min-width: 480px;
+}
+
+.bp-panel--open .bp-panel-inner {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ---- Close button ---- */
+.bp-panel-close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: none;
+  border: 1px solid rgba(200, 96, 16, 0.3);
+  color: #c86010;
+  width: 32px;
+  height: 32px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  z-index: 5;
+}
+
+.bp-panel-close:hover {
+  background: #c86010;
+  color: #060604;
+}
+
+/* ---- Year badge ---- */
+.bp-year {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: rgba(200, 96, 16, 0.5);
+  letter-spacing: 3px;
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+/* ---- Title ---- */
+.bp-title {
+  font-family: 'Courier New', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #c86010;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  line-height: 1.4;
+  margin: 0 0 1rem;
+  border: none;
+  padding: 0;
+  text-shadow: 0 0 12px rgba(200, 96, 16, 0.3);
+}
+
+/* ---- Divider ---- */
+.bp-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, #c86010, transparent);
+  margin-bottom: 1.5rem;
+  opacity: 0.4;
+}
+
+/* ---- Section heading ---- */
+.bp-section-heading {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #c86010;
+  letter-spacing: 3px;
+  margin: 1.8rem 0 0.6rem;
+  opacity: 0.7;
+  border: none;
+  padding: 0;
+}
+
+/* ---- Description ---- */
+.bp-desc {
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  color: rgba(224, 224, 224, 0.7);
+  line-height: 1.7;
+  text-transform: none;
+  margin-bottom: 0.5rem;
+}
+
+/* ---- Features list ---- */
+.bp-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+}
+
+.bp-features li {
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  color: rgba(224, 224, 224, 0.65);
+  text-transform: none;
+  padding: 0.35rem 0;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.bp-feat-arrow {
+  color: #c86010;
+  position: absolute;
+  left: 0;
+}
+
+/* ---- Tags ---- */
+.bp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 1.5rem 0;
+}
+
+.bp-tag {
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  color: #c86010;
+  border: 1px solid rgba(200, 96, 16, 0.35);
+  padding: 4px 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: all 0.25s ease;
+}
+
+.bp-tag:hover {
+  border-color: #c86010;
+  background: rgba(200, 96, 16, 0.1);
+}
+
+/* ---- View project link ---- */
+.bp-link {
+  display: inline-block;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #c86010;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid rgba(200, 96, 16, 0.3);
+  padding: 10px 20px;
+  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.bp-link:hover {
+  background: #c86010;
+  color: #060604;
+  box-shadow: 0 0 20px rgba(200, 96, 16, 0.4);
+}
+
+/* ---- Scrollbar in panel ---- */
+.bp-panel::-webkit-scrollbar {
+  width: 4px;
+}
+.bp-panel::-webkit-scrollbar-track {
+  background: #060604;
+}
+.bp-panel::-webkit-scrollbar-thumb {
+  background: rgba(200, 96, 16, 0.3);
+  border-radius: 2px;
+}
+
+/* ---- Mobile: projects showcase ---- */
+@media (max-width: 900px) {
+  .bp-root {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .bp-stage {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 2rem 1rem;
+    justify-content: center;
+  }
+
+  .bp-stage--collapsed {
+    flex: 0 0 auto;
+    flex-direction: row;
+    border-right: none;
+    border-bottom: 1px solid rgba(200, 96, 16, 0.15);
+    padding: 1rem 0.5rem;
+    gap: 10px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+
+  .bp-stage--collapsed .bp-model {
+    transform: scale(0.7);
+  }
+
+  .bp-stage--collapsed .bp-model--active {
+    transform: scale(0.85);
+  }
+
+  .bp-stage--collapsed .bp-model-label {
+    font-size: 0.5rem;
+    max-width: 80px;
+  }
+
+  .bp-panel--open {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(200, 96, 16, 0.15);
+  }
+
+  .bp-panel-inner {
+    min-width: unset;
+    padding: 2rem 1.2rem;
+  }
+
+  .bp-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bp-stage {
+    gap: 12px;
+    padding: 1.5rem 0.5rem;
+  }
+
+  .bp-model svg {
+    width: 90px;
+    height: 90px;
+  }
+
+  .bp-model-label {
+    font-size: 0.55rem;
+    max-width: 90px;
+  }
+}
