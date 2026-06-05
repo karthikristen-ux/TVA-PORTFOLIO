@@ -55,6 +55,14 @@ export const Hobbies: React.FC = () => {
           top: 0, left: 0, width: '100%', height: '100%',
           background: 'linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0.9) 100%)',
         }} />
+        
+        {/* Orange color overlay to force warm aesthetic */}
+        <div style={{
+          position: 'absolute',
+          top: 0, left: 0, width: '100%', height: '100%',
+          background: 'rgba(232, 130, 26, 0.25)',
+          mixBlendMode: 'color'
+        }} />
       </div>
 
       {/* 2. SCROLLING CONTENT WITH CHECKPOINTS */}

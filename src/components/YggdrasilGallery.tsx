@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // ─── ADD / REMOVE IMAGES HERE ─────────────────────────────────────────────────
 const images = [
@@ -359,6 +360,7 @@ export const YggdrasilGallery: React.FC = () => {
   const nodesRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<(HTMLDivElement|null)[]>([]);
   const initiated = useRef(false);
+  const [selectedImage, setSelectedImage] = useState<typeof images[0] | null>(null);
 
   useEffect(()=>{
     if(!svgRef.current || !nodesRef.current || initiated.current) return;
@@ -417,8 +419,9 @@ export const YggdrasilGallery: React.FC = () => {
                   ref={el => { nodeRefs.current[i] = el; }}
                   className="ygg-node"
                   style={{ left:`${0}%`, top:`${0}%` }}
+                  onClick={() => setSelectedImage(img)}
                 >
-                  <a href={img.link || "https://instagram.com"} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <div style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div className="ygg-frame">
                       <img src={img.src} alt={img.label} className="ygg-img" loading="lazy" />
                       <div className="ygg-border1" />
@@ -426,7 +429,7 @@ export const YggdrasilGallery: React.FC = () => {
                       <div className="ygg-dot" />
                     </div>
                     <p className="ygg-lbl">{img.label}</p>
-                  </a>
+                  </div>
                 </div>
               ))}
             </div>
@@ -434,6 +437,90 @@ export const YggdrasilGallery: React.FC = () => {
           <p className="ygg-counter">[ {images.length.toString().padStart(2,'0')} BRANCHES ACTIVE ]</p>
         </div>
       </section>
+
+      {/* IMAGE DETAILS MODAL */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(0,0,0,0.85)',
+              zIndex: 9999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backdropFilter: 'blur(10px)',
+            }}
+            onClick={() => setSelectedImage(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              style={{
+                background: 'rgba(20, 10, 0, 0.9)',
+                border: '1px solid var(--tva-orange, #c8711a)',
+                padding: '2rem',
+                maxWidth: '600px',
+                width: '90%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                boxShadow: '0 0 30px rgba(200, 113, 26, 0.2)',
+                position: 'relative',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setSelectedImage(null)}
+                style={{ 
+                  position: 'absolute', top: '15px', right: '15px', 
+                  background: 'none', border: 'none', color: '#c8711a', 
+                  fontSize: '1.5rem', cursor: 'pointer', fontFamily: 'monospace' 
+                }}
+              >
+                X
+              </button>
+              
+              <h2 style={{ fontFamily: '"Share Tech Mono", monospace', color: '#c8711a', letterSpacing: '0.2em', marginBottom: '1.5rem', textAlign: 'center', borderBottom: '1px solid rgba(200,113,26,0.3)', paddingBottom: '1rem', width: '100%' }}>
+                {selectedImage.label}
+              </h2>
+
+              <div style={{ width: '100%', aspectRatio: '1', position: 'relative', overflow: 'hidden', border: '1px solid rgba(200,113,26,0.5)', marginBottom: '2rem' }}>
+                 <img src={selectedImage.src} alt={selectedImage.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                 <div style={{ position: 'absolute', inset: 0, background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,120,0,0.02) 3px, rgba(255,120,0,0.02) 6px)', pointerEvents: 'none' }} />
+              </div>
+              
+              <a 
+                href={selectedImage.link} 
+                target="_blank" 
+                rel="noreferrer"
+                style={{
+                  padding: '1rem 2rem',
+                  background: 'transparent',
+                  border: '1px solid #c8711a',
+                  color: '#c8711a',
+                  textDecoration: 'none',
+                  fontFamily: '"Share Tech Mono", monospace',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(200,113,26,0.2)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(200,113,26,0.5)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.boxShadow = 'none'; }}
+              >
+                VIEW ARCHIVE ON INSTAGRAM
+              </a>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
