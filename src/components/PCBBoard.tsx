@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Link, Terminal, FileText, Instagram, MessageCircle } from 'lucide-react';
+import { Mail, Link, Terminal, FileText, Camera, MessageCircle } from 'lucide-react';
 
 const icChips = [
   {
@@ -40,7 +40,7 @@ const icChips = [
   },
   {
     label: 'INSTAGRAM',
-    icon: Instagram,
+    icon: Camera,
     href: 'https://instagram.com/karthikristen',
     target: '_blank',
     pinLabel: 'IG-06',
