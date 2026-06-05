@@ -391,6 +391,16 @@ nav.nav-collapsed .logo {
     width: 100%;
     justify-content: center;
   }
+
+  .tva-tab {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .hobbies-tabs-container {
+    gap: 0.5rem;
+    padding: 0.8rem 0.5rem;
+  }
   
   .tva-container {
     padding: 1.5rem 1rem;
@@ -753,6 +763,14 @@ nav.nav-collapsed .logo {
   border-color: #ffb347;
   box-shadow: 0 0 15px rgba(255, 140, 0, 0.4), inset 0 0 10px rgba(255, 140, 0, 0.1);
   text-shadow: 0 0 8px #ffb347;
+}
+
+.hobbies-tabs-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  flex-wrap: wrap;
 }
 
 .tempad-panel-scanlines {

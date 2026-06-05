@@ -74,18 +74,13 @@ export const Hobbies: React.FC = () => {
         </section>
 
         {/* TABS NAVIGATION */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          gap: '1rem', 
-          padding: '1rem', 
+        <div className="hobbies-tabs-container" style={{ 
           position: 'sticky', 
           top: 0, 
           zIndex: 50, 
           background: 'rgba(0, 0, 0, 0.7)', 
           backdropFilter: 'blur(10px)',
-          borderBottom: '1px solid rgba(200,113,26,0.2)',
-          flexWrap: 'wrap'
+          borderBottom: '1px solid rgba(200,113,26,0.2)'
         }}>
           <button 
             onClick={() => setActiveTab('freelance')} 
