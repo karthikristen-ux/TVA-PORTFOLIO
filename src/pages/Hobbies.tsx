@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import tempadVideo from '../components/tempad_video/tempad video.mp4';
 import { YggdrasilGallery } from '../components/YggdrasilGallery';
 
 export const Hobbies: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState<'freelance' | 'photography' | 'music'>('photography');
 
   const tabStyle = (isActive: boolean): React.CSSProperties => ({
     background: isActive ? 'var(--tva-orange, #e8821a)' : 'rgba(0, 0, 0, 0.5)',
@@ -93,32 +94,97 @@ export const Hobbies: React.FC = () => {
           background: 'linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%)', 
           flexWrap: 'wrap'
         }}>
-          <a 
-            href="/freelance"
-            target="_blank"
-            rel="noreferrer"
-            style={{ ...tabStyle(false), textDecoration: 'none' }}
+          <button 
+            onClick={() => setActiveTab('freelance')} 
+            style={tabStyle(activeTab === 'freelance')}
           >
             Freelance
-          </a>
+          </button>
           <button 
-            style={tabStyle(true)}
+            onClick={() => setActiveTab('photography')} 
+            style={tabStyle(activeTab === 'photography')}
           >
             Photography
           </button>
-          <a 
-            href="/music"
-            target="_blank"
-            rel="noreferrer"
-            style={{ ...tabStyle(false), textDecoration: 'none' }}
+          <button 
+            onClick={() => setActiveTab('music')} 
+            style={tabStyle(activeTab === 'music')}
           >
             Music
-          </a>
+          </button>
         </div>
 
         {/* CHECKPOINT 2: Tab Content */}
         <section style={{ width: '100%', position: 'relative', minHeight: '100vh' }}>
-          <YggdrasilGallery />
+          <AnimatePresence mode="wait">
+            {activeTab === 'photography' && (
+              <motion.div 
+                key="photography" 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <YggdrasilGallery />
+              </motion.div>
+            )}
+
+            {activeTab === 'freelance' && (
+              <motion.div 
+                key="freelance" 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                style={{ minHeight: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2rem' }}
+              >
+                <div className="tva-card" style={{ maxWidth: '800px', padding: '4rem', textAlign: 'center', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(5px)' }}>
+                  <h2 className="crt-text" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', marginBottom: '2rem', border: 'none' }}>
+                    FREELANCE LOGS
+                  </h2>
+                  <p style={{ fontSize: '1.2rem', color: '#ccc', lineHeight: 1.8 }}>
+                    [ DEVELOPING DIGITAL INFRASTRUCTURE FOR THE TIMELINE ]
+                  </p>
+                  <p style={{ fontSize: '1.2rem', color: '#ccc', lineHeight: 1.8, marginTop: '1.5rem' }}>
+                    I build custom web projects and applications. My work includes creating dynamic platforms for college students, full-scale CRM systems, and highly professional portfolio websites tailored to unique variant specifications.
+                  </p>
+                  <div style={{ marginTop: '3rem' }}>
+                    <a href="https://wa.me/" target="_blank" rel="noreferrer" className="tva-btn" style={{ padding: '1rem 2rem', border: '1px solid var(--tva-orange)', color: 'var(--tva-orange)', textDecoration: 'none', fontFamily: '"Share Tech Mono", monospace', fontSize: '1.1rem', letterSpacing: '0.1em', transition: 'all 0.3s ease' }}>
+                      CONTACT VIA WHATSAPP
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'music' && (
+              <motion.div 
+                key="music" 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                style={{ minHeight: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2rem' }}
+              >
+                <div className="tva-card" style={{ maxWidth: '600px', padding: '4rem', textAlign: 'center', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(5px)' }}>
+                  <h2 className="crt-text" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', marginBottom: '2rem', border: 'none' }}>
+                    MUSIC LOGS
+                  </h2>
+                  <div style={{ 
+                    padding: '2rem', 
+                    border: '1px dashed var(--tva-orange, #e8821a)', 
+                    color: 'var(--tva-orange, #e8821a)', 
+                    fontFamily: '"Share Tech Mono", monospace',
+                    fontSize: '1.1rem',
+                    letterSpacing: '0.15em',
+                    animation: 'pulse 2s infinite' 
+                  }}>
+                    [ TEMPORAL BRANCH UNDER CONSTRUCTION ]
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </section>
 
         {/* CHECKPOINT 3: End of logs */}

@@ -391,6 +391,8 @@ export const MissMinutes: React.FC = () => {
     <motion.div
       drag={isAwake}
       dragMomentum={false}
+      animate={!isAwake ? { x: 0, y: 0 } : undefined}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       style={{
         position: 'fixed',
         bottom: '1.5rem',

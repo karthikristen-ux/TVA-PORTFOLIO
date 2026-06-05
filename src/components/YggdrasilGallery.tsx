@@ -77,8 +77,8 @@ const STYLES = `
   }
   .ygg-tree-wrap {
     position: relative;
-    width: min(88vh, 88vw, 760px);
-    aspect-ratio: 760 / 1000;
+    width: min(95vh, 95vw, 1200px);
+    aspect-ratio: 1200 / 1000;
   }
   .ygg-svg {
     position: absolute;
@@ -167,7 +167,7 @@ const STYLES = `
 `;
 
 // ─── GEOMETRY & TIMING ────────────────────────────────────────────────────────
-const SVG_WIDTH = 760;
+const SVG_WIDTH = 1200;
 const SVG_HEIGHT = 1000;
 const CX = SVG_WIDTH / 2;
 const ORANGE = '#c8711a';
@@ -224,7 +224,7 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
 
   // ── Ring ──────────────────────────────────────────────────────────────────
   const circPts: [number,number][] = [];
-  const ringR = 340;
+  const ringR = 480;
   for(let i=0;i<=72;i++){const a=(i/72)*Math.PI*2-Math.PI/2; circPts.push([CX+ringR*Math.cos(a), CX+ringR*Math.sin(a)]);}
   animPath(circPts, 0.8, t, 600, gRing);
   animPath([[30,CX-6],[15,CX],[30,CX+6]], 0.8, t+200, 200, gRing);
@@ -266,9 +266,13 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
 
   // ── Tier definitions (top→bottom order) ───────────────────────────────────
   const tiers = [
-    {jY:200,len:40,sw:0.6},{jY:300,len:60,sw:0.7},{jY:400,len:80,sw:0.8},
-    {jY:500,len:100,sw:0.9},{jY:600,len:120,sw:1.0},{jY:700,len:145,sw:1.2},
-    {jY:800,len:170,sw:1.4},
+    {jY:200,len:90,sw:0.6},
+    {jY:300,len:160,sw:0.7},
+    {jY:400,len:230,sw:0.8},
+    {jY:500,len:300,sw:0.9},
+    {jY:600,len:370,sw:1.0},
+    {jY:700,len:440,sw:1.2},
+    {jY:800,len:510,sw:1.4},
   ];
   const subDefs: any[] = [
     [[14,24],[32,12]],
