@@ -388,81 +388,99 @@ export const MissMinutes: React.FC = () => {
   }
 
   return (
-    <AnimatePresence mode="wait">
-      {!isAwake ? (
-        /* ---- MINIMIZED STATE: tiny face + cloud text ---- */
-        <motion.div
-          key="minimized"
-          className="mm-minimized"
-          onClick={handleWakeUp}
-          initial={{ opacity: 0, scale: 0.3, y: 50 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.3, y: 20 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          aria-label="Wake up Miss Minutes for fun facts"
-        >
-          {/* Cloud text */}
+    <motion.div
+      drag
+      dragMomentum={false}
+      style={{
+        position: 'fixed',
+        bottom: '1.5rem',
+        right: '1.5rem',
+        zIndex: 9999,
+        pointerEvents: 'none',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end'
+      }}
+    >
+      <AnimatePresence mode="wait">
+        {!isAwake ? (
+          /* ---- MINIMIZED STATE: tiny face + cloud text ---- */
           <motion.div
-            className="mm-mini-cloud"
-            animate={{ y: [0, -3, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            key="minimized"
+            className="mm-minimized"
+            onClick={handleWakeUp}
+            initial={{ opacity: 0, scale: 0.3, y: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.3, y: 20 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            aria-label="Wake up Miss Minutes for fun facts"
+            style={{ position: 'relative', bottom: 'auto', right: 'auto', zIndex: 'auto' }}
           >
-            Click me for facts!
+            {/* Cloud text */}
+            <motion.div
+              className="mm-mini-cloud"
+              animate={{ y: [0, -3, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              Click me for facts!
+            </motion.div>
+            {/* Tiny face */}
+            <motion.div
+              className="mm-mini-body"
+              animate={{ rotate: [0, -5, 5, 0], y: [0, -3, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <MissMinutesMini />
+            </motion.div>
           </motion.div>
-          {/* Tiny face */}
+        ) : (
+          /* ---- AWAKE STATE: full character flies out ---- */
           <motion.div
-            className="mm-mini-body"
-            animate={{ rotate: [0, -5, 5, 0], y: [0, -3, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            key="awake"
+            ref={characterRef}
+            className="mm-full-container"
+            initial={{ opacity: 0, scale: 0.2, y: 80, x: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, scale: 0.2, y: 60, x: 20 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 18 }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            style={{ position: 'relative', bottom: 'auto', right: 'auto', zIndex: 'auto' }}
           >
-            <MissMinutesMini />
-          </motion.div>
-        </motion.div>
-      ) : (
-        /* ---- AWAKE STATE: full character flies out ---- */
-        <motion.div
-          key="awake"
-          ref={characterRef}
-          className="mm-full-container"
-          initial={{ opacity: 0, scale: 0.2, y: 80, x: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
-          exit={{ opacity: 0, scale: 0.2, y: 60, x: 20 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 18 }}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          {/* Speech bubble */}
-          <AnimatePresence mode="wait">
-            {showSpeech && (
-              <motion.div
-                key={`speech-${currentFact}`}
-                className="mm-speech-bubble"
-                initial={{ opacity: 0, scale: 0.5, y: 15, filter: 'blur(6px)' }}
-                animate={{
-                  opacity: [0, 1, 0.8, 1], scale: [0.5, 1.05, 0.98, 1],
-                  y: [15, -3, 1, 0], filter: ['blur(6px)', 'blur(0px)', 'blur(1px)', 'blur(0px)'],
-                }}
-                exit={{ opacity: 0, scale: 0.3, filter: 'blur(10px)' }}
-                transition={{ duration: 0.35 }}
-              >
-                {currentFact}
-              </motion.div>
-            )}
-          </AnimatePresence>
+            {/* Speech bubble */}
+            <AnimatePresence mode="wait">
+              {showSpeech && (
+                <motion.div
+                  key={`speech-${currentFact}`}
+                  className="mm-speech-bubble"
+                  initial={{ opacity: 0, scale: 0.5, y: 15, filter: 'blur(6px)' }}
+                  animate={{
+                    opacity: [0, 1, 0.8, 1], scale: [0.5, 1.05, 0.98, 1],
+                    y: [15, -3, 1, 0], filter: ['blur(6px)', 'blur(0px)', 'blur(1px)', 'blur(0px)'],
+                  }}
+                  exit={{ opacity: 0, scale: 0.3, filter: 'blur(10px)' }}
+                  transition={{ duration: 0.35 }}
+                >
+                  {currentFact}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-          {/* Full character body */}
-          <motion.div
-            className="mm-full-body"
-            onClick={handleInteraction}
-            animate={{ rotate: [0, -3, 3, 0], y: [0, -5, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <MissMinutesBody pupilPos={pupilPos} isTalking={showSpeech} mood={config.mood} />
+            {/* Full character body */}
+            <motion.div
+              className="mm-full-body"
+              onClick={handleInteraction}
+              animate={{ rotate: [0, -3, 3, 0], y: [0, -5, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <MissMinutesBody pupilPos={pupilPos} isTalking={showSpeech} mood={config.mood} />
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };

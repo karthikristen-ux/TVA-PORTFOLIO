@@ -1,21 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { Camera } from 'lucide-react';
-
-// Setup frames for the background
-const TOTAL_FRAMES = 40;
-const frameUrls = Array.from({ length: TOTAL_FRAMES }, (_, i) =>
-  `/images/frames/ezgif-frame-${String(i + 1).padStart(3, '0')}.png`
-);
-
-// Preload to avoid flickering
-frameUrls.forEach((src) => {
-  const img = new Image();
-  img.src = src;
-});
+import tempadVideo from '../components/tempad_video/tempad video.mp4';
 
 export const Hobbies: React.FC = () => {
-  const [currentFrame, setCurrentFrame] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Smooth scroll tracking using Framer Motion
@@ -31,16 +19,6 @@ export const Hobbies: React.FC = () => {
     restDelta: 0.001
   });
 
-  // Map smooth progress (0-1) to frame index (0-39)
-  const frameIndex = useTransform(smoothProgress, [0, 1], [0, TOTAL_FRAMES - 1]);
-
-  useEffect(() => {
-    // Update the actual frame state whenever the spring value changes
-    return frameIndex.on("change", (latest) => {
-      setCurrentFrame(Math.floor(latest));
-    });
-  }, [frameIndex]);
-
   return (
     <div ref={containerRef} style={{ position: 'relative' }}>
       
@@ -55,13 +33,14 @@ export const Hobbies: React.FC = () => {
         overflow: 'hidden',
         pointerEvents: 'none',
       }}>
-        <img
-          src={frameUrls[currentFrame]}
-          alt=""
-          className="hobbies-bg-img"
+        <video
+          src={tempadVideo}
+          className="hobbies-bg-video"
+          autoPlay
+          loop
+          muted
+          playsInline
           style={{
-            width: '100%',
-            height: '100%',
             filter: 'saturate(1.2) contrast(1.1)', 
           }}
         />

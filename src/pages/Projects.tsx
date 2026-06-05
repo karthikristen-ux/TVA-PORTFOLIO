@@ -120,6 +120,7 @@ const projects = [
 export const Projects: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [detailProject, setDetailProject] = useState<typeof projects[0] | null>(null);
+  const [showSwipeMsg, setShowSwipeMsg] = useState(false);
   const total = projects.length;
 
   // Responsive dimensions
@@ -129,18 +130,29 @@ export const Projects: React.FC = () => {
     const updateDimensions = () => {
       const w = window.innerWidth;
       if (w <= 480) {
-        setDimensions({ itemWidth: 220, gap: 180 });
+        setDimensions({ itemWidth: 280, gap: 230 });
       } else if (w <= 768) {
-        setDimensions({ itemWidth: 260, gap: 220 });
+        setDimensions({ itemWidth: 300, gap: 250 });
       } else if (w <= 900) {
-        setDimensions({ itemWidth: 280, gap: 260 });
+        setDimensions({ itemWidth: 320, gap: 280 });
       } else {
-        setDimensions({ itemWidth: 340, gap: 320 });
+        setDimensions({ itemWidth: 360, gap: 320 });
       }
     };
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
+  useEffect(() => {
+    const w = window.innerWidth;
+    if (w <= 768) {
+      setShowSwipeMsg(true);
+      const timer = setTimeout(() => {
+        setShowSwipeMsg(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   // Keyboard navigation
@@ -212,6 +224,37 @@ export const Projects: React.FC = () => {
         >
           ‹
         </button>
+
+        {/* Swipe Message */}
+        <AnimatePresence>
+          {showSwipeMsg && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, x: '-50%' }}
+              animate={{ opacity: 1, y: 0, x: '-50%' }}
+              exit={{ opacity: 0, y: -10, x: '-50%' }}
+              className="swipe-message"
+              style={{
+                position: 'absolute',
+                top: '5%',
+                left: '50%',
+                color: 'var(--tva-orange)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '1rem',
+                letterSpacing: '2px',
+                textShadow: '0 0 10px var(--tva-orange)',
+                zIndex: 100,
+                pointerEvents: 'none',
+                background: 'rgba(0,0,0,0.7)',
+                padding: '8px 16px',
+                border: '1px solid var(--tva-orange)',
+                borderRadius: '4px',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              ← SWIPE TO VIEW PROJECTS →
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Track */}
         <motion.div
