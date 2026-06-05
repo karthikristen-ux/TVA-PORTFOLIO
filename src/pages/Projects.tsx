@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 
@@ -120,7 +120,6 @@ const projects = [
 export const Projects: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [detailProject, setDetailProject] = useState<typeof projects[0] | null>(null);
-  const touchStartRef = useRef<number>(0);
   const total = projects.length;
 
   // Responsive dimensions
@@ -163,21 +162,6 @@ export const Projects: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeIndex, detailProject, total]);
 
-  // Touch swipe support
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartRef.current = e.touches[0].clientX;
-  }, []);
-
-  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    const diff = touchStartRef.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        setActiveIndex((prev) => (prev + 1) % total);
-      } else {
-        setActiveIndex((prev) => (prev - 1 + total) % total);
-      }
-    }
-  }, [total]);
 
   const goLeft = () => setActiveIndex((prev) => (prev - 1 + total) % total);
   const goRight = () => setActiveIndex((prev) => (prev + 1) % total);
@@ -235,7 +219,7 @@ export const Projects: React.FC = () => {
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.15}
-          onDragEnd={(e, { offset }) => {
+          onDragEnd={(_, { offset }) => {
             if (offset.x < -40) goRight();
             else if (offset.x > 40) goLeft();
           }}
