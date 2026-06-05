@@ -2,11 +2,11 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 const images = [
-  { id: 1, src: '/images/instagram/1.jpg', x: 20, y: 70, label: 'TIMELINE EVENT: 0X-11' },
-  { id: 2, src: '/images/instagram/2.jpg', x: 80, y: 65, label: 'TIMELINE EVENT: 0X-12' },
-  { id: 3, src: '/images/instagram/3.jpg', x: 15, y: 30, label: 'TIMELINE EVENT: 0X-13' },
-  { id: 4, src: '/images/instagram/4.jpg', x: 85, y: 25, label: 'TIMELINE EVENT: 0X-14' },
-  { id: 5, src: '/images/instagram/5.jpg', x: 50, y: 10, label: 'TIMELINE EVENT: 0X-15' },
+  { id: 1, src: '/images/instagram/1.png', x: 20, y: 70, label: 'TIMELINE EVENT: 0X-11' },
+  { id: 2, src: '/images/instagram/2.png', x: 80, y: 65, label: 'TIMELINE EVENT: 0X-12' },
+  { id: 3, src: '/images/instagram/3.png', x: 15, y: 30, label: 'TIMELINE EVENT: 0X-13' },
+  { id: 4, src: '/images/instagram/4.png', x: 85, y: 25, label: 'TIMELINE EVENT: 0X-14' },
+  { id: 5, src: '/images/instagram/5.png', x: 50, y: 10, label: 'TIMELINE EVENT: 0X-15' },
 ];
 
 export const YggdrasilGallery: React.FC = () => {
