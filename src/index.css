@@ -1945,12 +1945,12 @@ nav.nav-collapsed .logo {
 .mm-mini-cloud::after {
   content: '';
   position: absolute;
-  top: -6px;
+  bottom: -6px;
   right: 14px;
   width: 0; height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-bottom: 6px solid var(--tva-orange);
+  border-top: 6px solid var(--tva-orange);
 }
 
 @keyframes cloudPulse {
@@ -2003,12 +2003,12 @@ nav.nav-collapsed .logo {
 .mm-speech-bubble::after {
   content: '';
   position: absolute;
-  top: -8px;
+  bottom: -8px;
   right: 40px;
   width: 0; height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-bottom: 8px solid var(--tva-orange);
+  border-top: 8px solid var(--tva-orange);
 }
 
 .mm-full-body {

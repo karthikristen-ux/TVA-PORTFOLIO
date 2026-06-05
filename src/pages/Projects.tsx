@@ -225,36 +225,7 @@ export const Projects: React.FC = () => {
           ‹
         </button>
 
-        {/* Swipe Message */}
-        <AnimatePresence>
-          {showSwipeMsg && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, x: '-50%' }}
-              animate={{ opacity: 1, y: 0, x: '-50%' }}
-              exit={{ opacity: 0, y: -10, x: '-50%' }}
-              className="swipe-message"
-              style={{
-                position: 'absolute',
-                top: '5%',
-                left: '50%',
-                color: 'var(--tva-orange)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '1rem',
-                letterSpacing: '2px',
-                textShadow: '0 0 10px var(--tva-orange)',
-                zIndex: 100,
-                pointerEvents: 'none',
-                background: 'rgba(0,0,0,0.7)',
-                padding: '8px 16px',
-                border: '1px solid var(--tva-orange)',
-                borderRadius: '4px',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              ← SWIPE TO VIEW PROJECTS →
-            </motion.div>
-          )}
-        </AnimatePresence>
+
 
         {/* Track */}
         <motion.div
@@ -326,6 +297,21 @@ export const Projects: React.FC = () => {
           ›
         </button>
       </div>
+
+      {/* Swipe Message */}
+      <AnimatePresence>
+        {showSwipeMsg && (
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="projects-subtitle"
+            style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
+          >
+            ← SWIPE TO VIEW PROJECTS →
+          </motion.p>
+        )}
+      </AnimatePresence>
 
       {/* Dot indicators */}
       <div className="carousel-dots">
