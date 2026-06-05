@@ -1,35 +1,35 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Link, Terminal, FileText } from 'lucide-react';
+import { Mail, Link, Instagram, MessageCircle } from 'lucide-react';
 
 const icChips = [
   {
-    label: 'COMMUNICATE',
+    label: 'GMAIL',
     icon: Mail,
     href: 'mailto:karthikeyant1885@gmail.com',
     target: undefined as string | undefined,
     pinLabel: 'COM-01',
   },
   {
+    label: 'WHATSAPP',
+    icon: MessageCircle,
+    href: 'https://wa.me/918110823730',
+    target: '_blank',
+    pinLabel: 'WAP-02',
+  },
+  {
+    label: 'INSTAGRAM',
+    icon: Instagram,
+    href: 'https://instagram.com/karthikristen',
+    target: '_blank',
+    pinLabel: 'IG-03',
+  },
+  {
     label: 'LINKEDIN',
     icon: Link,
     href: 'https://www.linkedin.com/in/karthikristen/',
     target: '_blank',
-    pinLabel: 'LNK-02',
-  },
-  {
-    label: 'GITHUB',
-    icon: Terminal,
-    href: 'https://github.com/karthikristen-ux',
-    target: '_blank',
-    pinLabel: 'GIT-03',
-  },
-  {
-    label: 'RESUME (CV)',
-    icon: FileText,
-    href: 'https://drive.google.com/file/d/1Y6PHHpYaOuttlEbAWEBzi9brH7QaRlze/view?usp=drive_link',
-    target: '_blank',
-    pinLabel: 'RES-04',
+    pinLabel: 'LNK-04',
   },
 ];
 
