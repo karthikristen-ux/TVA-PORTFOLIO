@@ -43,8 +43,8 @@ body::before {
   top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none;
   background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.2) 50%
+    transparent 50%, 
+    rgba(255, 77, 0, 0.15) 50%
   );
   background-size: 100% 4px;
   z-index: 9998;
