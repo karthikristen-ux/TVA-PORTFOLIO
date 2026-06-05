@@ -75,11 +75,6 @@ const STYLES = `
     letter-spacing: 0.3em;
     margin-top: 5px;
   }
-  .ygg-tree-wrap {
-    position: relative;
-    width: min(95vh, 95vw, 1200px);
-    aspect-ratio: 1200 / 1000;
-  }
   .ygg-svg {
     position: absolute;
     inset: 0;
@@ -168,7 +163,7 @@ const STYLES = `
 
 // ─── GEOMETRY & TIMING ────────────────────────────────────────────────────────
 const SVG_WIDTH = 1200;
-const SVG_HEIGHT = 1000;
+const SVG_HEIGHT = 1200;
 const CX = SVG_WIDTH / 2;
 const ORANGE = '#c8711a';
 
@@ -241,7 +236,7 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
   t += 350;
 
   // ── Trunk grows top→bottom ────────────────────────────────────────────────
-  const trunkYs = [170, 200, 300, 400, 500, 600, 700, 800, 920];
+  const trunkYs = [150, 200, 350, 500, 650, 800, 950, 1100];
   const trunkTimes: number[] = [t];
   trunkYs.forEach((y,i)=>{
     if(i===0) return;
@@ -266,13 +261,12 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
 
   // ── Tier definitions (top→bottom order) ───────────────────────────────────
   const tiers = [
-    {jY:200,len:90,sw:0.6},
-    {jY:300,len:160,sw:0.7},
-    {jY:400,len:230,sw:0.8},
-    {jY:500,len:300,sw:0.9},
-    {jY:600,len:370,sw:1.0},
-    {jY:700,len:440,sw:1.2},
-    {jY:800,len:510,sw:1.4},
+    {jY:200,len:120,sw:0.6},
+    {jY:350,len:190,sw:0.7},
+    {jY:500,len:260,sw:0.8},
+    {jY:650,len:330,sw:0.9},
+    {jY:800,len:400,sw:1.0},
+    {jY:950,len:470,sw:1.2},
   ];
   const subDefs: any[] = [
     [[14,24],[32,12]],
@@ -324,8 +318,8 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
   });
 
   // ── Roots ─────────────────────────────────────────────────────────────────
-  const rootBase = trunkTimeAt(900)+100;
-  [{y:860,len:110,sw:1.0},{y:830,len:70,sw:0.8}].forEach(({y,len,sw})=>{
+  const rootBase = trunkTimeAt(1000)+100;
+  [{y:1050,len:110,sw:1.0},{y:1020,len:70,sw:0.8}].forEach(({y,len,sw})=>{
     [-1,1].forEach(dir=>{
       const ex=CX+dir*len;
       animPath([[CX,y],[ex,y]],sw,rootBase,len*3,gTree);
@@ -336,13 +330,13 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
       animTri(rx+dir*24,y+38,3,false,rootBase+len*1.5+520,gTree);
     });
   });
-  animPath([[CX,900],[CX,940]],1.2,rootBase,200,gTree);
-  animTri(CX,950,6,false,rootBase+220,gTree);
-  animTri(CX,965,4,false,rootBase+350,gTree);
-  animPath([[CX-85,860],[CX-45,860]],0.6,rootBase+100,200,gTree);
-  animTri(CX-85,868,3,false,rootBase+320,gTree);
-  animPath([[CX+45,860],[CX+85,860]],0.6,rootBase+100,200,gTree);
-  animTri(CX+85,868,3,false,rootBase+320,gTree);
+  animPath([[CX,1050],[CX,1100]],1.2,rootBase,200,gTree);
+  animTri(CX,1110,6,false,rootBase+220,gTree);
+  animTri(CX,1125,4,false,rootBase+350,gTree);
+  animPath([[CX-85,1050],[CX-45,1050]],0.6,rootBase+100,200,gTree);
+  animTri(CX-85,1058,3,false,rootBase+320,gTree);
+  animPath([[CX+45,1050],[CX+85,1050]],0.6,rootBase+100,200,gTree);
+  animTri(CX+85,1058,3,false,rootBase+320,gTree);
 
   // ── Apply initial dash state + fire animations ────────────────────────────
   anims.forEach(({el,isCircle})=>{

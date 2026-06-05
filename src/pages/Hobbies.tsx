@@ -43,7 +43,7 @@ export const Hobbies: React.FC = () => {
           muted
           playsInline
           style={{
-            filter: 'saturate(1.2) contrast(1.1)', 
+            filter: 'saturate(1.5) contrast(1.2) sepia(0.6) hue-rotate(-15deg)', 
             width: '100%',
             height: '100%',
             objectFit: 'cover'
