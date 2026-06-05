@@ -1,348 +1,512 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useRef, useMemo } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
-const INSTAGRAM_URL = 'https://instagram.com/karthikristen';
+// ─── IMAGE DATA ────────────────────────────────────────────────────────────────
+// Add or remove images here — the tree auto-generates branches to match.
+const images = [
+  { id: 1, src: '/images/instagram/1.png', label: 'TIMELINE EVENT: 0X-11' },
+  { id: 2, src: '/images/instagram/2.png', label: 'TIMELINE EVENT: 0X-12' },
+  { id: 3, src: '/images/instagram/3.png', label: 'TIMELINE EVENT: 0X-13' },
+  { id: 4, src: '/images/instagram/4.png', label: 'TIMELINE EVENT: 0X-14' },
+  { id: 5, src: '/images/instagram/5.png', label: 'TIMELINE EVENT: 0X-15' },
+  { id: 6, src: '/images/instagram/6.png', label: 'TIMELINE EVENT: 0X-16' },
+  { id: 7, src: '/images/instagram/7.png', label: 'TIMELINE EVENT: 0X-17' },
+  { id: 8, src: '/images/instagram/8.png', label: 'TIMELINE EVENT: 0X-18' },
+];
 
-interface ImageNode {
+// ─── TREE LAYOUT GENERATOR ────────────────────────────────────────────────────
+// Automatically lays out trunk + branches based on image count.
+// Returns nodes with (x,y) positions in 0-100 coordinate space and SVG path data.
+
+interface TreeNode {
   id: number;
-  src: string;
-  label: string;
-  // Position as percentage of the container
-  x: number;
-  y: number;
-  // Which side the label appears
-  labelSide: 'left' | 'right';
+  x: number;       // 0-100 percentage
+  y: number;       // 0-100 percentage
+  pathD: string;   // SVG path from parent junction to this node
+  trunkSegment?: string; // optional trunk segment drawn before this tier
+  appearAt: number; // scroll progress [0,1] when this node/branch appears
 }
 
-const imageNodes: ImageNode[] = [
-  { id: 1, src: '/images/instagram/1.png', label: 'ASGARD',        x: 12, y: 22, labelSide: 'left' },
-  { id: 2, src: '/images/instagram/2.png', label: 'VANAHEIM',      x: 10, y: 34, labelSide: 'left' },
-  { id: 3, src: '/images/instagram/3.png', label: 'MIDGARD',       x: 12, y: 46, labelSide: 'left' },
-  { id: 4, src: '/images/instagram/4.png', label: 'JOTUNHEIM',     x: 10, y: 58, labelSide: 'left' },
-  { id: 5, src: '/images/instagram/5.png', label: 'NIFLHEIM',      x: 12, y: 70, labelSide: 'left' },
-  { id: 6, src: '/images/instagram/6.png', label: 'ALFHEIM',       x: 88, y: 22, labelSide: 'right' },
-  { id: 7, src: '/images/instagram/7.png', label: 'SVARTALFHEIM',  x: 90, y: 34, labelSide: 'right' },
-  { id: 8, src: '/images/instagram/8.png', label: 'NIDAVELLIR',    x: 88, y: 46, labelSide: 'right' },
-  { id: 9, src: '/images/instagram/9.png', label: 'MUSPELHEIM',    x: 90, y: 58, labelSide: 'right' },
-];
+function buildTree(count: number): TreeNode[] {
+  if (count === 0) return [];
 
-// Generate decorative dots along the tree
-const decorativeDots = [
-  { cx: 50, cy: 18 }, { cx: 42, cy: 22 }, { cx: 58, cy: 22 },
-  { cx: 35, cy: 28 }, { cx: 65, cy: 28 }, { cx: 30, cy: 32 },
-  { cx: 70, cy: 32 }, { cx: 26, cy: 38 }, { cx: 74, cy: 38 },
-  { cx: 45, cy: 25 }, { cx: 55, cy: 25 }, { cx: 38, cy: 30 },
-  { cx: 62, cy: 30 }, { cx: 48, cy: 15 }, { cx: 52, cy: 15 },
-  { cx: 33, cy: 24 }, { cx: 67, cy: 24 }, { cx: 22, cy: 42 },
-  { cx: 78, cy: 42 }, { cx: 44, cy: 20 }, { cx: 56, cy: 20 },
-  { cx: 28, cy: 35 }, { cx: 72, cy: 35 }, { cx: 40, cy: 27 },
-  { cx: 60, cy: 27 }, { cx: 36, cy: 33 }, { cx: 64, cy: 33 },
-  // Root dots
-  { cx: 42, cy: 72 }, { cx: 58, cy: 72 }, { cx: 38, cy: 76 },
-  { cx: 62, cy: 76 }, { cx: 35, cy: 80 }, { cx: 65, cy: 80 },
-  { cx: 30, cy: 82 }, { cx: 70, cy: 82 },
-];
+  const nodes: TreeNode[] = [];
+  const cx = 50; // trunk center x
 
-// Branch paths from trunk to each node
-const branchPaths = [
-  // Left branches (top to bottom)
-  "M 50 45 Q 42 40, 35 35 Q 28 30, 20 25",      // to Asgard
-  "M 50 48 Q 40 44, 30 40 Q 22 37, 16 35",       // to Vanaheim
-  "M 50 52 Q 40 50, 30 48 Q 22 47, 18 47",       // to Midgard
-  "M 50 56 Q 40 56, 30 58 Q 22 59, 16 59",       // to Jotunheim
-  "M 50 62 Q 42 64, 34 67 Q 26 70, 18 71",       // to Niflheim
-  // Right branches (top to bottom)
-  "M 50 45 Q 58 40, 65 35 Q 72 30, 80 25",       // to Alfheim
-  "M 50 48 Q 60 44, 70 40 Q 78 37, 84 35",       // to Svartalfheim
-  "M 50 52 Q 60 50, 70 48 Q 78 47, 82 47",       // to Nidavellir
-  "M 50 56 Q 60 56, 70 58 Q 78 59, 84 59",       // to Muspelheim
-];
+  // Trunk runs from bottom (y=95) up to y=10
+  // We divide the trunk into tiers. Each tier hosts a pair of branches (or one center branch).
 
-// Main trunk paths
-const trunkPaths = [
-  "M 50 88 C 50 80, 50 72, 50 65",
-  "M 50 65 C 49 58, 50 52, 50 45",
-  "M 50 45 C 50 38, 50 30, 50 20",
-  // Trunk inner curves for thickness
-  "M 49 88 C 48 78, 49 70, 49 62",
-  "M 51 88 C 52 78, 51 70, 51 62",
-  "M 49 62 C 48 55, 49 48, 50 42",
-  "M 51 62 C 52 55, 51 48, 50 42",
-];
+  // Tier definitions: trunk junction Y and branch spread
+  const tierJunctions = [80, 62, 44, 28, 14];
+  const tierSpreads   = [22, 28, 32, 34, 34]; // horizontal distance from trunk
 
-// Root paths
-const rootPaths = [
-  "M 50 88 Q 45 92, 38 94 Q 30 96, 24 95",
-  "M 50 88 Q 44 90, 36 92 Q 28 93, 20 91",
-  "M 50 88 Q 46 91, 42 93 Q 36 95, 30 97",
-  "M 50 88 Q 55 92, 62 94 Q 70 96, 76 95",
-  "M 50 88 Q 56 90, 64 92 Q 72 93, 80 91",
-  "M 50 88 Q 54 91, 58 93 Q 64 95, 70 97",
-  // Additional thinner roots
-  "M 50 88 Q 43 93, 34 96",
-  "M 50 88 Q 57 93, 66 96",
-];
+  // Assign images round-robin to positions: left, right, left, right, center...
+  // Then group into tiers of 2 (or 1 for odd last)
 
-// Small branch sub-paths (decorative twigs)
-const twigPaths = [
-  "M 35 35 Q 32 32, 28 30", "M 35 35 Q 33 38, 30 40",
-  "M 65 35 Q 68 32, 72 30", "M 65 35 Q 67 38, 70 40",
-  "M 42 28 Q 39 25, 36 22", "M 58 28 Q 61 25, 64 22",
-  "M 30 48 Q 27 45, 24 43", "M 70 48 Q 73 45, 76 43",
-  "M 42 22 Q 40 18, 38 15", "M 58 22 Q 60 18, 62 15",
-  "M 50 20 Q 48 16, 46 13", "M 50 20 Q 52 16, 54 13",
-  "M 28 30 Q 25 28, 22 27", "M 72 30 Q 75 28, 78 27",
-  "M 30 40 Q 26 42, 23 44", "M 70 40 Q 74 42, 77 44",
-  "M 34 67 Q 30 69, 26 72", "M 66 67 Q 70 69, 74 72",
-  "M 20 25 Q 18 22, 16 20", "M 80 25 Q 82 22, 84 20",
-  // Crown top twigs
-  "M 50 20 Q 46 14, 43 10", "M 50 20 Q 54 14, 57 10",
-  "M 46 13 Q 44 10, 42 8", "M 54 13 Q 56 10, 58 8",
-];
+  const positions: { x: number; y: number; junctionY: number; tierIdx: number; side: 'left' | 'right' | 'center' }[] = [];
 
-export const YggdrasilGallery: React.FC = () => {
-  const [hoveredNode, setHoveredNode] = useState<number | null>(null);
+  let tier = 0;
+  let slot = 0; // 0=left, 1=right per tier
+
+  for (let i = 0; i < count; i++) {
+    const tIdx = Math.min(tier, tierJunctions.length - 1);
+    const jY = tierJunctions[tIdx];
+    const spread = tierSpreads[tIdx];
+
+    // Within a tier: first goes left, second goes right
+    // If only one remains, goes slightly offset from center
+    const side: 'left' | 'right' | 'center' = slot === 0 ? 'left' : 'right';
+    const nodeX = side === 'left' ? cx - spread : cx + spread;
+    const nodeY = jY - 8 + (slot === 0 ? 4 : -4);
+
+    positions.push({ x: nodeX, y: nodeY, junctionY: jY, tierIdx: tIdx, side });
+
+    slot++;
+    if (slot >= 2) {
+      slot = 0;
+      tier++;
+    }
+  }
+
+  // Build SVG paths + scroll appear timing
+  positions.forEach((pos, i) => {
+    const jY = pos.junctionY;
+    const normalizedAppear = 0.15 + (i / count) * 0.65;
+
+    // Branch path: from trunk at (cx, jY) curve to node position
+    const midX = pos.side === 'left'
+      ? cx - (pos.x - cx) * 0.3
+      : cx + (pos.x - cx) * 0.3;
+
+    const pathD = `M ${cx} ${jY} Q ${midX} ${jY - 4}, ${pos.x} ${pos.y}`;
+
+    nodes.push({
+      id: i + 1,
+      x: pos.x,
+      y: pos.y,
+      pathD,
+      appearAt: normalizedAppear,
+    });
+  });
+
+  return nodes;
+}
+
+// ─── STYLES ───────────────────────────────────────────────────────────────────
+const STYLES = `
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+  .ygg-wrap {
+    position: relative;
+    width: 100%;
+    min-height: 280vh;
+    background: transparent;
+  }
+
+  .ygg-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .ygg-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 60%, #1a0d00 0%, #0a0500 60%, #000 100%);
+    z-index: 0;
+  }
+
+  .ygg-scan {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255,120,0,0.012) 2px,
+      rgba(255,120,0,0.012) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .ygg-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .ygg-svg-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+  }
+
+  .ygg-nodes-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+  }
+
+  .ygg-header {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 30;
+    white-space: nowrap;
+  }
+
+  .ygg-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(1.2rem, 3vw, 2.2rem);
+    color: #e8821a;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-shadow: 0 0 30px rgba(232,130,26,0.6);
+    margin: 0 0 0.4rem;
+  }
+
+  .ygg-subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.55rem, 1.2vw, 0.75rem);
+    color: rgba(232,130,26,0.6);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .ygg-node-img {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+  }
+
+  .ygg-frame {
+    position: relative;
+    width: clamp(80px, 9vw, 130px);
+    aspect-ratio: 1;
+  }
+
+  .ygg-frame::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border: 1px solid rgba(232,130,26,0.7);
+    clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px), 0% 8px);
+    box-shadow: 0 0 18px rgba(232,130,26,0.35), inset 0 0 12px rgba(0,0,0,0.6);
+  }
+
+  .ygg-frame::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border: 1px solid rgba(232,130,26,0.2);
+    clip-path: polygon(12px 0%, calc(100% - 12px) 0%, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0% calc(100% - 12px), 0% 12px);
+  }
+
+  .ygg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px), 0% 8px);
+    filter: sepia(0.2) saturate(0.9) brightness(0.85);
+    transition: filter 0.3s ease;
+  }
+
+  .ygg-node-img:hover .ygg-img {
+    filter: sepia(0) saturate(1.1) brightness(1.05);
+  }
+
+  .ygg-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.38rem, 0.7vw, 0.55rem);
+    color: rgba(232,130,26,0.8);
+    letter-spacing: 0.12em;
+    text-align: center;
+    margin-top: 5px;
+    white-space: nowrap;
+    text-shadow: 0 0 8px rgba(232,130,26,0.5);
+  }
+
+  .ygg-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #e8821a;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #e8821a, 0 0 20px rgba(232,130,26,0.5);
+  }
+
+  .ygg-counter {
+    position: absolute;
+    bottom: 6%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(232,130,26,0.4);
+    letter-spacing: 0.3em;
+    z-index: 30;
+    white-space: nowrap;
+  }
+`;
+
+// ─── SUB-COMPONENT: BRANCH PATH ───────────────────────────────────────────────
+const AnimatedBranch: React.FC<{
+  pathD: string;
+  progress: any;
+  appearAt: number;
+  strokeWidth?: number;
+}> = ({ pathD, progress, appearAt, strokeWidth = 0.7 }) => {
+  const pathLength = useTransform(progress, [appearAt, Math.min(appearAt + 0.08, 1)], [0, 1]);
+  const opacity    = useTransform(progress, [appearAt, Math.min(appearAt + 0.06, 1)], [0, 1]);
 
   return (
-    <div className="yggdrasil-scene">
-      {/* Title at top */}
-      <motion.div 
-        className="yggdrasil-title-bar"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: false }}
-        transition={{ duration: 1 }}
-      >
-        <span className="yggdrasil-subtitle">TREE OF CONNECTIONS</span>
-      </motion.div>
-
-      {/* Main tree container */}
-      <div className="yggdrasil-tree-wrapper">
-        
-        {/* SVG Tree */}
-        <svg 
-          className="yggdrasil-svg"
-          viewBox="0 0 100 100" 
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <defs>
-            {/* Glow filter */}
-            <filter id="ygg-glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="0.8" result="blur1" />
-              <feMerge>
-                <feMergeNode in="blur1" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-            <filter id="ygg-glow-strong" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="1.5" result="blur2" />
-              <feMerge>
-                <feMergeNode in="blur2" />
-                <feMergeNode in="blur2" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-            {/* Radial gradient for the circle */}
-            <radialGradient id="circleGrad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="rgba(255,140,0,0.05)" />
-              <stop offset="100%" stopColor="rgba(255,140,0,0)" />
-            </radialGradient>
-          </defs>
-
-          {/* Large enclosing circle */}
-          <circle 
-            cx="50" cy="50" r="42" 
-            fill="url(#circleGrad)" 
-            stroke="rgba(255,140,0,0.15)" 
-            strokeWidth="0.3" 
-          />
-          {/* Inner dashed circle */}
-          <circle 
-            cx="50" cy="50" r="38" 
-            fill="none" 
-            stroke="rgba(255,140,0,0.08)" 
-            strokeWidth="0.15" 
-            strokeDasharray="1 1.5" 
-          />
-
-          {/* Root paths */}
-          {rootPaths.map((d, i) => (
-            <motion.path
-              key={`root-${i}`}
-              d={d}
-              fill="none"
-              stroke="rgba(255,140,0,0.35)"
-              strokeWidth={0.4 - i * 0.03}
-              filter="url(#ygg-glow)"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: false }}
-              transition={{ duration: 2, delay: 0.8 + i * 0.1, ease: 'easeOut' }}
-            />
-          ))}
-
-          {/* Trunk paths */}
-          {trunkPaths.map((d, i) => (
-            <motion.path
-              key={`trunk-${i}`}
-              d={d}
-              fill="none"
-              stroke={i < 3 ? "rgba(255,140,0,0.7)" : "rgba(255,140,0,0.3)"}
-              strokeWidth={i < 3 ? 0.8 : 0.4}
-              filter="url(#ygg-glow-strong)"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: false }}
-              transition={{ duration: 2, delay: i * 0.15, ease: 'easeOut' }}
-            />
-          ))}
-
-          {/* Branch paths to nodes */}
-          {branchPaths.map((d, i) => (
-            <motion.path
-              key={`branch-${i}`}
-              d={d}
-              fill="none"
-              stroke="rgba(255,140,0,0.5)"
-              strokeWidth="0.4"
-              filter="url(#ygg-glow)"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: false }}
-              transition={{ duration: 1.5, delay: 1.2 + i * 0.12, ease: 'easeOut' }}
-            />
-          ))}
-
-          {/* Decorative twig paths */}
-          {twigPaths.map((d, i) => (
-            <motion.path
-              key={`twig-${i}`}
-              d={d}
-              fill="none"
-              stroke="rgba(255,140,0,0.25)"
-              strokeWidth="0.2"
-              filter="url(#ygg-glow)"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: false }}
-              transition={{ duration: 1, delay: 1.8 + i * 0.05, ease: 'easeOut' }}
-            />
-          ))}
-
-          {/* Decorative glowing dots */}
-          {decorativeDots.map((dot, i) => (
-            <motion.circle
-              key={`dot-${i}`}
-              cx={dot.cx}
-              cy={dot.cy}
-              r="0.4"
-              fill="var(--tva-orange)"
-              filter="url(#ygg-glow)"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: [0, 0.8, 0.4] }}
-              viewport={{ once: false }}
-              transition={{ duration: 1, delay: 2 + i * 0.04, ease: 'easeOut' }}
-            />
-          ))}
-        </svg>
-
-        {/* Image nodes overlaid on the tree */}
-        {imageNodes.map((node, i) => (
-          <YggdrasilImageNode
-            key={node.id}
-            node={node}
-            index={i}
-            isHovered={hoveredNode === node.id}
-            onHover={() => setHoveredNode(node.id)}
-            onLeave={() => setHoveredNode(null)}
-          />
-        ))}
-      </div>
-
-      {/* Bottom section */}
-      <motion.div 
-        className="yggdrasil-bottom"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: false }}
-        transition={{ duration: 1, delay: 2.5 }}
-      >
-        {/* Yggdrasil rune */}
-        <div className="yggdrasil-rune">
-          <svg viewBox="0 0 40 40" width="40" height="40">
-            <circle cx="20" cy="20" r="18" fill="none" stroke="var(--tva-orange)" strokeWidth="1" />
-            <line x1="20" y1="5" x2="20" y2="35" stroke="var(--tva-orange)" strokeWidth="1.5" />
-            <line x1="20" y1="12" x2="12" y2="20" stroke="var(--tva-orange)" strokeWidth="1.2" />
-            <line x1="20" y1="12" x2="28" y2="20" stroke="var(--tva-orange)" strokeWidth="1.2" />
-          </svg>
-        </div>
-        <h2 className="yggdrasil-name">Y G G D R A S I L</h2>
-        <div className="yggdrasil-buttons">
-          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="ygg-btn">
-            <span>← EXPLORE</span>
-          </a>
-          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="ygg-btn">
-            <span>CONNECT →</span>
-          </a>
-        </div>
-      </motion.div>
-    </div>
+    <motion.path
+      d={pathD}
+      fill="none"
+      stroke="var(--tva-orange, #e8821a)"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      style={{
+        pathLength,
+        opacity,
+        filter: 'drop-shadow(0 0 3px rgba(232,130,26,0.7))',
+      }}
+    />
   );
 };
 
-/* ---- Individual image node component ---- */
-const YggdrasilImageNode: React.FC<{
-  node: ImageNode;
-  index: number;
-  isHovered: boolean;
-  onHover: () => void;
-  onLeave: () => void;
-}> = ({ node, index, isHovered, onHover, onLeave }) => {
+// ─── SUB-COMPONENT: NODE ─────────────────────────────────────────────────────
+const YggdrasilNode: React.FC<{
+  img: (typeof images)[number];
+  node: TreeNode;
+  progress: any;
+}> = ({ img, node, progress }) => {
+  const start = node.appearAt + 0.04;
+  const end   = Math.min(start + 0.07, 1);
+
+  const opacity = useTransform(progress, [start, end], [0, 1]);
+  const scale   = useTransform(progress, [start, end], [0.4, 1]);
+  const y       = useTransform(progress, [start, end], [10, 0]);
+
   return (
     <motion.div
-      className={`ygg-node ygg-node-${node.labelSide}`}
+      className="ygg-node-img"
       style={{
         left: `${node.x}%`,
         top: `${node.y}%`,
+        opacity,
+        scale,
+        y,
       }}
-      initial={{ opacity: 0, scale: 0 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: false }}
-      transition={{ duration: 0.5, delay: 1.5 + index * 0.15, type: 'spring', stiffness: 200 }}
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
     >
-      {/* The glowing dot */}
-      <a 
-        href={INSTAGRAM_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="ygg-dot-link"
-      >
-        <div className="ygg-dot">
-          <div className="ygg-dot-core" />
-          <div className="ygg-dot-ring" />
-        </div>
-
-        {/* Label */}
-        <span className="ygg-label">{node.label}</span>
-      </a>
-
-      {/* Popup image on hover */}
-      <AnimatePresence>
-        {isHovered && (
-          <motion.div
-            className="ygg-popup"
-            initial={{ opacity: 0, scale: 0.6, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.6, y: 10 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          >
-            <img src={node.src} alt={node.label} />
-            <div className="ygg-popup-label">{node.label}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div className="ygg-frame">
+        <img src={img.src} alt={img.label} className="ygg-img" loading="lazy" />
+        <div className="ygg-dot" />
+      </div>
+      <p className="ygg-label">{img.label}</p>
     </motion.div>
   );
 };
+
+// ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
+export const YggdrasilGallery: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start center', 'end end'],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 40,
+    damping: 18,
+    restDelta: 0.001,
+  });
+
+  const headerOpacity = useTransform(smoothProgress, [0, 0.12], [0, 1]);
+
+  // Auto-generate tree layout from image array
+  const nodes = useMemo(() => buildTree(images.length), []);
+
+  // Trunk path segments — drawn in tiers matching node tiers
+  const trunkSegments = useMemo(() => {
+    // One trunk segment per tier (from bottom to top)
+    const tiers = [
+      { d: 'M 50 95 Q 50 87, 50 80', at: 0.05 },
+      { d: 'M 50 80 Q 50 71, 50 62', at: 0.25 },
+      { d: 'M 50 62 Q 50 53, 50 44', at: 0.42 },
+      { d: 'M 50 44 Q 50 36, 50 28', at: 0.57 },
+      { d: 'M 50 28 Q 50 21, 50 14', at: 0.72 },
+    ];
+    // Only render as many trunk segments as there are tier groups needed
+    const tiersNeeded = Math.ceil(images.length / 2);
+    return tiers.slice(0, Math.min(tiersNeeded, tiers.length));
+  }, []);
+
+  // Outer ring
+  const ringOpacity = useTransform(smoothProgress, [0, 0.1], [0, 0.6]);
+
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: STYLES }} />
+
+      <div ref={containerRef} className="ygg-wrap">
+        <div className="ygg-sticky">
+
+          {/* ── Background ── */}
+          <div className="ygg-bg" />
+          <div className="ygg-scan" />
+          <div className="ygg-vignette" />
+
+          {/* ── Header ── */}
+          <motion.div className="ygg-header" style={{ opacity: headerOpacity }}>
+            <h2 className="ygg-title">Sacred Timeline Branches</h2>
+            <p className="ygg-subtitle">[ Viewing Alternate Realities ]</p>
+          </motion.div>
+
+          {/* ── SVG Tree ── */}
+          <div className="ygg-svg-layer">
+            <svg
+              viewBox="0 0 100 100"
+              preserveAspectRatio="xMidYMax meet"
+              style={{ width: '100%', height: '100%', overflow: 'visible' }}
+            >
+              <defs>
+                <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="0.8" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              {/* Outer decorative ring */}
+              <motion.circle
+                cx="50" cy="50" r="46"
+                fill="none"
+                stroke="#e8821a"
+                strokeWidth="0.3"
+                style={{ opacity: ringOpacity }}
+              />
+              {/* Cardinal tick marks */}
+              {[0, 90, 180, 270].map((deg) => {
+                const rad = (deg * Math.PI) / 180;
+                const r1 = 46, r2 = 43;
+                const x1 = 50 + r1 * Math.sin(rad);
+                const y1 = 50 - r1 * Math.cos(rad);
+                const x2 = 50 + r2 * Math.sin(rad);
+                const y2 = 50 - r2 * Math.cos(rad);
+                return (
+                  <motion.line
+                    key={deg}
+                    x1={x1} y1={y1} x2={x2} y2={y2}
+                    stroke="#e8821a"
+                    strokeWidth="0.5"
+                    style={{ opacity: ringOpacity }}
+                  />
+                );
+              })}
+              {/* Small triangle markers at cardinal ends */}
+              {[
+                { d: 'M 50 2.5 L 51.8 5.5 L 48.2 5.5 Z' },
+                { d: 'M 50 97.5 L 48.2 94.5 L 51.8 94.5 Z' },
+                { d: 'M 2.5 50 L 5.5 48.2 L 5.5 51.8 Z' },
+                { d: 'M 97.5 50 L 94.5 51.8 L 94.5 48.2 Z' },
+              ].map((t, i) => (
+                <motion.path
+                  key={i}
+                  d={t.d}
+                  fill="none"
+                  stroke="#e8821a"
+                  strokeWidth="0.4"
+                  style={{ opacity: ringOpacity }}
+                />
+              ))}
+
+              {/* Trunk segments */}
+              <g filter="url(#glow)">
+                {trunkSegments.map((seg, i) => (
+                  <AnimatedBranch
+                    key={`trunk-${i}`}
+                    pathD={seg.d}
+                    progress={smoothProgress}
+                    appearAt={seg.at}
+                    strokeWidth={1.4 - i * 0.15}
+                  />
+                ))}
+
+                {/* Branch paths to each node */}
+                {nodes.map((node) => (
+                  <AnimatedBranch
+                    key={`branch-${node.id}`}
+                    pathD={node.pathD}
+                    progress={smoothProgress}
+                    appearAt={node.appearAt}
+                    strokeWidth={0.6}
+                  />
+                ))}
+
+                {/* Root system — decorative */}
+                {[
+                  { d: 'M 50 95 Q 38 97, 28 99', at: 0.02 },
+                  { d: 'M 50 95 Q 62 97, 72 99', at: 0.02 },
+                  { d: 'M 50 95 Q 44 100, 40 102', at: 0.03 },
+                  { d: 'M 50 95 Q 56 100, 60 102', at: 0.03 },
+                  { d: 'M 28 99 Q 22 99, 18 101', at: 0.04 },
+                  { d: 'M 72 99 Q 78 99, 82 101', at: 0.04 },
+                ].map((r, i) => (
+                  <AnimatedBranch
+                    key={`root-${i}`}
+                    pathD={r.d}
+                    progress={smoothProgress}
+                    appearAt={r.at}
+                    strokeWidth={0.5}
+                  />
+                ))}
+              </g>
+            </svg>
+          </div>
+
+          {/* ── Image Nodes ── */}
+          <div className="ygg-nodes-layer">
+            {nodes.map((node, i) => {
+              const img = images[i];
+              if (!img) return null;
+              return (
+                <YggdrasilNode
+                  key={node.id}
+                  img={img}
+                  node={node}
+                  progress={smoothProgress}
+                />
+              );
+            })}
+          </div>
+
+          {/* ── Footer counter ── */}
+          <motion.p
+            className="ygg-counter"
+            style={{ opacity: useTransform(smoothProgress, [0.05, 0.2], [0, 1]) }}
+          >
+            [ {images.length.toString().padStart(2, '0')} BRANCHES ACTIVE ]
+          </motion.p>
+
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default YggdrasilGallery;
