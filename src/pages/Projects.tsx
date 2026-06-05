@@ -150,7 +150,7 @@ export const Projects: React.FC = () => {
       setShowSwipeMsg(true);
       const timer = setTimeout(() => {
         setShowSwipeMsg(false);
-      }, 2000);
+      }, 4000);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -278,8 +278,10 @@ export const Projects: React.FC = () => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.3 }}
+                      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}
                     >
-                      ▸ CLICK TO DECLASSIFY ◂
+                      <span>▸ CLICK TO DECLASSIFY ◂</span>
+                      <span>← SWIPE TO VIEW NEXT →</span>
                     </motion.div>
                   )}
                 </div>

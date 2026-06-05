@@ -38,10 +38,10 @@ const Navigation = () => {
   return (
     <>
       <nav className={location.pathname !== '/' ? 'nav-collapsed' : ''}>
-        <div className="logo">
+        <Link to="/" className="logo" style={{ textDecoration: 'none', color: 'inherit' }}>
           <Clock size={32} color="var(--tva-orange)" />
           KRISTEN ARCHIVES
-        </div>
+        </Link>
 
         {/* Desktop nav links */}
         <div className="nav-links">
