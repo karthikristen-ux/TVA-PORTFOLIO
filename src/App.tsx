@@ -38,7 +38,7 @@ const Navigation = () => {
   return (
     <>
       <nav className={location.pathname !== '/' ? 'nav-collapsed' : ''}>
-        <Link to="/" className="logo" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
           <Clock size={32} color="var(--tva-orange)" />
           KRISTEN ARCHIVES
         </Link>
