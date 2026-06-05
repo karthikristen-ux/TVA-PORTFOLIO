@@ -49,11 +49,11 @@ export const Hobbies: React.FC = () => {
             objectFit: 'cover'
           }}
         />
-        {/* Dark gradient for text readability */}
+        {/* Dark overlay for text readability */}
         <div style={{
           position: 'absolute',
           top: 0, left: 0, width: '100%', height: '100%',
-          background: 'linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0.9) 100%)',
+          background: 'rgba(0,0,0,0.7)',
         }} />
         
         {/* Orange color overlay to force warm aesthetic */}
@@ -99,7 +99,9 @@ export const Hobbies: React.FC = () => {
           position: 'sticky', 
           top: 0, 
           zIndex: 50, 
-          background: 'linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%)', 
+          background: 'rgba(0, 0, 0, 0.7)', 
+          backdropFilter: 'blur(10px)',
+          borderBottom: '1px solid rgba(200,113,26,0.2)',
           flexWrap: 'wrap'
         }}>
           <button 
