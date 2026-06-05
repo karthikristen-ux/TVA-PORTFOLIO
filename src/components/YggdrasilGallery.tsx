@@ -78,13 +78,15 @@ const STYLES = `
   .ygg-tree-wrap {
     position: relative;
     width: min(88vh, 88vw, 760px);
-    aspect-ratio: 1;
+    aspect-ratio: 760 / 1000;
   }
   .ygg-svg {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
+    z-index: 1;
+    pointer-events: none;
   }
   .ygg-nodes-layer {
     position: absolute;
@@ -165,8 +167,9 @@ const STYLES = `
 `;
 
 // ─── GEOMETRY & TIMING ────────────────────────────────────────────────────────
-const SVG_SIZE = 760;
-const CX = SVG_SIZE / 2;
+const SVG_WIDTH = 760;
+const SVG_HEIGHT = 1000;
+const CX = SVG_WIDTH / 2;
 const ORANGE = '#c8711a';
 
 interface AnimItem {
@@ -225,20 +228,20 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
   for(let i=0;i<=72;i++){const a=(i/72)*Math.PI*2-Math.PI/2; circPts.push([CX+ringR*Math.cos(a), CX+ringR*Math.sin(a)]);}
   animPath(circPts, 0.8, t, 600, gRing);
   animPath([[30,CX-6],[15,CX],[30,CX+6]], 0.8, t+200, 200, gRing);
-  animPath([[SVG_SIZE-30,CX-6],[SVG_SIZE-15,CX],[SVG_SIZE-30,CX+6]], 0.8, t+200, 200, gRing);
+  animPath([[SVG_WIDTH-30,CX-6],[SVG_WIDTH-15,CX],[SVG_WIDTH-30,CX+6]], 0.8, t+200, 200, gRing);
   animTri(CX, 30, 8, true, t+200, gRing);
-  animTri(CX, SVG_SIZE-30, 8, false, t+200, gRing);
-  animPath([[ringR+CX,CX],[SVG_SIZE-30,CX]], 0.5, t+300, 200, gRing);
+  animTri(CX, SVG_WIDTH-30, 8, false, t+200, gRing);
+  animPath([[ringR+CX,CX],[SVG_WIDTH-30,CX]], 0.5, t+300, 200, gRing);
   animPath([[30,CX],[CX-ringR,CX]], 0.5, t+300, 200, gRing);
   t += 700;
 
   // ── Crown ─────────────────────────────────────────────────────────────────
-  animTri(CX, 140, 7, true, t, gTree);
-  animTri(CX, 155, 5, true, t+100, gTree);
+  animTri(CX, 160, 7, true, t, gTree);
+  animTri(CX, 175, 5, true, t+100, gTree);
   t += 350;
 
   // ── Trunk grows top→bottom ────────────────────────────────────────────────
-  const trunkYs = [150, 180, 230, 290, 360, 440, 520, 600, 700];
+  const trunkYs = [170, 200, 300, 400, 500, 600, 700, 800, 920];
   const trunkTimes: number[] = [t];
   trunkYs.forEach((y,i)=>{
     if(i===0) return;
@@ -263,9 +266,9 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
 
   // ── Tier definitions (top→bottom order) ───────────────────────────────────
   const tiers = [
-    {jY:180,len:40,sw:0.6},{jY:230,len:60,sw:0.7},{jY:290,len:80,sw:0.8},
-    {jY:360,len:100,sw:0.9},{jY:440,len:120,sw:1.0},{jY:520,len:145,sw:1.2},
-    {jY:600,len:170,sw:1.4},
+    {jY:200,len:40,sw:0.6},{jY:300,len:60,sw:0.7},{jY:400,len:80,sw:0.8},
+    {jY:500,len:100,sw:0.9},{jY:600,len:120,sw:1.0},{jY:700,len:145,sw:1.2},
+    {jY:800,len:170,sw:1.4},
   ];
   const subDefs: any[] = [
     [[14,24],[32,12]],
@@ -317,8 +320,8 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
   });
 
   // ── Roots ─────────────────────────────────────────────────────────────────
-  const rootBase = trunkTimeAt(680)+100;
-  [{y:650,len:110,sw:1.0},{y:620,len:70,sw:0.8}].forEach(({y,len,sw})=>{
+  const rootBase = trunkTimeAt(900)+100;
+  [{y:860,len:110,sw:1.0},{y:830,len:70,sw:0.8}].forEach(({y,len,sw})=>{
     [-1,1].forEach(dir=>{
       const ex=CX+dir*len;
       animPath([[CX,y],[ex,y]],sw,rootBase,len*3,gTree);
@@ -329,13 +332,13 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
       animTri(rx+dir*24,y+38,3,false,rootBase+len*1.5+520,gTree);
     });
   });
-  animPath([[CX,680],[CX,720]],1.2,rootBase,200,gTree);
-  animTri(CX,730,6,false,rootBase+220,gTree);
-  animTri(CX,745,4,false,rootBase+350,gTree);
-  animPath([[CX-85,650],[CX-45,650]],0.6,rootBase+100,200,gTree);
-  animTri(CX-85,658,3,false,rootBase+320,gTree);
-  animPath([[CX+45,650],[CX+85,650]],0.6,rootBase+100,200,gTree);
-  animTri(CX+85,658,3,false,rootBase+320,gTree);
+  animPath([[CX,900],[CX,940]],1.2,rootBase,200,gTree);
+  animTri(CX,950,6,false,rootBase+220,gTree);
+  animTri(CX,965,4,false,rootBase+350,gTree);
+  animPath([[CX-85,860],[CX-45,860]],0.6,rootBase+100,200,gTree);
+  animTri(CX-85,868,3,false,rootBase+320,gTree);
+  animPath([[CX+45,860],[CX+85,860]],0.6,rootBase+100,200,gTree);
+  animTri(CX+85,868,3,false,rootBase+320,gTree);
 
   // ── Apply initial dash state + fire animations ────────────────────────────
   anims.forEach(({el,isCircle})=>{
@@ -397,8 +400,8 @@ export const YggdrasilGallery: React.FC = () => {
     nodeSpecs.forEach(({x, y, imgIdx, showAt})=>{
       const el = nodeRefs.current[imgIdx];
       if(el){
-        el.style.left = `${(x/SVG_SIZE)*100}%`;
-        el.style.top  = `${(y/SVG_SIZE)*100}%`;
+        el.style.left = `${(x/SVG_WIDTH)*100}%`;
+        el.style.top  = `${(y/SVG_HEIGHT)*100}%`;
         setTimeout(()=>{ el.classList.add('visible'); }, showAt);
       }
     });
@@ -418,7 +421,7 @@ export const YggdrasilGallery: React.FC = () => {
             <svg
               ref={svgRef}
               className="ygg-svg"
-              viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`}
+              viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
               preserveAspectRatio="xMidYMid meet"
             />
             <div ref={nodesRef} className="ygg-nodes-layer">

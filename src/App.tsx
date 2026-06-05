@@ -4,6 +4,8 @@ import { Home } from './pages/Home';
 import { Projects } from './pages/Projects';
 import { Certificates } from './pages/Certificates';
 import { Hobbies } from './pages/Hobbies';
+import { Freelance } from './pages/Freelance';
+import { Music } from './pages/Music';
 import { MissMinutes } from './components/MissMinutes';
 import { Clock } from 'lucide-react';
 
@@ -106,6 +108,8 @@ const App: React.FC = () => {
         <Route path="/projects" element={<Projects />} />
         <Route path="/certificates" element={<Certificates />} />
         <Route path="/hobbies" element={<Hobbies />} />
+        <Route path="/freelance" element={<Freelance />} />
+        <Route path="/music" element={<Music />} />
       </Routes>
       <MissMinutes />
     </Router>
