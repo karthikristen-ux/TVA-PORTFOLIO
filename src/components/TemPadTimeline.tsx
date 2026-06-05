@@ -98,6 +98,7 @@ export const TemPadTimeline: React.FC = () => {
       
       {/* FLOATING CURVED MONITOR SHELL */}
       <motion.div 
+        className="tempad-monitor"
         initial={{ y: 50, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
         viewport={{ once: true }}
@@ -125,7 +126,7 @@ export const TemPadTimeline: React.FC = () => {
         }} />
         
         {/* TEMPAD SCREEN */}
-        <div style={{
+        <div className="tempad-screen" style={{
           position: 'relative',
           width: '100%',
           backgroundColor: '#000000', 
@@ -147,7 +148,7 @@ export const TemPadTimeline: React.FC = () => {
           }} />
 
           {/* SCREEN CONTENT CONTAINER */}
-          <div style={{
+          <div className="tempad-screen-content" style={{
             position: 'relative',
             zIndex: 5,
             padding: '3rem 2rem',
@@ -157,7 +158,7 @@ export const TemPadTimeline: React.FC = () => {
           }}>
             
             {/* SACRED TIMELINE GRAPH */}
-            <div style={{ 
+            <div className="tempad-graph-container" style={{ 
               position: 'relative', 
               height: '260px', 
               marginBottom: '2rem', 
@@ -172,7 +173,7 @@ export const TemPadTimeline: React.FC = () => {
                 opacity: 0.05 
               }} />
 
-              <svg width="100%" height="100%" viewBox="0 0 900 260" preserveAspectRatio="none" style={{ position: 'relative', zIndex: 2 }}>
+              <svg width="100%" height="100%" viewBox="0 0 900 260" preserveAspectRatio="xMidYMid meet" style={{ position: 'relative', zIndex: 2 }}>
                 <defs>
                   <filter id="strongGlow">
                     <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
@@ -273,7 +274,7 @@ export const TemPadTimeline: React.FC = () => {
 
             {/* EVENT LOG TABLE */}
             <div style={{ borderTop: `1px solid ${dimOrange}`, padding: '1rem 0 0 0' }}>
-              <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+              <table className="tempad-table" style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
                 <thead>
                   <tr style={{ borderBottom: `1px solid ${dimOrange}`, color: redGlow }}>
                     <th style={{ padding: '0.5rem', fontWeight: 'bold' }}>EVENT#</th>
@@ -294,7 +295,7 @@ export const TemPadTimeline: React.FC = () => {
                         transition: 'background-color 0.2s'
                       }}
                     >
-                      <td style={{ padding: '0.5rem' }}>{event.id}</td>
+                      <td className="tempad-event-id" style={{ padding: '0.5rem' }}>{event.id}</td>
                       <td style={{ padding: '0.5rem' }}>{event.date}</td>
                       <td style={{ padding: '0.5rem', display: 'flex', flexDirection: 'column' }}>
                         <span style={{ color: '#fff' }}>{event.location}</span>
@@ -315,7 +316,7 @@ export const TemPadTimeline: React.FC = () => {
             </div>
 
             {/* FOOTER MENU */}
-            <div style={{ display: 'flex', gap: '1.5rem', marginTop: '2rem', fontSize: '0.8rem', opacity: 0.8, justifyContent: 'center' }}>
+            <div className="tempad-footer-menu" style={{ display: 'flex', gap: '1.5rem', marginTop: '2rem', fontSize: '0.8rem', opacity: 0.8, justifyContent: 'center' }}>
               <div style={{ fontWeight: 'bold', color: '#fff', textShadow: `0 0 5px ${redGlow}` }}>TVA LOG</div>
               <div style={{ cursor: 'pointer' }}>FILE</div>
               <div style={{ cursor: 'pointer' }}>EDIT</div>

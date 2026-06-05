@@ -50,13 +50,94 @@ const pageConfig: Record<string, { facts: string[]; mood: string }> = {
   }
 };
 
-// ========== ANIMATED SVG CHARACTER ==========
+// ========== MINI SVG (tiny sleeping face) ==========
+const MissMinutesMini: React.FC = () => {
+  const orange = '#FF8C00';
+  const orangeLight = '#FFB347';
+  const orangeDark = '#CC6600';
+
+  return (
+    <svg viewBox="0 0 200 200" width="55" height="55" style={{ overflow: 'visible' }}>
+      <defs>
+        <filter id="mmglow-mini">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        <radialGradient id="bodyGrad-mini" cx="45%" cy="38%">
+          <stop offset="0%" stopColor={orangeLight} />
+          <stop offset="65%" stopColor={orange} />
+          <stop offset="100%" stopColor={orangeDark} />
+        </radialGradient>
+      </defs>
+
+      {/* MAIN BODY */}
+      <circle cx="100" cy="100" r="80" fill="url(#bodyGrad-mini)" filter="url(#mmglow-mini)" />
+      <circle cx="100" cy="100" r="73" fill="none" stroke={orangeDark} strokeWidth="1.5" opacity="0.4" />
+
+      {/* HOUR MARKERS */}
+      {[...Array(12)].map((_, i) => {
+        const angle = (i * 30 - 90) * (Math.PI / 180);
+        return (
+          <line key={i}
+            x1={100 + Math.cos(angle) * 64} y1={100 + Math.sin(angle) * 64}
+            x2={100 + Math.cos(angle) * 72} y2={100 + Math.sin(angle) * 72}
+            stroke={orangeDark} strokeWidth={i % 3 === 0 ? 3.5 : 1.8} strokeLinecap="round" />
+        );
+      })}
+
+      {/* CLOCK HANDS */}
+      <g>
+        <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="40s" repeatCount="indefinite" />
+        <line x1="100" y1="100" x2="100" y2="63" stroke="#3a1800" strokeWidth="3.5" strokeLinecap="round" />
+      </g>
+      <g>
+        <animateTransform attributeName="transform" type="rotate" from="90 100 100" to="450 100 100" dur="8s" repeatCount="indefinite" />
+        <line x1="100" y1="100" x2="100" y2="50" stroke="#3a1800" strokeWidth="2" strokeLinecap="round" />
+      </g>
+      <circle cx="100" cy="100" r="3.5" fill="#3a1800" />
+
+      {/* SLEEPING EYES */}
+      <ellipse cx="78" cy="90" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
+      <path d="M 68 90 Q 78 100 88 90" fill="none" stroke="#3a1800" strokeWidth="2.5" strokeLinecap="round" />
+      <ellipse cx="122" cy="90" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
+      <path d="M 112 90 Q 122 100 132 90" fill="none" stroke="#3a1800" strokeWidth="2.5" strokeLinecap="round" />
+
+      {/* EYEBROWS */}
+      <line x1="65" y1="69" x2="88" y2="71" stroke={orangeDark} strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="112" y1="71" x2="135" y2="69" stroke={orangeDark} strokeWidth="2.5" strokeLinecap="round" />
+
+      {/* SMILE */}
+      <path d="M 80 120 Q 100 145 120 120" fill="none" stroke={orangeDark} strokeWidth="3" strokeLinecap="round" />
+
+      {/* BLUSH */}
+      <circle cx="62" cy="117" r="7" fill="rgba(255,80,40,0.25)" />
+      <circle cx="138" cy="117" r="7" fill="rgba(255,80,40,0.25)" />
+
+      {/* Z's */}
+      <g>
+        <text x="140" y="45" fontSize="16" fill={orangeLight} fontFamily="var(--font-mono)" opacity="0" fontWeight="bold">
+          <animate attributeName="y" values="45;25" dur="2s" repeatCount="indefinite" />
+          <animate attributeName="x" values="140;150" dur="2s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" />
+          Z
+        </text>
+        <text x="150" y="30" fontSize="20" fill={orangeLight} fontFamily="var(--font-mono)" opacity="0" fontWeight="bold">
+          <animate attributeName="y" values="30;5" dur="2s" repeatCount="indefinite" begin="0.6s" />
+          <animate attributeName="x" values="150;160" dur="2s" repeatCount="indefinite" begin="0.6s" />
+          <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.6s" />
+          Z
+        </text>
+      </g>
+    </svg>
+  );
+};
+
+// ========== ANIMATED SVG CHARACTER (FULL) ==========
 const MissMinutesBody: React.FC<{
   pupilPos: { x: number; y: number };
   isTalking: boolean;
   mood: string;
-  isSleeping: boolean;
-}> = ({ pupilPos, isTalking, mood, isSleeping }) => {
+}> = ({ pupilPos, isTalking, mood }) => {
   const orange = '#FF8C00';
   const orangeLight = '#FFB347';
   const orangeDark = '#CC6600';
@@ -138,47 +219,15 @@ const MissMinutesBody: React.FC<{
       </g>
       <circle cx="100" cy="95" r="3.5" fill="#3a1800" />
 
-      {/* EYES */}
-      {isSleeping ? (
-        <g>
-          {/* Sleeping Eyes */}
-          <ellipse cx="78" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
-          <path d="M 68 85 Q 78 95 88 85" fill="none" stroke="#3a1800" strokeWidth="2.5" strokeLinecap="round" />
-          <ellipse cx="122" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
-          <path d="M 112 85 Q 122 95 132 85" fill="none" stroke="#3a1800" strokeWidth="2.5" strokeLinecap="round" />
-          
-          {/* Zzzzz animation */}
-          <g>
-            <text x="135" y="40" fontSize="18" fill={orangeLight} fontFamily="var(--font-mono)" opacity="0" fontWeight="bold">
-              <animate attributeName="y" values="40;20" dur="2s" repeatCount="indefinite" />
-              <animate attributeName="x" values="135;145" dur="2s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" />
-              Z
-            </text>
-            <text x="145" y="25" fontSize="22" fill={orangeLight} fontFamily="var(--font-mono)" opacity="0" fontWeight="bold">
-              <animate attributeName="y" values="25;0" dur="2s" repeatCount="indefinite" begin="0.6s" />
-              <animate attributeName="x" values="145;155" dur="2s" repeatCount="indefinite" begin="0.6s" />
-              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.6s" />
-              Z
-            </text>
-            <text x="155" y="5" fontSize="28" fill={orangeLight} fontFamily="var(--font-mono)" opacity="0" fontWeight="bold">
-              <animate attributeName="y" values="5;-25" dur="2s" repeatCount="indefinite" begin="1.2s" />
-              <animate attributeName="x" values="155;165" dur="2s" repeatCount="indefinite" begin="1.2s" />
-              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1.2s" />
-              Z
-            </text>
-          </g>
-        </g>
-      ) : (
-        <g>
-          <ellipse cx="78" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
-          <circle cx={78 + pupilPos.x} cy={85 + pupilPos.y} r="6.5" fill="#1a1a1a" />
-          <circle cx={75 + pupilPos.x} cy={82 + pupilPos.y} r="2.2" fill="white" />
-          <ellipse cx="122" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
-          <circle cx={122 + pupilPos.x} cy={85 + pupilPos.y} r="6.5" fill="#1a1a1a" />
-          <circle cx={119 + pupilPos.x} cy={82 + pupilPos.y} r="2.2" fill="white" />
-        </g>
-      )}
+      {/* EYES (awake, tracking) */}
+      <g>
+        <ellipse cx="78" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
+        <circle cx={78 + pupilPos.x} cy={85 + pupilPos.y} r="6.5" fill="#1a1a1a" />
+        <circle cx={75 + pupilPos.x} cy={82 + pupilPos.y} r="2.2" fill="white" />
+        <ellipse cx="122" cy="85" rx="15" ry="18" fill="white" stroke={orangeDark} strokeWidth="1.2" />
+        <circle cx={122 + pupilPos.x} cy={85 + pupilPos.y} r="6.5" fill="#1a1a1a" />
+        <circle cx={119 + pupilPos.x} cy={82 + pupilPos.y} r="2.2" fill="white" />
+      </g>
 
       {/* EYEBROWS */}
       <line x1="65" y1="64" x2="88" y2="66" stroke={orangeDark} strokeWidth="2.5" strokeLinecap="round" />
@@ -225,8 +274,8 @@ export const MissMinutes: React.FC = () => {
   const location = useLocation();
   const characterRef = useRef<HTMLDivElement>(null);
 
+  const [isAwake, setIsAwake] = useState(false);
   const [showSpeech, setShowSpeech] = useState(false);
-  const [isSleeping, setIsSleeping] = useState(true);
   const [currentFact, setCurrentFact] = useState('');
   const [factIndex, setFactIndex] = useState(0);
   const [pupilPos, setPupilPos] = useState({ x: 0, y: 0 });
@@ -240,9 +289,10 @@ export const MissMinutes: React.FC = () => {
     };
   }, []);
 
+  // Reset on page change
   useEffect(() => {
     setShowSpeech(false);
-    setIsSleeping(true);
+    setIsAwake(false);
     setFactIndex(0);
     setCurrentFact(config.facts[0]);
   }, [location.pathname]);
@@ -254,7 +304,7 @@ export const MissMinutes: React.FC = () => {
       if (customEvent.detail) {
         setCurrentFact(customEvent.detail);
         setShowSpeech(true);
-        setIsSleeping(false);
+        setIsAwake(true);
         resetSleepTimer(15000);
       }
     };
@@ -263,11 +313,11 @@ export const MissMinutes: React.FC = () => {
     return () => window.removeEventListener('miss-minutes-speak', handleSpeakEvent);
   }, []);
 
-  const resetSleepTimer = (delay = 5000) => {
+  const resetSleepTimer = (delay = 8000) => {
     if (sleepTimeoutRef.current) clearTimeout(sleepTimeoutRef.current);
     sleepTimeoutRef.current = setTimeout(() => {
       setShowSpeech(false);
-      setIsSleeping(true);
+      setIsAwake(false);
     }, delay);
   };
 
@@ -276,15 +326,15 @@ export const MissMinutes: React.FC = () => {
   };
 
   const handleMouseLeave = () => {
-    if (!isSleeping) {
-      resetSleepTimer(5000); // go to sleep 5s after mouse leaves
+    if (isAwake) {
+      resetSleepTimer(5000);
     }
   };
 
   // Eye tracking
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isSleeping || !characterRef.current) return;
+      if (!isAwake || !characterRef.current) return;
       const rect = characterRef.current.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
@@ -296,87 +346,123 @@ export const MissMinutes: React.FC = () => {
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [isSleeping]);
+  }, [isAwake]);
 
-  const handleClick = () => {
-    if (isSleeping) {
-      setIsSleeping(false);
-      setShowSpeech(true);
-      setFactIndex(0);
-      setCurrentFact(config.facts[0]);
+  // Wake up handler
+  const handleWakeUp = () => {
+    setIsAwake(true);
+    setShowSpeech(true);
+    setFactIndex(0);
+    setCurrentFact(config.facts[0]);
+    resetSleepTimer(8000);
+  };
+
+  const clickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Robust click handler to differentiate single (change fact) and double (minimize) clicks
+  const handleInteraction = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (clickTimeoutRef.current) {
+      // Double tap detected!
+      clearTimeout(clickTimeoutRef.current);
+      clickTimeoutRef.current = null;
+      setIsAwake(false);
+      setShowSpeech(false);
     } else {
-      const nextIndex = (factIndex + 1) % config.facts.length;
-      setFactIndex(nextIndex);
-      setCurrentFact(config.facts[nextIndex]);
-      setShowSpeech(true);
+      // First tap — start timer
+      clickTimeoutRef.current = setTimeout(() => {
+        const nextIndex = (factIndex + 1) % config.facts.length;
+        setFactIndex(nextIndex);
+        setCurrentFact(config.facts[nextIndex]);
+        setShowSpeech(true);
+        resetSleepTimer(8000);
+        clickTimeoutRef.current = null;
+      }, 250); // 250ms window for double tap
     }
   };
 
-  // Do not render the bottom-right interactive Miss Minutes if we are on the Hobbies page
-  // (because the Hobbies page already features her prominently in the background animation)
+  // Do not render on Hobbies page (she's in the background animation there)
   if (location.pathname === '/hobbies') {
     return null;
   }
 
   return (
-    <div
-      ref={characterRef}
-      style={{
-        position: 'fixed',
-        bottom: '1.5rem',
-        right: '2rem',
-        zIndex: 9999,
-        pointerEvents: 'none',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-end',
-      }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <AnimatePresence mode="wait">
-        {showSpeech && (
+    <AnimatePresence mode="wait">
+      {!isAwake ? (
+        /* ---- MINIMIZED STATE: tiny face + cloud text ---- */
+        <motion.div
+          key="minimized"
+          className="mm-minimized"
+          onClick={handleWakeUp}
+          initial={{ opacity: 0, scale: 0.3, y: 50 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.3, y: 20 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          aria-label="Wake up Miss Minutes for fun facts"
+        >
+          {/* Cloud text */}
           <motion.div
-            key={`speech-${currentFact}`}
-            initial={{ opacity: 0, scale: 0.5, y: 15, filter: 'blur(6px)' }}
-            animate={{
-              opacity: [0, 1, 0.8, 1], scale: [0.5, 1.05, 0.98, 1],
-              y: [15, -3, 1, 0], filter: ['blur(6px)', 'blur(0px)', 'blur(1px)', 'blur(0px)'],
-            }}
-            exit={{ opacity: 0, scale: 0.3, filter: 'blur(10px)' }}
-            transition={{ duration: 0.35 }}
-            style={{
-              backgroundColor: 'rgba(5,5,5,0.95)', border: '2px solid var(--tva-orange)',
-              padding: '0.8rem 1rem', borderRadius: '4px', maxWidth: '240px', marginBottom: '0.3rem',
-              boxShadow: '0 0 20px var(--tva-orange-glow)', fontFamily: 'var(--font-mono)',
-              fontSize: '1rem', color: 'var(--tva-orange)', textShadow: '0 0 6px var(--tva-orange-glow)',
-              textAlign: 'center', pointerEvents: 'auto', position: 'relative',
-            }}
+            className="mm-mini-cloud"
+            animate={{ y: [0, -3, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
-            {currentFact}
-            <div style={{
-              position: 'absolute', bottom: '-8px', right: '40px',
-              width: 0, height: 0,
-              borderLeft: '8px solid transparent', borderRight: '8px solid transparent',
-              borderTop: '8px solid var(--tva-orange)',
-            }} />
+            Click me for facts!
           </motion.div>
-        )}
-      </AnimatePresence>
+          {/* Tiny face */}
+          <motion.div
+            className="mm-mini-body"
+            animate={{ rotate: [0, -5, 5, 0], y: [0, -3, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <MissMinutesMini />
+          </motion.div>
+        </motion.div>
+      ) : (
+        /* ---- AWAKE STATE: full character flies out ---- */
+        <motion.div
+          key="awake"
+          ref={characterRef}
+          className="mm-full-container"
+          initial={{ opacity: 0, scale: 0.2, y: 80, x: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+          exit={{ opacity: 0, scale: 0.2, y: 60, x: 20 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 18 }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {/* Speech bubble */}
+          <AnimatePresence mode="wait">
+            {showSpeech && (
+              <motion.div
+                key={`speech-${currentFact}`}
+                className="mm-speech-bubble"
+                initial={{ opacity: 0, scale: 0.5, y: 15, filter: 'blur(6px)' }}
+                animate={{
+                  opacity: [0, 1, 0.8, 1], scale: [0.5, 1.05, 0.98, 1],
+                  y: [15, -3, 1, 0], filter: ['blur(6px)', 'blur(0px)', 'blur(1px)', 'blur(0px)'],
+                }}
+                exit={{ opacity: 0, scale: 0.3, filter: 'blur(10px)' }}
+                transition={{ duration: 0.35 }}
+              >
+                {currentFact}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-      <motion.div
-        onClick={handleClick}
-        animate={{ rotate: [0, -3, 3, 0], y: [0, -5, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        style={{
-          cursor: 'pointer', pointerEvents: 'auto',
-          filter: 'drop-shadow(0 0 12px var(--tva-orange-glow))',
-        }}
-      >
-        <MissMinutesBody pupilPos={pupilPos} isTalking={showSpeech} mood={config.mood} isSleeping={isSleeping} />
-      </motion.div>
-    </div>
+          {/* Full character body */}
+          <motion.div
+            className="mm-full-body"
+            onClick={handleInteraction}
+            animate={{ rotate: [0, -3, 3, 0], y: [0, -5, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <MissMinutesBody pupilPos={pupilPos} isTalking={showSpeech} mood={config.mood} />
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

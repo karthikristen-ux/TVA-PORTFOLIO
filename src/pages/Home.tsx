@@ -26,22 +26,16 @@ export const Home: React.FC = () => {
         initial="hidden"
         animate="visible"
       >
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'minmax(300px, 1.2fr) minmax(300px, 1fr)', 
-          gap: '4rem', 
-          alignItems: 'start', 
-          marginBottom: '6rem' 
-        }}>
+        <div className="home-hero-grid">
           
           {/* LEFT COLUMN: INTRO & PCB BOARD */}
           <motion.div variants={itemVariants} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div>
-              <h1 className="crt-text" style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', margin: '0 0 0.5rem 0', lineHeight: 1.1 }}>T. KARTHIKEYAN</h1>
-              <h2 style={{ fontSize: '1.4rem', borderBottom: 'none', color: '#ff8c00', opacity: 0.9, letterSpacing: '4px', padding: 0 }}>Electronics & Communication Engineering</h2>
+              <h1 className="crt-text" style={{ fontSize: 'clamp(2rem, 5vw, 4.5rem)', margin: '0 0 0.5rem 0', lineHeight: 1.1 }}>T. KARTHIKEYAN</h1>
+              <h2 style={{ fontSize: 'clamp(1rem, 2vw, 1.4rem)', borderBottom: 'none', color: '#ff8c00', opacity: 0.9, letterSpacing: '4px', padding: 0, display: 'inline-block' }}>Electronics & Communication Engineering</h2>
             </div>
             
-            <p style={{ fontSize: '1.15rem', color: '#ccc', lineHeight: '1.8', maxWidth: '90%' }}>
+            <p style={{ fontSize: 'clamp(0.95rem, 1.5vw, 1.15rem)', color: '#ccc', lineHeight: '1.8', maxWidth: '90%' }}>
               Welcome to my timeline. I am an aspiring engineer with a hyper-focus on <strong style={{color: '#fff'}}>Embedded Systems, IoT, and Software Development</strong>. 
               Currently decoding the future at Sathyabama Institute of Science and Technology (2023 - 2027).
             </p>
@@ -60,8 +54,6 @@ export const Home: React.FC = () => {
               padding: '1.5rem', 
               textAlign: 'center',
               width: '100%',
-              maxWidth: '450px',
-              margin: '0 auto'
             }}
           >
             <div style={{ fontSize: '0.9rem', marginBottom: '1.5rem', opacity: 0.8, letterSpacing: '2px', borderBottom: '1px solid var(--tva-orange)', paddingBottom: '0.8rem' }}>
@@ -113,7 +105,7 @@ export const Home: React.FC = () => {
 
         </div>
 
-        <motion.div variants={containerVariants} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '3rem', marginBottom: '6rem' }}>
+        <motion.div variants={containerVariants} className="home-skills-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
           
           <motion.div variants={itemVariants} className="tva-card">
             <h3 className="crt-text" style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.5rem', marginBottom: '1.5rem', borderBottom: '1px solid rgba(255,140,0,0.2)', paddingBottom: '1rem' }}>
@@ -143,7 +135,7 @@ export const Home: React.FC = () => {
 
         {/* TVA TEMPAD TIMELINE */}
         <motion.div variants={itemVariants}>
-          <h3 className="crt-text" style={{ fontSize: '2rem', marginBottom: '-1rem', textAlign: 'center', letterSpacing: '8px' }}>EXPERIENCE LOG</h3>
+          <h3 className="crt-text" style={{ fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', marginBottom: '-1rem', textAlign: 'center', letterSpacing: '8px' }}>EXPERIENCE LOG</h3>
           <TemPadTimeline />
         </motion.div>
 

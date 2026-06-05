@@ -102,10 +102,11 @@ export const Hobbies: React.FC = () => {
         <section style={{ height: '100vh', display: 'flex', alignItems: 'center', padding: '2rem' }}>
           <div style={{
             display: 'flex',
-            justifyContent: 'flex-start',
+            justifyContent: 'center',
             maxWidth: '1200px',
             margin: '0 auto',
-            width: '100%'
+            width: '100%',
+            padding: '0 1rem'
           }}>
             <motion.div
               initial={{ x: -100, opacity: 0 }}
@@ -230,8 +231,8 @@ export const Hobbies: React.FC = () => {
         </section>
 
         {/* CHECKPOINT 3: End of logs */}
-        <section style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end', padding: '2rem' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+        <section style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '2rem' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'flex', justifyContent: 'center' }}>
             <motion.div 
               initial={{ x: 100, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}

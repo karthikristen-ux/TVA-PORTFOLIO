@@ -20,12 +20,12 @@ export const Certificates: React.FC = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="crt-text">CERTIFICATIONS & AWARDS</h1>
-        <p style={{ fontSize: '1.2rem', marginBottom: '3rem' }}>
+        <h1 className="crt-text" style={{ fontSize: 'clamp(2rem, 4vw, 4rem)' }}>CERTIFICATIONS & AWARDS</h1>
+        <p style={{ fontSize: 'clamp(1rem, 1.5vw, 1.2rem)', marginBottom: '3rem', color: '#ccc' }}>
           Official credentials and recognitions on file.
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+        <div className="cert-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2rem' }}>
           {certificates.map((cert, index) => (
             <motion.div 
               key={index}
@@ -35,10 +35,10 @@ export const Certificates: React.FC = () => {
               transition={{ delay: index * 0.1 }}
               style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}
             >
-              <Award size={40} color="var(--tva-orange)" />
-              <div>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>{cert.name}</h3>
-                <span style={{ color: 'var(--tva-orange)', opacity: 0.7, fontFamily: 'var(--font-mono)' }}>[{cert.date}]</span>
+              <Award size={32} color="var(--tva-orange)" style={{ flexShrink: 0, marginTop: '4px' }} />
+              <div style={{ minWidth: 0 }}>
+                <h3 style={{ fontSize: 'clamp(1rem, 1.5vw, 1.2rem)', marginBottom: '0.5rem', lineHeight: 1.4 }}>{cert.name}</h3>
+                <span style={{ color: 'var(--tva-orange)', opacity: 0.7, fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>[{cert.date}]</span>
                 <div style={{ marginTop: '1rem', width: '100%', height: '2px', backgroundColor: 'var(--tva-orange)', opacity: 0.3 }} />
               </div>
             </motion.div>
@@ -48,3 +48,4 @@ export const Certificates: React.FC = () => {
     </div>
   );
 };
+

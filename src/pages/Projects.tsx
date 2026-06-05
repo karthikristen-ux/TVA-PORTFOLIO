@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
 
 /* ───── project data ───── */
 const projects = [
   {
     id: 'rawp',
     title: 'RAWP – RADIOACTIVE WATER ANALYSIS',
+    shortTitle: 'RAWP',
     year: '2025',
     description:
       'An IoT-based web application designed to analyze water quality and detect radioactive contamination using sensor data and real-time visualization dashboards.',
     tags: ['IOT', 'REACT', 'NODE.JS', 'SENSORS', 'DATA-VIZ'],
     github: 'https://github.com/karthikristen-ux/R.A.W.P.git',
+    image: '/images/rawp.png',
+    wideImage: '/images/rawp_wide.png',
     problemStatement:
       'Natural disasters or industrial accidents can contaminate water sources with dangerous radioactive materials, which often go undetected by conventional water sensors until it is too late.',
     solution:
@@ -24,11 +29,14 @@ const projects = [
   {
     id: 'flood',
     title: 'MOBILE FLOOD WATER TRANSPORTER',
+    shortTitle: 'FLOOD TRANSPORTER',
     year: '2024',
     description:
       'A Bluetooth-controlled embedded system developed to navigate flooded areas and assist in transporting and purifying water during emergencies.',
     tags: ['EMBEDDED', 'BLUETOOTH', 'FILTRATION', 'HARDWARE'],
     github: '#',
+    image: '/images/flood.png',
+    wideImage: '/images/flood_wide.png',
     problemStatement:
       'During severe floods, clean drinking water becomes scarce, and navigating flooded terrains to deliver supplies or extract water is extremely difficult for human responders.',
     solution:
@@ -43,11 +51,14 @@ const projects = [
   {
     id: 'farm',
     title: 'ONE-MAN FARMING SYSTEM',
+    shortTitle: 'FARMING SYSTEM',
     year: '2019',
     description:
       'An automated IoT-enabled agricultural system supporting ploughing, harvesting, and smart irrigation with minimal human intervention.',
     tags: ['IOT', 'AUTOMATION', 'AGRICULTURE', 'WI-FI'],
     github: '#',
+    image: '/images/farming.png',
+    wideImage: '/images/farming_wide.png',
     problemStatement:
       'Small-scale farmers face labor shortages and high operational costs when trying to maintain large plots of land, making traditional farming methods unsustainable and inefficient.',
     solution:
@@ -62,11 +73,14 @@ const projects = [
   {
     id: 'traffic',
     title: 'SMART TRAFFIC SYSTEM',
+    shortTitle: 'TRAFFIC SYSTEM',
     year: '2025',
     description:
       'An intelligent traffic management system using smart sensors and dynamic signaling algorithms to optimize flow and reduce congestion.',
     tags: ['IOT', 'ALGORITHMS', 'SENSORS', 'REAL-TIME'],
     github: 'https://github.com/karthikristen-ux/smart-traffic-system-1.git',
+    image: '/images/smart_traffic.png',
+    wideImage: '/images/smart_traffic_wide.png',
     problemStatement:
       'Rapid urban expansion leads to severe traffic congestion, increasing commute times and delaying emergency vehicles because static traffic lights cannot adapt to real-time road conditions.',
     solution:
@@ -81,11 +95,14 @@ const projects = [
   {
     id: 'glove',
     title: 'BEHAVIOUR SCREENING SYSTEM',
+    shortTitle: 'SMART GLOVE',
     year: '2026',
     description:
       'A wearable smart glove prototype equipped with flex sensors that translates natural hand gestures into precise PC inputs via Wi-Fi.',
     tags: ['WEARABLE', 'WI-FI', 'GESTURE', 'FLEX-SENSOR'],
     github: 'https://github.com/karthikristen-ux/BEHAVIOUR-SCREENING-SYSYTEM.git',
+    image: '/images/smart_glove.png',
+    wideImage: '/images/smart_glove_wide.png',
     problemStatement:
       'Traditional gaming controllers can be unintuitive and limit the immersive experience. There is a need for more natural, motion-based human-computer interfaces.',
     solution:
@@ -99,270 +116,304 @@ const projects = [
   },
 ];
 
-/* ───── SVG wireframes ───── */
-const SensorBoxSVG: React.FC<{ size?: number }> = ({ size = 140 }) => (
-  <svg width={size} height={size} viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* main enclosure */}
-    <rect x="20" y="30" width="100" height="80" rx="4" stroke="#c86010" strokeWidth="0.8" />
-    {/* top panel line */}
-    <line x1="20" y1="50" x2="120" y2="50" stroke="#c86010" strokeWidth="0.6" strokeDasharray="3 2" />
-    {/* inner display */}
-    <rect x="35" y="58" width="40" height="22" rx="2" stroke="#c86010" strokeWidth="0.7" />
-    {/* display wave */}
-    <polyline points="38,69 44,63 50,72 56,65 62,70 68,66 72,69" stroke="#c86010" strokeWidth="0.6" fill="none" />
-    {/* antenna */}
-    <line x1="70" y1="30" x2="70" y2="14" stroke="#c86010" strokeWidth="0.7" />
-    <circle cx="70" cy="11" r="3" stroke="#c86010" strokeWidth="0.6" />
-    {/* sensor probes bottom */}
-    <line x1="40" y1="110" x2="40" y2="125" stroke="#7a4010" strokeWidth="0.6" />
-    <line x1="70" y1="110" x2="70" y2="130" stroke="#7a4010" strokeWidth="0.6" />
-    <line x1="100" y1="110" x2="100" y2="125" stroke="#7a4010" strokeWidth="0.6" />
-    {/* indicator LEDs */}
-    <circle cx="90" cy="62" r="2.5" stroke="#c86010" strokeWidth="0.6" />
-    <circle cx="100" cy="62" r="2.5" stroke="#c86010" strokeWidth="0.6" />
-    <circle cx="110" cy="62" r="2.5" stroke="#c86010" strokeWidth="0.6" />
-    {/* ventilation slits */}
-    <line x1="85" y1="75" x2="115" y2="75" stroke="#5a3008" strokeWidth="0.5" />
-    <line x1="85" y1="79" x2="115" y2="79" stroke="#5a3008" strokeWidth="0.5" />
-    <line x1="85" y1="83" x2="115" y2="83" stroke="#5a3008" strokeWidth="0.5" />
-    {/* corner bolts */}
-    <circle cx="26" cy="36" r="1.5" stroke="#5a3008" strokeWidth="0.5" />
-    <circle cx="114" cy="36" r="1.5" stroke="#5a3008" strokeWidth="0.5" />
-    <circle cx="26" cy="104" r="1.5" stroke="#5a3008" strokeWidth="0.5" />
-    <circle cx="114" cy="104" r="1.5" stroke="#5a3008" strokeWidth="0.5" />
-  </svg>
-);
-
-const TankTruckSVG: React.FC<{ size?: number }> = ({ size = 140 }) => (
-  <svg width={size} height={size} viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* tank body (elliptical) */}
-    <ellipse cx="75" cy="55" rx="55" ry="25" stroke="#c86010" strokeWidth="0.8" />
-    {/* tank inner structure lines */}
-    <ellipse cx="75" cy="55" rx="40" ry="18" stroke="#5a3008" strokeWidth="0.5" strokeDasharray="4 3" />
-    {/* cab */}
-    <rect x="125" y="40" width="28" height="32" rx="3" stroke="#c86010" strokeWidth="0.8" />
-    {/* windshield */}
-    <rect x="130" y="44" width="18" height="12" rx="1" stroke="#7a4010" strokeWidth="0.6" />
-    {/* cab connect to tank */}
-    <line x1="125" y1="55" x2="130" y2="55" stroke="#c86010" strokeWidth="0.7" />
-    {/* wheels */}
-    <circle cx="35" cy="85" r="9" stroke="#c86010" strokeWidth="0.8" />
-    <circle cx="35" cy="85" r="4" stroke="#5a3008" strokeWidth="0.5" />
-    <circle cx="75" cy="85" r="9" stroke="#c86010" strokeWidth="0.8" />
-    <circle cx="75" cy="85" r="4" stroke="#5a3008" strokeWidth="0.5" />
-    <circle cx="140" cy="85" r="9" stroke="#c86010" strokeWidth="0.8" />
-    <circle cx="140" cy="85" r="4" stroke="#5a3008" strokeWidth="0.5" />
-    {/* chassis line */}
-    <line x1="25" y1="76" x2="150" y2="76" stroke="#7a4010" strokeWidth="0.6" />
-    {/* top hatch */}
-    <rect x="65" y="28" width="20" height="6" rx="1" stroke="#c86010" strokeWidth="0.6" />
-    {/* pipe */}
-    <line x1="20" y1="55" x2="8" y2="55" stroke="#7a4010" strokeWidth="0.7" />
-    <circle cx="6" cy="55" r="3" stroke="#7a4010" strokeWidth="0.5" />
-    {/* pump indicator */}
-    <rect x="50" y="43" width="8" height="5" rx="1" stroke="#5a3008" strokeWidth="0.5" />
-    <rect x="92" y="43" width="8" height="5" rx="1" stroke="#5a3008" strokeWidth="0.5" />
-  </svg>
-);
-
-const TractorSVG: React.FC<{ size?: number }> = ({ size = 140 }) => (
-  <svg width={size} height={size} viewBox="0 0 160 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* large rear wheel */}
-    <circle cx="45" cy="90" r="28" stroke="#c86010" strokeWidth="0.8" />
-    <circle cx="45" cy="90" r="20" stroke="#5a3008" strokeWidth="0.5" strokeDasharray="3 2" />
-    <circle cx="45" cy="90" r="8" stroke="#c86010" strokeWidth="0.6" />
-    {/* spokes */}
-    <line x1="45" y1="62" x2="45" y2="70" stroke="#5a3008" strokeWidth="0.4" />
-    <line x1="45" y1="110" x2="45" y2="118" stroke="#5a3008" strokeWidth="0.4" />
-    <line x1="17" y1="90" x2="25" y2="90" stroke="#5a3008" strokeWidth="0.4" />
-    <line x1="65" y1="90" x2="73" y2="90" stroke="#5a3008" strokeWidth="0.4" />
-    {/* small front wheel */}
-    <circle cx="130" cy="95" r="14" stroke="#c86010" strokeWidth="0.8" />
-    <circle cx="130" cy="95" r="5" stroke="#5a3008" strokeWidth="0.5" />
-    {/* body/hood */}
-    <path d="M 70 65 L 145 65 L 145 82 L 115 82 L 110 75 L 70 75 Z" stroke="#c86010" strokeWidth="0.8" fill="none" />
-    {/* cab */}
-    <rect x="60" y="30" width="35" height="35" rx="2" stroke="#c86010" strokeWidth="0.8" />
-    {/* cab window */}
-    <rect x="65" y="34" width="25" height="18" rx="1" stroke="#7a4010" strokeWidth="0.6" />
-    {/* exhaust pipe */}
-    <line x1="105" y1="65" x2="105" y2="25" stroke="#c86010" strokeWidth="0.7" />
-    <ellipse cx="105" cy="22" rx="3" ry="2" stroke="#7a4010" strokeWidth="0.5" />
-    {/* steering */}
-    <line x1="72" y1="55" x2="80" y2="62" stroke="#5a3008" strokeWidth="0.5" />
-    <circle cx="72" cy="53" r="3" stroke="#5a3008" strokeWidth="0.4" />
-    {/* hitch */}
-    <line x1="145" y1="72" x2="158" y2="72" stroke="#7a4010" strokeWidth="0.6" />
-    <circle cx="158" cy="72" r="2" stroke="#7a4010" strokeWidth="0.5" />
-    {/* axle */}
-    <line x1="45" y1="90" x2="70" y2="75" stroke="#5a3008" strokeWidth="0.5" />
-    <line x1="115" y1="82" x2="130" y2="95" stroke="#5a3008" strokeWidth="0.5" />
-  </svg>
-);
-
-const TrafficLightSVG: React.FC<{ size?: number }> = ({ size = 140 }) => (
-  <svg width={size} height={size} viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* pole */}
-    <line x1="50" y1="130" x2="50" y2="90" stroke="#7a4010" strokeWidth="0.8" />
-    {/* base */}
-    <rect x="35" y="128" width="30" height="6" rx="2" stroke="#7a4010" strokeWidth="0.6" />
-    {/* arm */}
-    <line x1="50" y1="35" x2="80" y2="35" stroke="#7a4010" strokeWidth="0.7" />
-    {/* housing */}
-    <rect x="30" y="10" width="40" height="80" rx="5" stroke="#c86010" strokeWidth="0.8" />
-    {/* lights */}
-    <circle cx="50" cy="28" r="10" stroke="#c86010" strokeWidth="0.7" />
-    <circle cx="50" cy="50" r="10" stroke="#c86010" strokeWidth="0.7" />
-    <circle cx="50" cy="72" r="10" stroke="#c86010" strokeWidth="0.7" />
-    {/* light inner details */}
-    <circle cx="50" cy="28" r="5" stroke="#5a3008" strokeWidth="0.4" strokeDasharray="2 2" />
-    <circle cx="50" cy="50" r="5" stroke="#5a3008" strokeWidth="0.4" strokeDasharray="2 2" />
-    <circle cx="50" cy="72" r="5" stroke="#5a3008" strokeWidth="0.4" strokeDasharray="2 2" />
-    {/* visor hoods */}
-    <path d="M 30 20 L 22 16 L 22 22 Z" stroke="#c86010" strokeWidth="0.6" fill="none" />
-    <path d="M 30 42 L 22 38 L 22 44 Z" stroke="#c86010" strokeWidth="0.6" fill="none" />
-    <path d="M 30 64 L 22 60 L 22 66 Z" stroke="#c86010" strokeWidth="0.6" fill="none" />
-    {/* sensor on top */}
-    <rect x="44" y="2" width="12" height="8" rx="1" stroke="#5a3008" strokeWidth="0.5" />
-    <line x1="50" y1="2" x2="50" y2="-2" stroke="#5a3008" strokeWidth="0.4" />
-    {/* signal waves */}
-    <path d="M 82 30 Q 88 28 82 26" stroke="#5a3008" strokeWidth="0.4" fill="none" />
-    <path d="M 85 32 Q 93 28 85 24" stroke="#5a3008" strokeWidth="0.4" fill="none" />
-  </svg>
-);
-
-const GloveSVG: React.FC<{ size?: number }> = ({ size = 140 }) => (
-  <svg width={size} height={size} viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* palm */}
-    <path d="M 30 90 Q 25 60 35 50 L 40 30 L 48 28 L 48 48" stroke="#c86010" strokeWidth="0.8" fill="none" />
-    <path d="M 48 48 L 48 20 L 56 18 L 56 45" stroke="#c86010" strokeWidth="0.8" fill="none" />
-    <path d="M 56 45 L 56 15 L 64 13 L 64 42" stroke="#c86010" strokeWidth="0.8" fill="none" />
-    <path d="M 64 42 L 64 18 L 72 20 L 72 48" stroke="#c86010" strokeWidth="0.8" fill="none" />
-    <path d="M 72 48 L 75 40 L 82 45 L 78 55" stroke="#c86010" strokeWidth="0.8" fill="none" />
-    {/* palm body */}
-    <path d="M 30 90 Q 28 110 40 120 L 70 120 Q 85 110 82 90 L 78 55" stroke="#c86010" strokeWidth="0.8" fill="none" />
-    {/* wrist */}
-    <rect x="32" y="118" width="45" height="20" rx="3" stroke="#c86010" strokeWidth="0.7" />
-    {/* flex sensor strips */}
-    <line x1="44" y1="28" x2="44" y2="48" stroke="#7a4010" strokeWidth="0.5" strokeDasharray="2 2" />
-    <line x1="52" y1="18" x2="52" y2="45" stroke="#7a4010" strokeWidth="0.5" strokeDasharray="2 2" />
-    <line x1="60" y1="15" x2="60" y2="42" stroke="#7a4010" strokeWidth="0.5" strokeDasharray="2 2" />
-    <line x1="68" y1="20" x2="68" y2="48" stroke="#7a4010" strokeWidth="0.5" strokeDasharray="2 2" />
-    {/* PCB on back of hand */}
-    <rect x="42" y="65" width="25" height="18" rx="2" stroke="#c86010" strokeWidth="0.6" />
-    <line x1="46" y1="70" x2="63" y2="70" stroke="#5a3008" strokeWidth="0.4" />
-    <line x1="46" y1="74" x2="63" y2="74" stroke="#5a3008" strokeWidth="0.4" />
-    <line x1="46" y1="78" x2="63" y2="78" stroke="#5a3008" strokeWidth="0.4" />
-    <circle cx="50" cy="72" r="1.5" stroke="#c86010" strokeWidth="0.4" />
-    <circle cx="58" cy="72" r="1.5" stroke="#c86010" strokeWidth="0.4" />
-    {/* wi-fi waves */}
-    <path d="M 90 50 Q 96 45 90 40" stroke="#5a3008" strokeWidth="0.5" fill="none" />
-    <path d="M 93 53 Q 102 45 93 37" stroke="#5a3008" strokeWidth="0.5" fill="none" />
-    <path d="M 96 56 Q 108 45 96 34" stroke="#5a3008" strokeWidth="0.5" fill="none" />
-    {/* wrist module details */}
-    <circle cx="40" cy="128" r="2" stroke="#5a3008" strokeWidth="0.4" />
-    <rect x="58" y="124" width="12" height="8" rx="1" stroke="#5a3008" strokeWidth="0.4" />
-  </svg>
-);
-
-const modelMap: Record<string, React.FC<{ size?: number }>> = {
-  rawp: SensorBoxSVG,
-  flood: TankTruckSVG,
-  farm: TractorSVG,
-  traffic: TrafficLightSVG,
-  glove: GloveSVG,
-};
-
 /* ───── component ───── */
 export const Projects: React.FC = () => {
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [detailProject, setDetailProject] = useState<typeof projects[0] | null>(null);
+  const touchStartRef = useRef<number>(0);
+  const total = projects.length;
 
-  const active = projects.find((p) => p.id === activeId) ?? null;
+  // Responsive dimensions
+  const [dimensions, setDimensions] = useState({ itemWidth: 340, gap: 320 });
 
-  const handleModelClick = (id: string) => {
-    setActiveId((prev) => (prev === id ? null : id));
+  useEffect(() => {
+    const updateDimensions = () => {
+      const w = window.innerWidth;
+      if (w <= 480) {
+        setDimensions({ itemWidth: 220, gap: 180 });
+      } else if (w <= 768) {
+        setDimensions({ itemWidth: 260, gap: 220 });
+      } else if (w <= 900) {
+        setDimensions({ itemWidth: 280, gap: 260 });
+      } else {
+        setDimensions({ itemWidth: 340, gap: 320 });
+      }
+    };
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (detailProject) {
+        if (e.key === 'Escape') setDetailProject(null);
+        return;
+      }
+      if (e.key === 'ArrowLeft') {
+        setActiveIndex((prev) => (prev - 1 + total) % total);
+      } else if (e.key === 'ArrowRight') {
+        setActiveIndex((prev) => (prev + 1) % total);
+      } else if (e.key === 'Enter') {
+        setDetailProject(projects[activeIndex]);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeIndex, detailProject, total]);
+
+  // Touch swipe support
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    const diff = touchStartRef.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        setActiveIndex((prev) => (prev + 1) % total);
+      } else {
+        setActiveIndex((prev) => (prev - 1 + total) % total);
+      }
+    }
+  }, [total]);
+
+  const goLeft = () => setActiveIndex((prev) => (prev - 1 + total) % total);
+  const goRight = () => setActiveIndex((prev) => (prev + 1) % total);
+
+  // Get carousel item transform based on offset from active
+  const getItemStyle = (index: number) => {
+    let offset = index - activeIndex;
+    // Wrap around
+    if (offset > Math.floor(total / 2)) offset -= total;
+    if (offset < -Math.floor(total / 2)) offset += total;
+
+    const absOffset = Math.abs(offset);
+
+    if (absOffset > 2) {
+      return {
+        transform: `translateX(${offset * (dimensions.gap * 0.6)}px) scale(0.5) rotateY(${offset > 0 ? -35 : 35}deg)`,
+        opacity: 0,
+        filter: 'blur(12px)',
+        zIndex: 0,
+        pointerEvents: 'none' as const,
+      };
+    }
+
+    return {
+      transform: `translateX(${offset * dimensions.gap}px) scale(${1 - absOffset * 0.18}) rotateY(${offset * -15}deg)`,
+      opacity: absOffset === 0 ? 1 : 0.4 - absOffset * 0.1,
+      filter: absOffset === 0 ? 'blur(0px)' : `blur(${absOffset * 4}px)`,
+      zIndex: 10 - absOffset,
+      pointerEvents: absOffset === 0 ? 'auto' as const : 'none' as const,
+    };
   };
 
   return (
-    <div className="bp-root">
-      {/* ---- left: models stage ---- */}
-      <div className={`bp-stage${activeId ? ' bp-stage--collapsed' : ''}`}>
-        {projects.map((p, i) => {
-          const ModelSVG = modelMap[p.id] ?? SensorBoxSVG;
-          const isActive = p.id === activeId;
-          return (
-            <button
-              key={p.id}
-              className={`bp-model${isActive ? ' bp-model--active' : ''}`}
-              style={{ animationDelay: `${i * 0.6}s` }}
-              onClick={() => handleModelClick(p.id)}
-              aria-label={`View project: ${p.title}`}
-            >
-              <ModelSVG size={activeId ? 80 : 140} />
-              <span className="bp-model-label">{p.title.split('–')[0].trim()}</span>
-            </button>
-          );
-        })}
+    <div className="carousel-root">
+      {/* Page header */}
+      <div className="carousel-header">
+        <h1>PROJECT ARCHIVE</h1>
+        <p>SELECT A BLUEPRINT TO DECRYPT CLASSIFIED PROJECT DATA</p>
       </div>
 
-      {/* ---- right: detail panel ---- */}
-      <div className={`bp-panel${active ? ' bp-panel--open' : ''}`}>
-        {active && (
-          <div className="bp-panel-inner">
-            <button
-              className="bp-panel-close"
-              onClick={() => setActiveId(null)}
-              aria-label="Close detail panel"
-            >
-              ✕
-            </button>
+      {/* Carousel */}
+      <div className="carousel-container">
+        {/* Left arrow */}
+        <button
+          className="carousel-nav-btn carousel-nav-prev"
+          onClick={goLeft}
+          aria-label="Previous project"
+        >
+          ‹
+        </button>
 
-            <span className="bp-year">[{active.year}]</span>
-            <h2 className="bp-title">{active.title}</h2>
-            <div className="bp-divider" />
+        {/* Track */}
+        <motion.div
+          className="carousel-track"
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.15}
+          onDragEnd={(e, { offset }) => {
+            if (offset.x < -40) goRight();
+            else if (offset.x > 40) goLeft();
+          }}
+          style={{ touchAction: 'pan-y' }}
+        >
+          {projects.map((project, index) => {
+            const style = getItemStyle(index);
+            const isActive = index === activeIndex;
 
-            <p className="bp-desc">{active.description}</p>
-
-            {/* Problem */}
-            <h3 className="bp-section-heading">// PROBLEM</h3>
-            <p className="bp-desc">{active.problemStatement}</p>
-
-            {/* Solution */}
-            <h3 className="bp-section-heading">// SOLUTION</h3>
-            <p className="bp-desc">{active.solution}</p>
-
-            {/* Features */}
-            <h3 className="bp-section-heading">// KEY ARCHITECTURE</h3>
-            <ul className="bp-features">
-              {active.features.map((f, i) => (
-                <li key={i}>
-                  <span className="bp-feat-arrow">▹</span> {f}
-                </li>
-              ))}
-            </ul>
-
-            {/* Tags */}
-            <div className="bp-tags">
-              {active.tags.map((t) => (
-                <span key={t} className="bp-tag">
-                  {t}
-                </span>
-              ))}
-            </div>
-
-            {active.github && active.github !== '#' && (
-              <a
-                href={active.github}
-                target="_blank"
-                rel="noreferrer"
-                className="bp-link"
+            return (
+              <motion.div
+                key={project.id}
+                className={`carousel-item ${isActive ? 'carousel-item--active' : ''}`}
+                animate={{
+                  transform: style.transform,
+                  opacity: style.opacity,
+                  filter: style.filter,
+                  zIndex: style.zIndex,
+                }}
+                transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                style={{
+                  pointerEvents: style.pointerEvents,
+                  position: 'absolute',
+                  left: '50%',
+                  marginLeft: `${-dimensions.itemWidth / 2}px`,
+                  width: `${dimensions.itemWidth}px`,
+                }}
+                onClick={isActive ? () => setDetailProject(project) : () => setActiveIndex(index)}
               >
-                [ VIEW PROJECT ] ›
-              </a>
-            )}
-          </div>
-        )}
+                <div className="carousel-item-inner">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="carousel-item-img"
+                    draggable={false}
+                  />
+                  <div className="carousel-item-title">{project.shortTitle}</div>
+                  <div className="carousel-item-year">[{project.year}]</div>
+                  {isActive && (
+                    <motion.div
+                      className="carousel-item-prompt"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      ▸ CLICK TO DECLASSIFY ◂
+                    </motion.div>
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+
+        {/* Right arrow */}
+        <button
+          className="carousel-nav-btn carousel-nav-next"
+          onClick={goRight}
+          aria-label="Next project"
+        >
+          ›
+        </button>
       </div>
+
+      {/* Dot indicators */}
+      <div className="carousel-dots">
+        {projects.map((_, index) => (
+          <button
+            key={index}
+            className={`carousel-dot ${index === activeIndex ? 'carousel-dot--active' : ''}`}
+            onClick={() => setActiveIndex(index)}
+            aria-label={`Go to project ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* ---- DETAIL OVERLAY ---- */}
+      {createPortal(
+        <AnimatePresence>
+          {detailProject && (
+            <motion.div
+              className="project-detail-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setDetailProject(null);
+            }}
+          >
+            <motion.div
+              className="project-detail-panel"
+              initial={{ opacity: 0, scale: 0.9, y: 40 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 40 }}
+              transition={{ type: 'spring', stiffness: 250, damping: 22 }}
+            >
+              <button
+                className="detail-close-btn"
+                onClick={() => setDetailProject(null)}
+                aria-label="Close detail panel"
+              >
+                ✕
+              </button>
+
+              {/* Hero image */}
+              <img
+                src={detailProject.wideImage}
+                alt={detailProject.title}
+                className="detail-hero-img"
+              />
+
+              {/* Title area */}
+              <span className="detail-year">[{detailProject.year}]</span>
+              <h2 className="detail-title">{detailProject.title}</h2>
+              <div className="detail-status-bar">
+                <span className="detail-status-item">
+                  <span className="detail-status-dot" /> STATUS: DECLASSIFIED
+                </span>
+                <span className="detail-status-item">
+                  FILE 0{projects.indexOf(detailProject) + 1}/0{projects.length}
+                </span>
+              </div>
+
+              <div className="detail-divider" />
+
+              {/* Overview */}
+              <p className="detail-desc">{detailProject.description}</p>
+
+              {/* Problem + Solution */}
+              <div className="detail-two-col">
+                <div>
+                  <h3 className="detail-section-heading">// PROBLEM</h3>
+                  <p className="detail-desc">{detailProject.problemStatement}</p>
+                </div>
+                <div>
+                  <h3 className="detail-section-heading">// SOLUTION</h3>
+                  <p className="detail-desc">{detailProject.solution}</p>
+                </div>
+              </div>
+
+              <div className="detail-divider" />
+
+              {/* Features */}
+              <h3 className="detail-section-heading">// KEY ARCHITECTURE</h3>
+              <ul className="detail-features">
+                {detailProject.features.map((f, i) => (
+                  <li key={i}>
+                    <span className="detail-feat-arrow">▹</span> {f}
+                  </li>
+                ))}
+              </ul>
+
+              {/* Tags + Link */}
+              <div className="detail-footer-row">
+                <div className="detail-tags">
+                  {detailProject.tags.map((t) => (
+                    <span key={t} className="detail-tag">{t}</span>
+                  ))}
+                </div>
+
+                {detailProject.github && detailProject.github !== '#' && (
+                  <a
+                    href={detailProject.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="detail-link"
+                  >
+                    [ VIEW PROJECT ] ›
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 };
