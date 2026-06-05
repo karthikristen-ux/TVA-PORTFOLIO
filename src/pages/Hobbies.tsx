@@ -1,23 +1,11 @@
 import React, { useRef } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Camera } from 'lucide-react';
 import tempadVideo from '../components/tempad_video/tempad video.mp4';
 
 export const Hobbies: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Smooth scroll tracking using Framer Motion
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-
-  // Make the spring slightly tighter for more deliberate "checkpoint" feeling
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 70,
-    damping: 20,
-    restDelta: 0.001
-  });
 
   return (
     <div ref={containerRef} style={{ position: 'relative' }}>
