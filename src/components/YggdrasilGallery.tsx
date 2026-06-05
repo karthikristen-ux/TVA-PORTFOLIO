@@ -54,13 +54,21 @@ const STYLES = `
     text-transform: uppercase;
     text-shadow: 0 0 24px rgba(200,113,26,0.7);
     margin: 0;
+    background: rgba(40, 15, 0, 0.85);
+    padding: 8px 16px;
+    border: 1px solid rgba(200,113,26,0.3);
+    border-radius: 4px;
   }
   .ygg-subtitle {
     font-family: 'Share Tech Mono', monospace;
     font-size: clamp(0.5rem, 1vw, 0.7rem);
-    color: rgba(200,113,26,0.5);
+    color: rgba(200,113,26,0.7);
     letter-spacing: 0.3em;
     margin-top: 5px;
+    background: rgba(40, 15, 0, 0.85);
+    padding: 4px 12px;
+    border: 1px solid rgba(200,113,26,0.2);
+    border-radius: 4px;
   }
   .ygg-tree-wrap {
     position: relative;
@@ -134,20 +142,28 @@ const STYLES = `
   .ygg-lbl {
     font-family: 'Share Tech Mono', monospace;
     font-size: clamp(0.4rem, 0.6vw, 0.6rem);
-    color: rgba(200,113,26,0.9);
+    color: #c8711a;
     letter-spacing: 0.1em;
     text-align: center;
     margin-top: 8px;
     white-space: nowrap;
     text-shadow: 0 0 5px rgba(200,113,26,0.4);
+    background: rgba(40, 15, 0, 0.85);
+    padding: 4px 8px;
+    border: 1px solid rgba(200,113,26,0.3);
+    border-radius: 4px;
   }
   .ygg-counter {
     margin-top: 20px;
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.8rem;
-    color: rgba(200,113,26,0.5);
+    color: rgba(200,113,26,0.6);
     letter-spacing: 0.3em;
     text-align: center;
+    background: rgba(40, 15, 0, 0.85);
+    padding: 8px 16px;
+    border: 1px solid rgba(200,113,26,0.3);
+    border-radius: 4px;
   }
 `;
 
