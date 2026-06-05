@@ -43,8 +43,8 @@ body::before {
   top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none;
   background: linear-gradient(
-    transparent 50%, 
-    rgba(255, 77, 0, 0.15) 50%
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.2) 50%
   );
   background-size: 100% 4px;
   z-index: 9998;
@@ -1932,12 +1932,15 @@ nav.nav-collapsed .logo {
 
 /* Minimized tiny character button */
 .mm-minimized {
-  position: relative;
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
   z-index: 9999;
   cursor: pointer;
   display: flex;
-  flex-direction: column-reverse;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
   pointer-events: auto;
 }
 
@@ -1988,13 +1991,13 @@ nav.nav-collapsed .logo {
 
 /* Full character container */
 .mm-full-container {
-  position: absolute;
-  top: 0;
-  right: 0;
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
   z-index: 9999;
   pointer-events: none;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   align-items: flex-end;
 }
 
@@ -2035,8 +2038,8 @@ nav.nav-collapsed .logo {
 /* Mobile adjustments for Miss Minutes */
 @media (max-width: 768px) {
   .mm-minimized {
-    top: auto;
-    right: auto;
+    bottom: 1rem;
+    right: 1rem;
   }
 
   .mm-mini-cloud {
@@ -2045,8 +2048,8 @@ nav.nav-collapsed .logo {
   }
 
   .mm-full-container {
-    top: 0;
-    right: 0;
+    bottom: 1rem;
+    right: 1rem;
   }
 
   .mm-speech-bubble {

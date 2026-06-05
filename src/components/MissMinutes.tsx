@@ -394,14 +394,15 @@ export const MissMinutes: React.FC = () => {
       animate={!isAwake ? { x: 0, y: 0 } : undefined}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       style={{
-        position: 'relative',
+        position: 'fixed',
+        bottom: '1.5rem',
+        right: '1.5rem',
         zIndex: 9999,
         pointerEvents: 'none',
         display: 'flex',
-        flexDirection: 'column-reverse',
+        flexDirection: 'column',
         alignItems: 'flex-end',
-        justifyContent: 'flex-end',
-        marginRight: '1rem'
+        justifyContent: 'flex-end'
       }}
     >
       <AnimatePresence mode="wait">
