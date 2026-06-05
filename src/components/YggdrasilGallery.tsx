@@ -89,20 +89,21 @@ const STYLES = `
   }
   .ygg-node {
     position: absolute;
-    transform: translate(-50%, -50%) scale(0.3);
+    transform: translate(-50%, -50%) scale(0.8);
     opacity: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    cursor: pointer;
     pointer-events: auto;
-    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    z-index: 9999;
   }
   .ygg-node.visible {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
-  .ygg-node:hover { transform: translate(-50%, -50%) scale(1.07) !important; z-index: 10; }
+  .ygg-node:hover { transform: translate(-50%, -50%) scale(1.07) !important; z-index: 10000; }
   .ygg-frame {
     position: relative;
     width: clamp(60px, 10vw, 120px);

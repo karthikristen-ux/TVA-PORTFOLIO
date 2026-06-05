@@ -56,15 +56,18 @@ const Navigation = () => {
           ))}
         </div>
 
-        {/* Hamburger button (mobile only) */}
-        <button
-          className="hamburger-btn"
-          onClick={() => setMenuOpen(true)}
-          aria-label="Open menu"
-          aria-expanded={menuOpen}
-        >
-          ☰
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <MissMinutes />
+          {/* Hamburger button (mobile only) */}
+          <button
+            className="hamburger-btn"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={menuOpen}
+          >
+            ☰
+          </button>
+        </div>
       </nav>
 
       {/* Mobile overlay */}
@@ -107,7 +110,6 @@ const App: React.FC = () => {
         <Route path="/certificates" element={<Certificates />} />
         <Route path="/hobbies" element={<Hobbies />} />
       </Routes>
-      <MissMinutes />
     </Router>
   );
 };

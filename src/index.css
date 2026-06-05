@@ -1932,9 +1932,7 @@ nav.nav-collapsed .logo {
 
 /* Minimized tiny character button */
 .mm-minimized {
-  position: fixed;
-  top: 1.5rem;
-  right: 5rem;
+  position: relative;
   z-index: 9999;
   cursor: pointer;
   display: flex;
@@ -1990,9 +1988,9 @@ nav.nav-collapsed .logo {
 
 /* Full character container */
 .mm-full-container {
-  position: fixed;
-  top: 1.5rem;
-  right: 5rem;
+  position: absolute;
+  top: 0;
+  right: 0;
   z-index: 9999;
   pointer-events: none;
   display: flex;
@@ -2037,8 +2035,8 @@ nav.nav-collapsed .logo {
 /* Mobile adjustments for Miss Minutes */
 @media (max-width: 768px) {
   .mm-minimized {
-    top: 1rem;
-    right: 4rem;
+    top: auto;
+    right: auto;
   }
 
   .mm-mini-cloud {
@@ -2047,8 +2045,8 @@ nav.nav-collapsed .logo {
   }
 
   .mm-full-container {
-    top: 1rem;
-    right: 4rem;
+    top: 0;
+    right: 0;
   }
 
   .mm-speech-bubble {
