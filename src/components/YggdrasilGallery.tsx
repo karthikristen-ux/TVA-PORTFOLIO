@@ -236,7 +236,7 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
   t += 350;
 
   // ── Trunk grows top→bottom ────────────────────────────────────────────────
-  const trunkYs = [150, 200, 350, 500, 650, 800, 950, 1100];
+  const trunkYs = [150, 250, 400, 550, 700, 850, 1000, 1100];
   const trunkTimes: number[] = [t];
   trunkYs.forEach((y,i)=>{
     if(i===0) return;
@@ -261,12 +261,11 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
 
   // ── Tier definitions (top→bottom order) ───────────────────────────────────
   const tiers = [
-    {jY:200,len:120,sw:0.6},
-    {jY:350,len:190,sw:0.7},
-    {jY:500,len:260,sw:0.8},
-    {jY:650,len:330,sw:0.9},
-    {jY:800,len:400,sw:1.0},
-    {jY:950,len:470,sw:1.2},
+    {jY:250,len:150,sw:0.6},
+    {jY:400,len:250,sw:0.7},
+    {jY:550,len:350,sw:0.8},
+    {jY:700,len:450,sw:0.9},
+    {jY:850,len:550,sw:1.0},
   ];
   const subDefs: any[] = [
     [[14,24],[32,12]],
