@@ -2,14 +2,14 @@ import React, { useEffect, useRef } from 'react';
 
 // ─── ADD / REMOVE IMAGES HERE ─────────────────────────────────────────────────
 const images = [
-  { id: 1, src: '/images/instagram/1.png', label: 'TIMELINE EVENT: 0X-11' },
-  { id: 2, src: '/images/instagram/2.png', label: 'TIMELINE EVENT: 0X-12' },
-  { id: 3, src: '/images/instagram/3.png', label: 'TIMELINE EVENT: 0X-13' },
-  { id: 4, src: '/images/instagram/4.png', label: 'TIMELINE EVENT: 0X-14' },
-  { id: 5, src: '/images/instagram/5.png', label: 'TIMELINE EVENT: 0X-15' },
-  { id: 6, src: '/images/instagram/6.png', label: 'TIMELINE EVENT: 0X-16' },
-  { id: 7, src: '/images/instagram/7.png', label: 'TIMELINE EVENT: 0X-17' },
-  { id: 8, src: '/images/instagram/8.png', label: 'TIMELINE EVENT: 0X-18' },
+  { id: 1, src: '/images/instagram/1.png', label: 'TIMELINE EVENT: 0X-11', link: 'https://instagram.com/karthikristen' },
+  { id: 2, src: '/images/instagram/2.png', label: 'TIMELINE EVENT: 0X-12', link: 'https://instagram.com/karthikristen' },
+  { id: 3, src: '/images/instagram/3.png', label: 'TIMELINE EVENT: 0X-13', link: 'https://instagram.com/karthikristen' },
+  { id: 4, src: '/images/instagram/4.png', label: 'TIMELINE EVENT: 0X-14', link: 'https://instagram.com/karthikristen' },
+  { id: 5, src: '/images/instagram/5.png', label: 'TIMELINE EVENT: 0X-15', link: 'https://instagram.com/karthikristen' },
+  { id: 6, src: '/images/instagram/6.png', label: 'TIMELINE EVENT: 0X-16', link: 'https://instagram.com/karthikristen' },
+  { id: 7, src: '/images/instagram/7.png', label: 'TIMELINE EVENT: 0X-17', link: 'https://instagram.com/karthikristen' },
+  { id: 8, src: '/images/instagram/8.png', label: 'TIMELINE EVENT: 0X-18', link: 'https://instagram.com/karthikristen' },
 ];
 
 // ─── STYLES ───────────────────────────────────────────────────────────────────
@@ -39,6 +39,7 @@ const STYLES = `
     inset: 0;
     background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,120,0,0.008) 3px, rgba(255,120,0,0.008) 6px);
     pointer-events: none;
+    z-index: 0;
   }
   .ygg-vignette {
     position: absolute;
@@ -76,7 +77,7 @@ const STYLES = `
   }
   .ygg-tree-wrap {
     position: relative;
-    width: min(88vh, 88vw, 560px);
+    width: min(88vh, 88vw, 760px);
     aspect-ratio: 1;
   }
   .ygg-svg {
@@ -164,7 +165,7 @@ const STYLES = `
 `;
 
 // ─── GEOMETRY & TIMING ────────────────────────────────────────────────────────
-const SVG_SIZE = 560;
+const SVG_SIZE = 760;
 const CX = SVG_SIZE / 2;
 const ORANGE = '#c8711a';
 
@@ -220,23 +221,24 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
 
   // ── Ring ──────────────────────────────────────────────────────────────────
   const circPts: [number,number][] = [];
-  for(let i=0;i<=72;i++){const a=(i/72)*Math.PI*2-Math.PI/2; circPts.push([CX+255*Math.cos(a), CX+255*Math.sin(a)]);}
+  const ringR = 340;
+  for(let i=0;i<=72;i++){const a=(i/72)*Math.PI*2-Math.PI/2; circPts.push([CX+ringR*Math.cos(a), CX+ringR*Math.sin(a)]);}
   animPath(circPts, 0.8, t, 600, gRing);
-  animPath([[22,CX-6],[10,CX],[22,CX+6]], 0.8, t+200, 200, gRing);
-  animPath([[SVG_SIZE-22,CX-6],[SVG_SIZE-10,CX],[SVG_SIZE-22,CX+6]], 0.8, t+200, 200, gRing);
-  animTri(CX, 22, 8, true, t+200, gRing);
-  animTri(CX, SVG_SIZE-22, 8, false, t+200, gRing);
-  animPath([[255+CX,CX],[SVG_SIZE-22,CX]], 0.5, t+300, 200, gRing);
-  animPath([[22,CX],[CX-255,CX]], 0.5, t+300, 200, gRing);
+  animPath([[30,CX-6],[15,CX],[30,CX+6]], 0.8, t+200, 200, gRing);
+  animPath([[SVG_SIZE-30,CX-6],[SVG_SIZE-15,CX],[SVG_SIZE-30,CX+6]], 0.8, t+200, 200, gRing);
+  animTri(CX, 30, 8, true, t+200, gRing);
+  animTri(CX, SVG_SIZE-30, 8, false, t+200, gRing);
+  animPath([[ringR+CX,CX],[SVG_SIZE-30,CX]], 0.5, t+300, 200, gRing);
+  animPath([[30,CX],[CX-ringR,CX]], 0.5, t+300, 200, gRing);
   t += 700;
 
   // ── Crown ─────────────────────────────────────────────────────────────────
-  animTri(CX, 112, 7, true, t, gTree);
-  animTri(CX, 122, 5, true, t+100, gTree);
+  animTri(CX, 140, 7, true, t, gTree);
+  animTri(CX, 155, 5, true, t+100, gTree);
   t += 350;
 
   // ── Trunk grows top→bottom ────────────────────────────────────────────────
-  const trunkYs = [120,135,162,200,245,290,340,390,480];
+  const trunkYs = [150, 180, 230, 290, 360, 440, 520, 600, 700];
   const trunkTimes: number[] = [t];
   trunkYs.forEach((y,i)=>{
     if(i===0) return;
@@ -261,18 +263,18 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
 
   // ── Tier definitions (top→bottom order) ───────────────────────────────────
   const tiers = [
-    {jY:135,len:30,sw:0.6},{jY:162,len:44,sw:0.7},{jY:200,len:58,sw:0.8},
-    {jY:245,len:72,sw:0.9},{jY:290,len:88,sw:1.0},{jY:340,len:106,sw:1.2},
-    {jY:390,len:130,sw:1.4},
+    {jY:180,len:40,sw:0.6},{jY:230,len:60,sw:0.7},{jY:290,len:80,sw:0.8},
+    {jY:360,len:100,sw:0.9},{jY:440,len:120,sw:1.0},{jY:520,len:145,sw:1.2},
+    {jY:600,len:170,sw:1.4},
   ];
   const subDefs: any[] = [
-    [[10,18],[24,9]],
-    [[14,25,[[8,-1,12]]],[35,12]],
-    [[18,30,[[10,-1,16]]],[44,15]],
-    [[22,35,[[12,-1,20]]],[55,18,[[9,-1,14]]]],
-    [[25,40,[[15,-1,24]]],[65,22,[[10,-1,16]]]],
-    [[30,45,[[18,-1,28],[18,1,16]]],[76,25,[[12,-1,18]]]],
-    [[40,50,[[20,-1,36],[20,1,18]]],[90,30,[[14,-1,22]]]],
+    [[14,24],[32,12]],
+    [[20,32,[[10,-1,16]]],[48,16]],
+    [[26,40,[[14,-1,22]]],[60,20]],
+    [[32,48,[[16,-1,26]]],[76,24,[[12,-1,18]]]],
+    [[38,56,[[20,-1,32]]],[92,28,[[14,-1,22]]]],
+    [[44,64,[[24,-1,38],[24,1,22]]],[108,34,[[16,-1,24]]]],
+    [[54,74,[[28,-1,46],[28,1,26]]],[126,40,[[18,-1,30]]]],
   ];
 
   const tiersNeeded = Math.min(Math.ceil(imgCount/2), tiers.length);
@@ -315,25 +317,25 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
   });
 
   // ── Roots ─────────────────────────────────────────────────────────────────
-  const rootBase = trunkTimeAt(480)+100;
-  [{y:450,len:80,sw:1.0},{y:430,len:50,sw:0.8}].forEach(({y,len,sw})=>{
+  const rootBase = trunkTimeAt(680)+100;
+  [{y:650,len:110,sw:1.0},{y:620,len:70,sw:0.8}].forEach(({y,len,sw})=>{
     [-1,1].forEach(dir=>{
       const ex=CX+dir*len;
       animPath([[CX,y],[ex,y]],sw,rootBase,len*3,gTree);
       animTri(ex,y+6,4,false,rootBase+len*3+40,gTree);
       const rx=CX+dir*len*0.55;
-      animPath([[rx,y],[rx,y+22]],sw*0.7,rootBase+len*1.5+60,220,gTree);
-      animPath([[rx,y+22],[rx+dir*18,y+22]],sw*0.55,rootBase+len*1.5+300,200,gTree);
-      animTri(rx+dir*18,y+28,3,false,rootBase+len*1.5+520,gTree);
+      animPath([[rx,y],[rx,y+30]],sw*0.7,rootBase+len*1.5+60,220,gTree);
+      animPath([[rx,y+30],[rx+dir*24,y+30]],sw*0.55,rootBase+len*1.5+300,200,gTree);
+      animTri(rx+dir*24,y+38,3,false,rootBase+len*1.5+520,gTree);
     });
   });
-  animPath([[CX,480],[CX,522]],1.2,rootBase,200,gTree);
-  animTri(CX,528,6,false,rootBase+220,gTree);
-  animTri(CX,538,4,false,rootBase+350,gTree);
-  animPath([[CX-65,450],[CX-35,450]],0.6,rootBase+100,200,gTree);
-  animTri(CX-65,456,3,false,rootBase+320,gTree);
-  animPath([[CX+35,450],[CX+65,450]],0.6,rootBase+100,200,gTree);
-  animTri(CX+65,456,3,false,rootBase+320,gTree);
+  animPath([[CX,680],[CX,720]],1.2,rootBase,200,gTree);
+  animTri(CX,730,6,false,rootBase+220,gTree);
+  animTri(CX,745,4,false,rootBase+350,gTree);
+  animPath([[CX-85,650],[CX-45,650]],0.6,rootBase+100,200,gTree);
+  animTri(CX-85,658,3,false,rootBase+320,gTree);
+  animPath([[CX+45,650],[CX+85,650]],0.6,rootBase+100,200,gTree);
+  animTri(CX+85,658,3,false,rootBase+320,gTree);
 
   // ── Apply initial dash state + fire animations ────────────────────────────
   anims.forEach(({el,isCircle})=>{
@@ -427,13 +429,15 @@ export const YggdrasilGallery: React.FC = () => {
                   className="ygg-node"
                   style={{ left:`${0}%`, top:`${0}%` }}
                 >
-                  <div className="ygg-frame">
-                    <img src={img.src} alt={img.label} className="ygg-img" loading="lazy" />
-                    <div className="ygg-border1" />
-                    <div className="ygg-border2" />
-                    <div className="ygg-dot" />
-                  </div>
-                  <p className="ygg-lbl">{img.label}</p>
+                  <a href={img.link} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div className="ygg-frame">
+                      <img src={img.src} alt={img.label} className="ygg-img" loading="lazy" />
+                      <div className="ygg-border1" />
+                      <div className="ygg-border2" />
+                      <div className="ygg-dot" />
+                    </div>
+                    <p className="ygg-lbl">{img.label}</p>
+                  </a>
                 </div>
               ))}
             </div>

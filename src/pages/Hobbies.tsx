@@ -148,6 +148,11 @@ export const Hobbies: React.FC = () => {
                   <p style={{ fontSize: '1.2rem', color: '#ccc', lineHeight: 1.8, marginTop: '1.5rem' }}>
                     I build custom web projects and applications. My work includes creating dynamic platforms for college students, full-scale CRM systems, and highly professional portfolio websites tailored to unique variant specifications.
                   </p>
+                  <div style={{ marginTop: '3rem' }}>
+                    <a href="https://wa.me/YOUR_PHONE_NUMBER" target="_blank" rel="noreferrer" className="tva-btn" style={{ padding: '1rem 2rem', border: '1px solid var(--tva-orange)', color: 'var(--tva-orange)', textDecoration: 'none', fontFamily: '"Share Tech Mono", monospace', fontSize: '1.1rem', letterSpacing: '0.1em', transition: 'all 0.3s ease' }}>
+                      CONTACT VIA WHATSAPP
+                    </a>
+                  </div>
                 </div>
               </motion.div>
             )}

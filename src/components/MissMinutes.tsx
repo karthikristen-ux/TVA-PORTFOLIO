@@ -352,9 +352,9 @@ export const MissMinutes: React.FC = () => {
   const handleWakeUp = () => {
     setIsAwake(true);
     setShowSpeech(true);
-    setFactIndex(0);
-    setCurrentFact(config.facts[0]);
-    resetSleepTimer(8000);
+    setFactIndex(-1); // Use -1 to trigger the intro text first
+    setCurrentFact("Hey there! I'm Miss Minutes! One tap for a fun fact, double tap to shrink me down, and you can drag me around the screen!");
+    resetSleepTimer(10000);
   };
 
   const clickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -372,7 +372,7 @@ export const MissMinutes: React.FC = () => {
     } else {
       // First tap — start timer
       clickTimeoutRef.current = setTimeout(() => {
-        const nextIndex = (factIndex + 1) % config.facts.length;
+        const nextIndex = factIndex === -1 ? 0 : (factIndex + 1) % config.facts.length;
         setFactIndex(nextIndex);
         setCurrentFact(config.facts[nextIndex]);
         setShowSpeech(true);
@@ -389,7 +389,7 @@ export const MissMinutes: React.FC = () => {
 
   return (
     <motion.div
-      drag
+      drag={isAwake}
       dragMomentum={false}
       style={{
         position: 'fixed',
