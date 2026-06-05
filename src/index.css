@@ -400,11 +400,6 @@ nav.nav-collapsed .logo {
     padding: 1.2rem;
   }
   
-  .hobbies-bg-video {
-    object-fit: cover !important;
-    object-position: center center !important;
-  }
-  
   .retro-tv-shell {
     flex-direction: column !important;
   }
@@ -513,7 +508,10 @@ nav.nav-collapsed .logo {
 .hobbies-bg-video {
   width: 100vw;
   height: 100vh;
-  object-fit: contain;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .retro-tv-shell {
