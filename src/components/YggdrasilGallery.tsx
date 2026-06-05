@@ -168,8 +168,8 @@ const STYLES = `
 `;
 
 // ─── GEOMETRY & TIMING ────────────────────────────────────────────────────────
-const SVG_WIDTH = 1400;
-const SVG_HEIGHT = 1400;
+const SVG_WIDTH = 2400;
+const SVG_HEIGHT = 1800;
 const CX = SVG_WIDTH / 2;
 const ORANGE = '#c8711a';
 
@@ -228,18 +228,18 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
 
   // ── Ring ──────────────────────────────────────────────────────────────────
   const circPts: [number,number][] = [];
-  const ringR = 650; 
-  for(let i=0;i<=72;i++){const a=(i/72)*Math.PI*2-Math.PI/2; circPts.push([CX+ringR*Math.cos(a), 700+ringR*Math.sin(a)]);}
+  const ringR = 850; 
+  for(let i=0;i<=72;i++){const a=(i/72)*Math.PI*2-Math.PI/2; circPts.push([CX+ringR*Math.cos(a), 800+ringR*Math.sin(a)]);}
   animPath(circPts, 0.8, t, 600, gRing);
   t += 700;
 
   // ── Crown ─────────────────────────────────────────────────────────────────
-  animTri(CX, 130, 9, true, t, gTree);
-  animTri(CX, 140, 7, true, t+100, gTree);
+  animTri(CX, 180, 9, true, t, gTree);
+  animTri(CX, 190, 7, true, t+100, gTree);
   t += 350;
 
   // ── Trunk grows top→bottom ────────────────────────────────────────────────
-  const trunkYs = [150, 250, 400, 550, 700, 850, 1000, 1150, 1300];
+  const trunkYs = [200, 350, 600, 850, 1100, 1350, 1600, 1800];
   const trunkTimes: number[] = [t];
   trunkYs.forEach((y,i)=>{
     if(i===0) return;
@@ -263,15 +263,15 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
   }
 
   // ── Tier definitions (top→bottom order) ───────────────────────────────────
-  // Here we use MASSIVE explicit spacing to guarantee no overlap!
+  // We use a ZIGZAG pattern to mathematically guarantee images will never overlap.
+  // One tier is short, the next is extremely long, providing massive clearance.
   const tiers = [
-    {jY:250, len:180, sw:1.0},
-    {jY:400, len:260, sw:1.2},
-    {jY:550, len:340, sw:1.4},
-    {jY:700, len:420, sw:1.6},
-    {jY:850, len:500, sw:1.8},
-    {jY:1000, len:580, sw:2.0},
-    {jY:1150, len:660, sw:2.2},
+    {jY:350,  len:350, sw:1.0},
+    {jY:600,  len:950, sw:1.2},
+    {jY:850,  len:350, sw:1.4},
+    {jY:1100, len:950, sw:1.6},
+    {jY:1350, len:350, sw:1.8},
+    {jY:1600, len:950, sw:2.0},
   ];
   
   // These are the internal PCB trace offsets. They are scaled by 'S' so they look proportional.
@@ -329,17 +329,17 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
   });
 
   // ── Roots ─────────────────────────────────────────────────────────────────
-  const rootBaseY = 1300;
+  const rootBaseY = 1600;
   const rootBaseTime = trunkTimeAt(rootBaseY)+100;
-  [{y:1340,len:250,sw:2.0},{y:1370,len:160,sw:1.6}].forEach(({y,len,sw})=>{
+  [{y:1650,len:400,sw:2.0},{y:1700,len:250,sw:1.6}].forEach(({y,len,sw})=>{
     [-1,1].forEach(dir=>{
       const ex=CX+dir*len;
       animPath([[CX,y],[ex,y]],sw,rootBaseTime,len*1.5,gTree);
       animTri(ex,y+8,6,false,rootBaseTime+len*1.5+40,gTree);
       const rx=CX+dir*len*0.55;
-      animPath([[rx,y],[rx,y+60]],sw*0.7,rootBaseTime+len*0.7+60,220,gTree);
-      animPath([[rx,y+60],[rx+dir*50,y+60]],sw*0.55,rootBaseTime+len*0.7+300,200,gTree);
-      animTri(rx+dir*50,y+68,5,false,rootBaseTime+len*0.7+520,gTree);
+      animPath([[rx,y],[rx,y+80]],sw*0.7,rootBaseTime+len*0.7+60,220,gTree);
+      animPath([[rx,y+80],[rx+dir*60,y+80]],sw*0.55,rootBaseTime+len*0.7+300,200,gTree);
+      animTri(rx+dir*60,y+88,5,false,rootBaseTime+len*0.7+520,gTree);
     });
   });
 

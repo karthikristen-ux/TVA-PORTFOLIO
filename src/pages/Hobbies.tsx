@@ -49,13 +49,6 @@ export const Hobbies: React.FC = () => {
             objectFit: 'cover'
           }}
         />
-        {/* Dark overlay for text readability */}
-        <div style={{
-          position: 'absolute',
-          top: 0, left: 0, width: '100%', height: '100%',
-          background: 'rgba(0,0,0,0.7)',
-        }} />
-        
         {/* Orange color overlay to force warm aesthetic */}
         <div style={{
           position: 'absolute',
