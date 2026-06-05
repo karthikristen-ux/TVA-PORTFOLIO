@@ -2,14 +2,14 @@ import React, { useEffect, useRef } from 'react';
 
 // ─── ADD / REMOVE IMAGES HERE ─────────────────────────────────────────────────
 const images = [
-  { id: 1, src: '/images/instagram/1.png', label: 'TIMELINE EVENT: 0X-11', link: 'https://instagram.com/karthikristen' },
-  { id: 2, src: '/images/instagram/2.png', label: 'TIMELINE EVENT: 0X-12', link: 'https://instagram.com/karthikristen' },
-  { id: 3, src: '/images/instagram/3.png', label: 'TIMELINE EVENT: 0X-13', link: 'https://instagram.com/karthikristen' },
-  { id: 4, src: '/images/instagram/4.png', label: 'TIMELINE EVENT: 0X-14', link: 'https://instagram.com/karthikristen' },
-  { id: 5, src: '/images/instagram/5.png', label: 'TIMELINE EVENT: 0X-15', link: 'https://instagram.com/karthikristen' },
-  { id: 6, src: '/images/instagram/6.png', label: 'TIMELINE EVENT: 0X-16', link: 'https://instagram.com/karthikristen' },
-  { id: 7, src: '/images/instagram/7.png', label: 'TIMELINE EVENT: 0X-17', link: 'https://instagram.com/karthikristen' },
-  { id: 8, src: '/images/instagram/8.png', label: 'TIMELINE EVENT: 0X-18', link: 'https://instagram.com/karthikristen' },
+  { id: 1, src: '/images/instagram/1.png', label: 'TIMELINE EVENT: 0X-11', link: 'https://instagram.com' },
+  { id: 2, src: '/images/instagram/2.png', label: 'TIMELINE EVENT: 0X-12', link: 'https://instagram.com' },
+  { id: 3, src: '/images/instagram/3.png', label: 'TIMELINE EVENT: 0X-13', link: 'https://instagram.com' },
+  { id: 4, src: '/images/instagram/4.png', label: 'TIMELINE EVENT: 0X-14', link: 'https://instagram.com' },
+  { id: 5, src: '/images/instagram/5.png', label: 'TIMELINE EVENT: 0X-15', link: 'https://instagram.com' },
+  { id: 6, src: '/images/instagram/6.png', label: 'TIMELINE EVENT: 0X-16', link: 'https://instagram.com' },
+  { id: 7, src: '/images/instagram/7.png', label: 'TIMELINE EVENT: 0X-17', link: 'https://instagram.com' },
+  { id: 8, src: '/images/instagram/8.png', label: 'TIMELINE EVENT: 0X-18', link: 'https://instagram.com' },
 ];
 
 // ─── STYLES ───────────────────────────────────────────────────────────────────
@@ -18,7 +18,7 @@ const STYLES = `
 
   .ygg-section {
     width: 100%;
-    background: #000;
+    background: transparent;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,24 +27,9 @@ const STYLES = `
     position: relative;
     overflow: hidden;
   }
-  .ygg-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 60%, #180c00 0%, #090400 55%, #000 100%);
-  }
-  .ygg-section::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,120,0,0.008) 3px, rgba(255,120,0,0.008) 6px);
-    pointer-events: none;
-    z-index: 0;
-  }
   .ygg-vignette {
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(0,0,0,0.75) 100%);
     pointer-events: none;
     z-index: 1;
   }
@@ -75,13 +60,16 @@ const STYLES = `
     letter-spacing: 0.3em;
     margin-top: 5px;
   }
+  .ygg-tree-wrap {
+    position: relative;
+    width: min(95vh, 95vw, 1400px);
+    aspect-ratio: 2400 / 1800;
+  }
   .ygg-svg {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
-    pointer-events: none;
   }
   .ygg-nodes-layer {
     position: absolute;
@@ -103,7 +91,7 @@ const STYLES = `
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
-  .ygg-node:hover { transform: translate(-50%, -50%) scale(1.07) !important; }
+  .ygg-node:hover { transform: translate(-50%, -50%) scale(1.07) !important; z-index: 10; }
   .ygg-frame {
     position: relative;
     width: clamp(50px, 8vw, 92px);
@@ -115,10 +103,9 @@ const STYLES = `
     object-fit: cover;
     display: block;
     clip-path: polygon(7px 0%,calc(100% - 7px) 0%,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0% calc(100% - 7px),0% 7px);
-    filter: sepia(0.15) brightness(0.82);
     transition: filter 0.3s;
   }
-  .ygg-node:hover .ygg-img { filter: sepia(0) brightness(1.05); }
+  .ygg-node:hover .ygg-img { filter: brightness(1.1); }
   .ygg-border1 {
     position: absolute;
     inset: -3px;
@@ -162,8 +149,10 @@ const STYLES = `
 `;
 
 // ─── GEOMETRY & TIMING ────────────────────────────────────────────────────────
-const SVG_WIDTH = 1200;
-const SVG_HEIGHT = 1200;
+const SX = 7.5; // Huge horizontal scaling to prevent overlap
+const SY = 4.5; // Huge vertical scaling
+const SVG_WIDTH = 2400;
+const SVG_HEIGHT = 1800;
 const CX = SVG_WIDTH / 2;
 const ORANGE = '#c8711a';
 
@@ -206,7 +195,7 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
     return animPath(pts, 0.7, delay, 280, parent);
   }
   function animDot(cx: number, cy: number, delay: number, parent: SVGElement) {
-    const c = se<SVGCircleElement>('circle', { cx, cy, r:2.5, fill:ORANGE, stroke:'none', opacity:'0' }, parent);
+    const c = se<SVGCircleElement>('circle', { cx, cy, r:3.5, fill:ORANGE, stroke:'none', opacity:'0' }, parent);
     anims.push({ el:c, delay, dur:0, isCircle:true });
   }
 
@@ -219,32 +208,27 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
 
   // ── Ring ──────────────────────────────────────────────────────────────────
   const circPts: [number,number][] = [];
-  const ringR = 480;
-  for(let i=0;i<=72;i++){const a=(i/72)*Math.PI*2-Math.PI/2; circPts.push([CX+ringR*Math.cos(a), CX+ringR*Math.sin(a)]);}
+  const ringR = 255 * SY; 
+  for(let i=0;i<=72;i++){const a=(i/72)*Math.PI*2-Math.PI/2; circPts.push([CX+ringR*Math.cos(a), 120*SY+ringR*Math.sin(a)]);}
   animPath(circPts, 0.8, t, 600, gRing);
-  animPath([[30,CX-6],[15,CX],[30,CX+6]], 0.8, t+200, 200, gRing);
-  animPath([[SVG_WIDTH-30,CX-6],[SVG_WIDTH-15,CX],[SVG_WIDTH-30,CX+6]], 0.8, t+200, 200, gRing);
-  animTri(CX, 30, 8, true, t+200, gRing);
-  animTri(CX, SVG_WIDTH-30, 8, false, t+200, gRing);
-  animPath([[ringR+CX,CX],[SVG_WIDTH-30,CX]], 0.5, t+300, 200, gRing);
-  animPath([[30,CX],[CX-ringR,CX]], 0.5, t+300, 200, gRing);
   t += 700;
 
   // ── Crown ─────────────────────────────────────────────────────────────────
-  animTri(CX, 160, 7, true, t, gTree);
-  animTri(CX, 175, 5, true, t+100, gTree);
+  animTri(CX, 112*SY, 7, true, t, gTree);
+  animTri(CX, 122*SY, 5, true, t+100, gTree);
   t += 350;
 
   // ── Trunk grows top→bottom ────────────────────────────────────────────────
-  const trunkYs = [150, 250, 400, 550, 700, 850, 1000, 1100];
+  const rawTrunkYs = [120,135,162,200,245,290,340,390,480];
+  const trunkYs = rawTrunkYs.map(y => 120*SY + (y-120)*SY);
   const trunkTimes: number[] = [t];
   trunkYs.forEach((y,i)=>{
     if(i===0) return;
     const prev = trunkYs[i-1];
-    const dur = Math.abs(y-prev)*3.5;
-    animPath([[CX,prev],[CX,y]], 2.0, t, dur, gTree);
-    animPath([[CX-2,prev],[CX-2,y]], 0.7, t+30, dur, gTree);
-    animPath([[CX+2,prev],[CX+2,y]], 0.7, t+60, dur, gTree);
+    const dur = Math.abs(y-prev)*1.5; // faster animation for big tree
+    animPath([[CX,prev],[CX,y]], 3.0, t, dur, gTree);
+    animPath([[CX-4,prev],[CX-4,y]], 1.0, t+30, dur, gTree);
+    animPath([[CX+4,prev],[CX+4,y]], 1.0, t+60, dur, gTree);
     t += dur+30;
     trunkTimes.push(t);
   });
@@ -260,82 +244,80 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
   }
 
   // ── Tier definitions (top→bottom order) ───────────────────────────────────
-  const tiers = [
-    {jY:250,len:150,sw:0.6},
-    {jY:400,len:250,sw:0.7},
-    {jY:550,len:350,sw:0.8},
-    {jY:700,len:450,sw:0.9},
-    {jY:850,len:550,sw:1.0},
+  const rawTiers = [
+    {jY:135,len:30,sw:0.6},{jY:162,len:44,sw:0.7},{jY:200,len:58,sw:0.8},
+    {jY:245,len:72,sw:0.9},{jY:290,len:88,sw:1.0},{jY:340,len:106,sw:1.2},
+    {jY:390,len:130,sw:1.4},
   ];
-  const subDefs: any[] = [
-    [[14,24],[32,12]],
-    [[20,32,[[10,-1,16]]],[48,16]],
-    [[26,40,[[14,-1,22]]],[60,20]],
-    [[32,48,[[16,-1,26]]],[76,24,[[12,-1,18]]]],
-    [[38,56,[[20,-1,32]]],[92,28,[[14,-1,22]]]],
-    [[44,64,[[24,-1,38],[24,1,22]]],[108,34,[[16,-1,24]]]],
-    [[54,74,[[28,-1,46],[28,1,26]]],[126,40,[[18,-1,30]]]],
+  const rawSubDefs: any[] = [
+    [[10,18],[24,9]],
+    [[14,25,[[8,-1,12]]],[35,12]],
+    [[18,30,[[10,-1,16]]],[44,15]],
+    [[22,35,[[12,-1,20]]],[55,18,[[9,-1,14]]]],
+    [[25,40,[[15,-1,24]]],[65,22,[[10,-1,16]]]],
+    [[30,45,[[18,-1,28],[18,1,16]]],[76,25,[[12,-1,18]]]],
+    [[40,50,[[20,-1,36],[20,1,18]]],[90,30,[[14,-1,22]]]],
   ];
 
-  const tiersNeeded = Math.min(Math.ceil(imgCount/2), tiers.length);
-  tiers.slice(0,tiersNeeded).forEach((tier,ti)=>{
-    const {jY,len,sw} = tier;
-    const subs = subDefs[ti];
+  const tiersNeeded = Math.min(Math.ceil(imgCount/2), rawTiers.length);
+  rawTiers.slice(0,tiersNeeded).forEach((rawTier,ti)=>{
+    const jY = 120*SY + (rawTier.jY - 120)*SY;
+    const len = rawTier.len * SX;
+    const sw = rawTier.sw * 2;
+    const subs = rawSubDefs[ti];
     const baseT = trunkTimeAt(jY)+60;
 
     animDot(CX,jY,baseT,gDots);
 
     [-1,1].forEach(dir=>{
       const tipX = CX+dir*len;
-      animPath([[CX,jY],[tipX,jY]], sw, baseT, len*3, gTree);
-      animTri(tipX, jY-7, 5, true, baseT+len*3+50, gTree);
+      animPath([[CX,jY],[tipX,jY]], sw, baseT, len*1.5, gTree);
+      animTri(tipX, jY-10, 8, true, baseT+len*1.5+50, gTree);
 
       subs.forEach((sub: any, si: number)=>{
-        const [offset,vlen,...rest] = sub;
-        if(!vlen) return;
+        const [rawOffset,rawVlen,...rest] = sub;
+        if(!rawVlen) return;
+        const offset = rawOffset * SX;
+        const vlen = rawVlen * SY;
         const bx = CX+dir*offset;
         const byTop = jY-vlen;
-        const bDelay = baseT+offset*2.5+100;
-        animPath([[bx,jY],[bx,byTop]], sw*0.7, bDelay, vlen*3.5, gTree);
-        animTri(bx, byTop-5, 4, true, bDelay+vlen*3.5+40, gTree);
+        const bDelay = baseT+offset*1.2+100;
+        animPath([[bx,jY],[bx,byTop]], sw*0.7, bDelay, vlen*1.5, gTree);
+        animTri(bx, byTop-7, 6, true, bDelay+vlen*1.5+40, gTree);
 
         const subSubs = rest[0];
         if(subSubs){
-          (subSubs as [number,number,number][]).forEach(([ssOff,ssDir,ssLen])=>{
+          (subSubs as [number,number,number][]).forEach(([rawSsOff,ssDir,rawSsLen])=>{
+            const ssOff = rawSsOff * SY;
+            const ssLen = rawSsLen * SX;
             const sy2 = byTop-ssOff;
             const ex2 = bx+dir*ssDir*-1*ssLen;
-            const ssD = bDelay+vlen*3.5+80+si*60;
-            animPath([[bx,sy2],[ex2,sy2]], sw*0.55, ssD, ssLen*4, gTree);
-            animTri(ex2, sy2-5, 3, true, ssD+ssLen*4+30, gTree);
+            const ssD = bDelay+vlen*1.5+80+si*60;
+            animPath([[bx,sy2],[ex2,sy2]], sw*0.55, ssD, ssLen*2, gTree);
+            animTri(ex2, sy2-6, 5, true, ssD+ssLen*2+30, gTree);
           });
         }
       });
 
       const imgIdx = ti*2+(dir===-1?0:1);
-      if(imgIdx<imgCount) nodeSpecs.push({x:tipX, y:jY, imgIdx, showAt:baseT+len*3+200});
+      if(imgIdx<imgCount) nodeSpecs.push({x:tipX, y:jY, imgIdx, showAt:baseT+len*1.5+200});
     });
   });
 
   // ── Roots ─────────────────────────────────────────────────────────────────
-  const rootBase = trunkTimeAt(1000)+100;
-  [{y:1050,len:110,sw:1.0},{y:1020,len:70,sw:0.8}].forEach(({y,len,sw})=>{
+  const rootBaseY = 120*SY + (480-120)*SY;
+  const rootBaseTime = trunkTimeAt(rootBaseY)+100;
+  [{y:rootBaseY-30*SY,len:80*SX,sw:2.0},{y:rootBaseY-50*SY,len:50*SX,sw:1.6}].forEach(({y,len,sw})=>{
     [-1,1].forEach(dir=>{
       const ex=CX+dir*len;
-      animPath([[CX,y],[ex,y]],sw,rootBase,len*3,gTree);
-      animTri(ex,y+6,4,false,rootBase+len*3+40,gTree);
+      animPath([[CX,y],[ex,y]],sw,rootBaseTime,len*1.5,gTree);
+      animTri(ex,y+8,6,false,rootBaseTime+len*1.5+40,gTree);
       const rx=CX+dir*len*0.55;
-      animPath([[rx,y],[rx,y+30]],sw*0.7,rootBase+len*1.5+60,220,gTree);
-      animPath([[rx,y+30],[rx+dir*24,y+30]],sw*0.55,rootBase+len*1.5+300,200,gTree);
-      animTri(rx+dir*24,y+38,3,false,rootBase+len*1.5+520,gTree);
+      animPath([[rx,y],[rx,y+22*SY]],sw*0.7,rootBaseTime+len*0.7+60,220,gTree);
+      animPath([[rx,y+22*SY],[rx+dir*18*SX,y+22*SY]],sw*0.55,rootBaseTime+len*0.7+300,200,gTree);
+      animTri(rx+dir*18*SX,y+28*SY,5,false,rootBaseTime+len*0.7+520,gTree);
     });
   });
-  animPath([[CX,1050],[CX,1100]],1.2,rootBase,200,gTree);
-  animTri(CX,1110,6,false,rootBase+220,gTree);
-  animTri(CX,1125,4,false,rootBase+350,gTree);
-  animPath([[CX-85,1050],[CX-45,1050]],0.6,rootBase+100,200,gTree);
-  animTri(CX-85,1058,3,false,rootBase+320,gTree);
-  animPath([[CX+45,1050],[CX+85,1050]],0.6,rootBase+100,200,gTree);
-  animTri(CX+85,1058,3,false,rootBase+320,gTree);
 
   // ── Apply initial dash state + fire animations ────────────────────────────
   anims.forEach(({el,isCircle})=>{
@@ -352,11 +334,11 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
     if(!el) return;
     setTimeout(()=>{
       if(isCircle){
-        (el as unknown as HTMLElement).style.transition='opacity 0.3s ease';
-        (el as unknown as HTMLElement).style.opacity='1';
+        (el as any).style.transition='opacity 0.3s ease';
+        (el as any).style.opacity='1';
         return;
       }
-      (el as unknown as HTMLElement).style.transition=`stroke-dashoffset ${dur}ms linear`;
+      (el as any).style.transition=`stroke-dashoffset ${dur}ms linear`;
       el.setAttribute('stroke-dashoffset','0');
     }, delay);
   });
@@ -385,7 +367,7 @@ export const YggdrasilGallery: React.FC = () => {
     filt.setAttribute('x','-40%'); filt.setAttribute('y','-40%');
     filt.setAttribute('width','180%'); filt.setAttribute('height','180%');
     const blur = document.createElementNS(NS,'feGaussianBlur') as SVGElement;
-    blur.setAttribute('stdDeviation','1.0'); blur.setAttribute('result','b');
+    blur.setAttribute('stdDeviation','2.0'); blur.setAttribute('result','b');
     const merge = document.createElementNS(NS,'feMerge') as SVGElement;
     ['b','b','SourceGraphic'].forEach(v=>{ const n=document.createElementNS(NS,'feMergeNode') as SVGElement; n.setAttribute('in',v); merge.appendChild(n); });
     filt.appendChild(blur); filt.appendChild(merge);
@@ -429,7 +411,7 @@ export const YggdrasilGallery: React.FC = () => {
                   className="ygg-node"
                   style={{ left:`${0}%`, top:`${0}%` }}
                 >
-                  <a href={img.link} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <a href={img.link || "https://instagram.com"} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div className="ygg-frame">
                       <img src={img.src} alt={img.label} className="ygg-img" loading="lazy" />
                       <div className="ygg-border1" />
