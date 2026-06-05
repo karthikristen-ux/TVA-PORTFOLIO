@@ -7,19 +7,9 @@ export const Hobbies: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState<'freelance' | 'photography' | 'music'>('photography');
 
-  const tabStyle = (isActive: boolean): React.CSSProperties => ({
-    background: isActive ? 'var(--tva-orange, #e8821a)' : 'rgba(0, 0, 0, 0.5)',
-    color: isActive ? '#000' : 'var(--tva-orange, #e8821a)',
-    border: '1px solid var(--tva-orange, #e8821a)',
-    padding: '0.8rem 2rem',
-    fontFamily: '"Share Tech Mono", monospace',
-    fontSize: 'clamp(0.9rem, 2vw, 1.2rem)',
-    cursor: 'pointer',
-    textTransform: 'uppercase',
-    letterSpacing: '0.15em',
-    transition: 'all 0.3s ease',
-    boxShadow: isActive ? '0 0 15px rgba(232, 130, 26, 0.5)' : 'none',
-  });
+  const getTabClass = (isActive: boolean) => {
+    return isActive ? 'tva-tab active' : 'tva-tab';
+  };
 
   return (
     <div ref={containerRef} style={{ position: 'relative' }}>
@@ -99,19 +89,19 @@ export const Hobbies: React.FC = () => {
         }}>
           <button 
             onClick={() => setActiveTab('freelance')} 
-            style={tabStyle(activeTab === 'freelance')}
+            className={getTabClass(activeTab === 'freelance')}
           >
             Freelance
           </button>
           <button 
             onClick={() => setActiveTab('photography')} 
-            style={tabStyle(activeTab === 'photography')}
+            className={getTabClass(activeTab === 'photography')}
           >
             Photography
           </button>
           <button 
             onClick={() => setActiveTab('music')} 
-            style={tabStyle(activeTab === 'music')}
+            className={getTabClass(activeTab === 'music')}
           >
             Music
           </button>

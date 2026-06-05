@@ -519,21 +519,7 @@ export const YggdrasilGallery: React.FC = () => {
                 href={selectedImage.link} 
                 target="_blank" 
                 rel="noreferrer"
-                style={{
-                  padding: '0.8rem 1.5rem',
-                  background: 'transparent',
-                  border: '1px solid #c8711a',
-                  color: '#c8711a',
-                  textDecoration: 'none',
-                  fontFamily: '"Share Tech Mono", monospace',
-                  fontSize: '0.9rem',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer'
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(200,113,26,0.2)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(200,113,26,0.5)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.boxShadow = 'none'; }}
+                className="tva-tab"
               >
                 VIEW ARCHIVE ON INSTAGRAM
               </a>
