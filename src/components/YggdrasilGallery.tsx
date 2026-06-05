@@ -39,6 +39,7 @@ const STYLES = `
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
   }
   .ygg-header {
     text-align: center;
@@ -46,7 +47,7 @@ const STYLES = `
   }
   .ygg-title {
     font-family: 'Share Tech Mono', monospace;
-    font-size: clamp(0.75rem, 2vw, 1.25rem);
+    font-size: clamp(1rem, 2vw, 1.5rem);
     color: #c8711a;
     letter-spacing: 0.25em;
     text-transform: uppercase;
@@ -55,15 +56,16 @@ const STYLES = `
   }
   .ygg-subtitle {
     font-family: 'Share Tech Mono', monospace;
-    font-size: clamp(0.42rem, 0.85vw, 0.6rem);
+    font-size: clamp(0.5rem, 1vw, 0.7rem);
     color: rgba(200,113,26,0.5);
     letter-spacing: 0.3em;
     margin-top: 5px;
   }
   .ygg-tree-wrap {
     position: relative;
-    width: min(95vh, 95vw, 1400px);
-    aspect-ratio: 2400 / 1800;
+    width: 100%;
+    max-width: 1400px;
+    aspect-ratio: 1;
   }
   .ygg-svg {
     position: absolute;
@@ -94,7 +96,7 @@ const STYLES = `
   .ygg-node:hover { transform: translate(-50%, -50%) scale(1.07) !important; z-index: 10; }
   .ygg-frame {
     position: relative;
-    width: clamp(50px, 8vw, 92px);
+    width: clamp(60px, 10vw, 120px);
     aspect-ratio: 1;
   }
   .ygg-img {
@@ -105,7 +107,7 @@ const STYLES = `
     clip-path: polygon(7px 0%,calc(100% - 7px) 0%,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0% calc(100% - 7px),0% 7px);
     transition: filter 0.3s;
   }
-  .ygg-node:hover .ygg-img { filter: brightness(1.1); }
+  .ygg-node:hover .ygg-img { filter: brightness(1.2); }
   .ygg-border1 {
     position: absolute;
     inset: -3px;
@@ -121,40 +123,41 @@ const STYLES = `
   }
   .ygg-dot {
     position: absolute;
-    width: 4px; height: 4px;
+    width: 6px; height: 6px;
     background: #c8711a;
     border-radius: 50%;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 7px #c8711a;
+    box-shadow: 0 0 10px #c8711a;
   }
   .ygg-lbl {
     font-family: 'Share Tech Mono', monospace;
-    font-size: clamp(0.25rem, 0.42vw, 0.36rem);
-    color: rgba(200,113,26,0.7);
-    letter-spacing: 0.09em;
+    font-size: clamp(0.4rem, 0.6vw, 0.6rem);
+    color: rgba(200,113,26,0.9);
+    letter-spacing: 0.1em;
     text-align: center;
-    margin-top: 4px;
+    margin-top: 8px;
     white-space: nowrap;
     text-shadow: 0 0 5px rgba(200,113,26,0.4);
   }
   .ygg-counter {
-    margin-top: 14px;
+    margin-top: 20px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.5rem;
-    color: rgba(200,113,26,0.35);
-    letter-spacing: 0.27em;
+    font-size: 0.8rem;
+    color: rgba(200,113,26,0.5);
+    letter-spacing: 0.3em;
     text-align: center;
   }
 `;
 
 // ─── GEOMETRY & TIMING ────────────────────────────────────────────────────────
-const SX = 7.5; // Huge horizontal scaling to prevent overlap
-const SY = 4.5; // Huge vertical scaling
-const SVG_WIDTH = 2400;
-const SVG_HEIGHT = 1800;
+const SVG_WIDTH = 1400;
+const SVG_HEIGHT = 1400;
 const CX = SVG_WIDTH / 2;
 const ORANGE = '#c8711a';
+
+// Scale factor for the internal PCB traces so they are visible on the huge canvas
+const S = 3.5;
 
 interface AnimItem {
   el: SVGElement | null;
@@ -195,7 +198,7 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
     return animPath(pts, 0.7, delay, 280, parent);
   }
   function animDot(cx: number, cy: number, delay: number, parent: SVGElement) {
-    const c = se<SVGCircleElement>('circle', { cx, cy, r:3.5, fill:ORANGE, stroke:'none', opacity:'0' }, parent);
+    const c = se<SVGCircleElement>('circle', { cx, cy, r:4, fill:ORANGE, stroke:'none', opacity:'0' }, parent);
     anims.push({ el:c, delay, dur:0, isCircle:true });
   }
 
@@ -208,19 +211,18 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
 
   // ── Ring ──────────────────────────────────────────────────────────────────
   const circPts: [number,number][] = [];
-  const ringR = 255 * SY; 
-  for(let i=0;i<=72;i++){const a=(i/72)*Math.PI*2-Math.PI/2; circPts.push([CX+ringR*Math.cos(a), 120*SY+ringR*Math.sin(a)]);}
+  const ringR = 650; 
+  for(let i=0;i<=72;i++){const a=(i/72)*Math.PI*2-Math.PI/2; circPts.push([CX+ringR*Math.cos(a), 700+ringR*Math.sin(a)]);}
   animPath(circPts, 0.8, t, 600, gRing);
   t += 700;
 
   // ── Crown ─────────────────────────────────────────────────────────────────
-  animTri(CX, 112*SY, 7, true, t, gTree);
-  animTri(CX, 122*SY, 5, true, t+100, gTree);
+  animTri(CX, 130, 9, true, t, gTree);
+  animTri(CX, 140, 7, true, t+100, gTree);
   t += 350;
 
   // ── Trunk grows top→bottom ────────────────────────────────────────────────
-  const rawTrunkYs = [120,135,162,200,245,290,340,390,480];
-  const trunkYs = rawTrunkYs.map(y => 120*SY + (y-120)*SY);
+  const trunkYs = [150, 250, 400, 550, 700, 850, 1000, 1150, 1300];
   const trunkTimes: number[] = [t];
   trunkYs.forEach((y,i)=>{
     if(i===0) return;
@@ -244,11 +246,18 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
   }
 
   // ── Tier definitions (top→bottom order) ───────────────────────────────────
-  const rawTiers = [
-    {jY:135,len:30,sw:0.6},{jY:162,len:44,sw:0.7},{jY:200,len:58,sw:0.8},
-    {jY:245,len:72,sw:0.9},{jY:290,len:88,sw:1.0},{jY:340,len:106,sw:1.2},
-    {jY:390,len:130,sw:1.4},
+  // Here we use MASSIVE explicit spacing to guarantee no overlap!
+  const tiers = [
+    {jY:250, len:180, sw:1.0},
+    {jY:400, len:260, sw:1.2},
+    {jY:550, len:340, sw:1.4},
+    {jY:700, len:420, sw:1.6},
+    {jY:850, len:500, sw:1.8},
+    {jY:1000, len:580, sw:2.0},
+    {jY:1150, len:660, sw:2.2},
   ];
+  
+  // These are the internal PCB trace offsets. They are scaled by 'S' so they look proportional.
   const rawSubDefs: any[] = [
     [[10,18],[24,9]],
     [[14,25,[[8,-1,12]]],[35,12]],
@@ -259,11 +268,9 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
     [[40,50,[[20,-1,36],[20,1,18]]],[90,30,[[14,-1,22]]]],
   ];
 
-  const tiersNeeded = Math.min(Math.ceil(imgCount/2), rawTiers.length);
-  rawTiers.slice(0,tiersNeeded).forEach((rawTier,ti)=>{
-    const jY = 120*SY + (rawTier.jY - 120)*SY;
-    const len = rawTier.len * SX;
-    const sw = rawTier.sw * 2;
+  const tiersNeeded = Math.min(Math.ceil(imgCount/2), tiers.length);
+  tiers.slice(0,tiersNeeded).forEach((tier,ti)=>{
+    const {jY, len, sw} = tier;
     const subs = rawSubDefs[ti];
     const baseT = trunkTimeAt(jY)+60;
 
@@ -277,8 +284,8 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
       subs.forEach((sub: any, si: number)=>{
         const [rawOffset,rawVlen,...rest] = sub;
         if(!rawVlen) return;
-        const offset = rawOffset * SX;
-        const vlen = rawVlen * SY;
+        const offset = rawOffset * S;
+        const vlen = rawVlen * S;
         const bx = CX+dir*offset;
         const byTop = jY-vlen;
         const bDelay = baseT+offset*1.2+100;
@@ -288,8 +295,8 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
         const subSubs = rest[0];
         if(subSubs){
           (subSubs as [number,number,number][]).forEach(([rawSsOff,ssDir,rawSsLen])=>{
-            const ssOff = rawSsOff * SY;
-            const ssLen = rawSsLen * SX;
+            const ssOff = rawSsOff * S;
+            const ssLen = rawSsLen * S;
             const sy2 = byTop-ssOff;
             const ex2 = bx+dir*ssDir*-1*ssLen;
             const ssD = bDelay+vlen*1.5+80+si*60;
@@ -305,17 +312,17 @@ function buildTree(svgEl: SVGSVGElement, imgCount: number): NodeSpec[] {
   });
 
   // ── Roots ─────────────────────────────────────────────────────────────────
-  const rootBaseY = 120*SY + (480-120)*SY;
+  const rootBaseY = 1300;
   const rootBaseTime = trunkTimeAt(rootBaseY)+100;
-  [{y:rootBaseY-30*SY,len:80*SX,sw:2.0},{y:rootBaseY-50*SY,len:50*SX,sw:1.6}].forEach(({y,len,sw})=>{
+  [{y:1340,len:250,sw:2.0},{y:1370,len:160,sw:1.6}].forEach(({y,len,sw})=>{
     [-1,1].forEach(dir=>{
       const ex=CX+dir*len;
       animPath([[CX,y],[ex,y]],sw,rootBaseTime,len*1.5,gTree);
       animTri(ex,y+8,6,false,rootBaseTime+len*1.5+40,gTree);
       const rx=CX+dir*len*0.55;
-      animPath([[rx,y],[rx,y+22*SY]],sw*0.7,rootBaseTime+len*0.7+60,220,gTree);
-      animPath([[rx,y+22*SY],[rx+dir*18*SX,y+22*SY]],sw*0.55,rootBaseTime+len*0.7+300,200,gTree);
-      animTri(rx+dir*18*SX,y+28*SY,5,false,rootBaseTime+len*0.7+520,gTree);
+      animPath([[rx,y],[rx,y+60]],sw*0.7,rootBaseTime+len*0.7+60,220,gTree);
+      animPath([[rx,y+60],[rx+dir*50,y+60]],sw*0.55,rootBaseTime+len*0.7+300,200,gTree);
+      animTri(rx+dir*50,y+68,5,false,rootBaseTime+len*0.7+520,gTree);
     });
   });
 
