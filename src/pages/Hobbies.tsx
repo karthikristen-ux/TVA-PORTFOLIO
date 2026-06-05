@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Camera } from 'lucide-react';
 import tempadVideo from '../components/tempad_video/tempad video.mp4';
+import { YggdrasilGallery } from '../components/YggdrasilGallery';
 
 export const Hobbies: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -197,7 +198,12 @@ export const Hobbies: React.FC = () => {
           </div>
         </section>
 
-        {/* CHECKPOINT 3: End of logs */}
+        {/* CHECKPOINT 3: Yggdrasil Gallery */}
+        <section style={{ width: '100%', position: 'relative' }}>
+          <YggdrasilGallery />
+        </section>
+
+        {/* CHECKPOINT 4: End of logs */}
         <section style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '2rem' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'flex', justifyContent: 'center' }}>
             <motion.div 

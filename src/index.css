@@ -2013,3 +2013,79 @@ nav.nav-collapsed .logo {
     padding: 3px 6px;
   }
 }
+
+/* =========================================
+   YGGDRASIL GALLERY
+========================================= */
+.yggdrasil-node {
+  width: 280px;
+  height: 280px;
+  border-radius: 12px;
+  perspective: 1000px;
+  transition: z-index 0.3s;
+}
+
+.yggdrasil-node:hover {
+  z-index: 50 !important;
+}
+
+.yggdrasil-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 140, 0, 0.4);
+  box-shadow: 0 0 15px rgba(255, 140, 0, 0.2);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: #000;
+}
+
+.yggdrasil-node:hover .yggdrasil-img-wrapper {
+  transform: scale(1.1) translateY(-10px);
+  border-color: var(--tva-orange);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 140, 0, 0.4);
+}
+
+.yggdrasil-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  filter: grayscale(40%) contrast(1.1);
+}
+
+.yggdrasil-node:hover .yggdrasil-img {
+  transform: scale(1.05);
+  filter: grayscale(0%) contrast(1.1);
+}
+
+.yggdrasil-img-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
+  color: var(--tva-orange);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px var(--tva-orange);
+}
+
+.yggdrasil-node:hover .yggdrasil-img-overlay {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .yggdrasil-node {
+    width: 160px;
+    height: 160px;
+  }
+}
+
