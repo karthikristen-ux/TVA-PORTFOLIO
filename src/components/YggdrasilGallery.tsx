@@ -465,9 +465,11 @@ export const YggdrasilGallery: React.FC = () => {
               style={{
                 background: 'rgba(20, 10, 0, 0.9)',
                 border: '1px solid var(--tva-orange, #c8711a)',
-                padding: '2rem',
-                maxWidth: '600px',
+                padding: '1.5rem',
+                maxWidth: '450px',
                 width: '90%',
+                maxHeight: '90vh',
+                overflowY: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -479,20 +481,21 @@ export const YggdrasilGallery: React.FC = () => {
               <button 
                 onClick={() => setSelectedImage(null)}
                 style={{ 
-                  position: 'absolute', top: '15px', right: '15px', 
+                  position: 'absolute', top: '10px', right: '15px', 
                   background: 'none', border: 'none', color: '#c8711a', 
-                  fontSize: '1.5rem', cursor: 'pointer', fontFamily: 'monospace' 
+                  fontSize: '1.5rem', cursor: 'pointer', fontFamily: 'monospace',
+                  zIndex: 10
                 }}
               >
                 X
               </button>
               
-              <h2 style={{ fontFamily: '"Share Tech Mono", monospace', color: '#c8711a', letterSpacing: '0.2em', marginBottom: '1.5rem', textAlign: 'center', borderBottom: '1px solid rgba(200,113,26,0.3)', paddingBottom: '1rem', width: '100%' }}>
+              <h2 style={{ fontFamily: '"Share Tech Mono", monospace', color: '#c8711a', fontSize: '1.2rem', letterSpacing: '0.15em', marginTop: '1rem', marginBottom: '1rem', textAlign: 'center', borderBottom: '1px solid rgba(200,113,26,0.3)', paddingBottom: '0.8rem', width: '100%' }}>
                 {selectedImage.label}
               </h2>
 
-              <div style={{ width: '100%', aspectRatio: '1', position: 'relative', overflow: 'hidden', border: '1px solid rgba(200,113,26,0.5)', marginBottom: '2rem' }}>
-                 <img src={selectedImage.src} alt={selectedImage.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ width: '100%', maxHeight: '40vh', aspectRatio: '1', position: 'relative', overflow: 'hidden', border: '1px solid rgba(200,113,26,0.5)', marginBottom: '1.5rem' }}>
+                 <img src={selectedImage.src} alt={selectedImage.label} style={{ width: '100%', height: '100%', objectFit: 'contain', background: 'rgba(0,0,0,0.5)' }} />
                  <div style={{ position: 'absolute', inset: 0, background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,120,0,0.02) 3px, rgba(255,120,0,0.02) 6px)', pointerEvents: 'none' }} />
               </div>
               
@@ -501,12 +504,13 @@ export const YggdrasilGallery: React.FC = () => {
                 target="_blank" 
                 rel="noreferrer"
                 style={{
-                  padding: '1rem 2rem',
+                  padding: '0.8rem 1.5rem',
                   background: 'transparent',
                   border: '1px solid #c8711a',
                   color: '#c8711a',
                   textDecoration: 'none',
                   fontFamily: '"Share Tech Mono", monospace',
+                  fontSize: '0.9rem',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                   transition: 'all 0.3s ease',
