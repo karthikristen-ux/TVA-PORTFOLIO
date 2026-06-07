@@ -12,14 +12,14 @@ export const Hobbies: React.FC = () => {
   };
 
   return (
-    <div ref={containerRef} style={{ position: 'relative' }}>
+    <div ref={containerRef} style={{ position: 'relative', width: '100%', overflowX: 'hidden' }}>
       
       {/* 1. ANIMATED BACKGROUND (Fixed) */}
       <div style={{
         position: 'fixed',
         top: 0,
         left: 0,
-        width: '100vw',
+        width: '100%',
         height: '100vh',
         zIndex: 0,
         overflow: 'hidden',

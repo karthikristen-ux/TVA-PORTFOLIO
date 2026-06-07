@@ -120,7 +120,6 @@ const projects = [
 export const Projects: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [detailProject, setDetailProject] = useState<typeof projects[0] | null>(null);
-  const [showSwipeMsg, setShowSwipeMsg] = useState(false);
   const total = projects.length;
 
   // Responsive dimensions
@@ -144,16 +143,7 @@ export const Projects: React.FC = () => {
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  useEffect(() => {
-    const w = window.innerWidth;
-    if (w <= 768) {
-      setShowSwipeMsg(true);
-      const timer = setTimeout(() => {
-        setShowSwipeMsg(false);
-      }, 4000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+
 
   // Keyboard navigation
   useEffect(() => {
@@ -300,20 +290,7 @@ export const Projects: React.FC = () => {
         </button>
       </div>
 
-      {/* Swipe Message */}
-      <AnimatePresence>
-        {showSwipeMsg && (
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="projects-subtitle"
-            style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
-          >
-            ← SWIPE TO VIEW PROJECTS →
-          </motion.p>
-        )}
-      </AnimatePresence>
+
 
       {/* Dot indicators */}
       <div className="carousel-dots">

@@ -23,7 +23,8 @@ const pageConfig: Record<string, { facts: string[]; mood: string }> = {
       "He interned at Shell doing fancy IoT Web Projects!",
       "Click the code buttons to see the repositories!",
       "The RAWP project monitors water quality with real sensors!",
-      "That farming system runs on Bluetooth and Wi-Fi, sugar!"
+      "That farming system runs on Bluetooth and Wi-Fi, sugar!",
+      "← Swipe on mobile to view more projects! →"
     ]
   },
   '/certificates': {
