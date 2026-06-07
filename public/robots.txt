@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Replace 'your-domain.com' with your actual website URL once deployed
+Sitemap: https://karthikristen.vercel.app/sitemap.xml
